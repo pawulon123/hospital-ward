@@ -16,6 +16,9 @@ import { WindowInfoComponent } from './window-info/widow-info.component';
   ],
   imports: [
     CommonModule
+  ],
+  exports:[
+    WardComponent
   ]
 })
 export class SvgModule { }
