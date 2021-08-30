@@ -1,0 +1,161 @@
+[{
+  "id": "1",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["10,5", "10,40", "50,40", "50,5"],
+  "bedsId": []
+}, {
+  "id": "2",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["50,5", "50,40", "190,40", "90,5"],
+  "bedsId": []
+}, {
+  "id": "3",
+  "name": "9",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["90,5", "90,40", "130,40", "130,5"],
+  "bedsId": []
+}, {
+  "id": "4",
+  "name": "10",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["130,5", "130,40", "170,40", "170,5"],
+  "bedsId": []
+}, {
+  "id": "5",
+  "name": "11",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["170,5", "170,40", "210,40", "210,5"],
+  "bedsId": []
+}, {
+  "id": "6",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["210,5", "210,40", "250,40", "250,5"],
+  "bedsId": []
+}, {
+  "id": "7",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["250,5", "250,40", "290,40", "290,5"],
+  "bedsId": []
+}, {
+  "id": "8",
+  "name": "13",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["290,5", "290,40", "330,40", "330,5"],
+  "bedsId": []
+}, {
+  "id": "9",
+  "name": "14",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["330,5", "330,40", "350,40", "350,5"],
+  "bedsId": []
+}, {
+  "id": "10",
+  "name": "8",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["10,45", "10,85", "30,85", "30,45"],
+  "bedsId": []
+}, {
+  "id": "11",
+  "name": "7",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["30,45", "30,85", "50,85", "50,45"],
+  "bedsId": []
+}, {
+  "id": "12",
+  "name": "6",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["50,45", "50,85", "70,85", "70,45"],
+  "bedsId": []
+}, {
+  "id": "13",
+  "name": "5",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["70,45", "70,85", "90,85", "90,45"],
+  "bedsId": []
+}, {
+  "id": "14",
+  "name": "4",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["90,45", "90,85", "130,85", "130,45"],
+  "bedsId": []
+}, {
+  "id": "15",
+  "name": "3",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["130,50", "130,85", "170,85", "170,50"],
+  "bedsId": []
+}, {
+  "id": "16",
+  "name": "2",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["170,50", "170,85", "210,85", "210,50"],
+  "bedsId": []
+}, {
+  "id": "17",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["210,50", "210,85", "250,85", "250,50"],
+  "bedsId": []
+}, {
+  "id": "18",
+  "name": "1",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["250,50", "250,85", "290,85", "290,50"],
+  "bedsId": []
+}, {
+  "id": "19",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["290,50", "290,85", "330,85", "330,50"],
+  "bedsId": []
+}, {
+  "id": "20",
+  "name": "",
+  "type": "",
+  "equipment": [],
+  "keepers": [],
+  "polygon": ["330,50", "330,85", "350,85", "350,50"],
+  "bedsId": []
+}]

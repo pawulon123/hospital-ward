@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { RoomService } from '../../services/room.service';
+import { Component } from '@angular/core';
+import { Room } from '../../../interfaces/room';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-room',
-  templateUrl: './room.component.html',
+  template: ``,
   styleUrls: ['./room.component.css']
+
 })
-export class RoomComponent implements OnInit {
+export class RoomComponent {
 
-  constructor() { }
+  constructor(private roomService: RoomService) { }
 
-  ngOnInit(): void {
+  get rooms(): Observable<Room[]> {
+    return this.roomService.getRooms();
   }
-
 }

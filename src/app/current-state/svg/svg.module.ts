@@ -5,8 +5,6 @@ import { WardComponent } from './ward/ward.component';
 import { RoomComponent } from './room/room.component';
 import { WindowInfoComponent } from './window-info/widow-info.component';
 
-
-
 @NgModule({
   declarations: [
     BedComponent,
@@ -20,5 +18,6 @@ import { WindowInfoComponent } from './window-info/widow-info.component';
   exports:[
     WardComponent
   ]
+
 })
 export class SvgModule { }
