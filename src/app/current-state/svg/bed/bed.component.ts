@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { BedService } from '../../services/bed.service';
 
 @Component({
   selector: 'app-bed',
@@ -7,8 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BedComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private bedService: BedService) { }
+  get beds(): Observable<any[]> {
+    return this.bedService.getBeds();
+  }
   ngOnInit(): void {
   }
 
