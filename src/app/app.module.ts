@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CurrentStateModule } from './current-state/current-state.module';
@@ -15,7 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     CurrentStateModule,
-    HttpClientModule
+    HttpClientModule,
+
 
   ],
   providers: [],

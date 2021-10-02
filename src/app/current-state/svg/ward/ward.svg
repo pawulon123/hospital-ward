@@ -4,6 +4,7 @@
   <app-room #room></app-room>
   <g *ngFor="let room of rooms; index as i">
     <polygon [attr.points]="room.polygon.join(' ')" style="fill:red;stroke:white;stroke-width:0.1"/>
-    <text [attr.x]="((+room.polygon[room.polygon.length-1].split(',')[0])+(+room.polygon[0].split(',')[0]))/2" [attr.y]="+room.polygon[0].split(',')[1]-1" font-size="0.2em" fill="white">{{room.name}}</text>
+     <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">{{room.name}}</text>
   </g>
 </svg>
+

@@ -11,7 +11,6 @@ export class WardComponent implements AfterViewInit {
   viewBox: string = '0 0 360 90';
   rooms: Room[] | undefined;
   @ViewChild('room') room: RoomComponent | undefined;
-
   ngAfterViewInit() {
     this.createRooms();
   }
@@ -24,4 +23,5 @@ export class WardComponent implements AfterViewInit {
     console.error(message);
     return undefined;
   }
+
 }
