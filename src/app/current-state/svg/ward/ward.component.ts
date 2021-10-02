@@ -1,4 +1,5 @@
 import { RoomComponent } from './../room/room.component';
+import { BedComponent } from './../bed/bed.component'
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Room } from '../../../interfaces/room';
 
@@ -10,10 +11,9 @@ import { Room } from '../../../interfaces/room';
 export class WardComponent implements AfterViewInit {
   viewBox: string = '0 0 360 90';
   rooms: Room[] | undefined;
-  @ViewChild('room') room: RoomComponent | undefined;
-
+ @ViewChild('room') room: RoomComponent | undefined;
   ngAfterViewInit() {
-    this.createRooms();
+   this.createRooms();
   }
   createRooms(): void {
     this.room?.rooms.subscribe((rooms: Room[]) => {
@@ -24,4 +24,5 @@ export class WardComponent implements AfterViewInit {
     console.error(message);
     return undefined;
   }
+
 }
