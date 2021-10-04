@@ -13,7 +13,9 @@ export class WardComponent implements AfterViewInit {
   rooms: Room[] | undefined;
   beds: any[] | undefined;
   @ViewChild('room') room: RoomComponent | undefined;
+
   @ViewChild('bed') bed: BedComponent | undefined;
+
 
   ngAfterViewInit() {
     this.createBeds();
@@ -33,4 +35,5 @@ export class WardComponent implements AfterViewInit {
     console.error(message);
     return undefined;
   }
+
 }

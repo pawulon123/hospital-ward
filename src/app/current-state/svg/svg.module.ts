@@ -1,3 +1,4 @@
+import { SharedModule } from './../../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BedComponent } from './bed/bed.component';
@@ -13,7 +14,8 @@ import { WindowInfoComponent } from './window-info/widow-info.component';
     WindowInfoComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
   exports:[
     WardComponent
