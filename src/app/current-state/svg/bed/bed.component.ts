@@ -9,9 +9,15 @@ import { BedService } from '../../services/bed.service';
 })
 export class BedComponent implements OnInit {
 
-  constructor(private bedService: BedService) { }
+  constructor(private bedService: BedService) { this.addBed().subscribe((beds: any[]) => {
+    console.log(beds);
+
+  }) }
   get beds(): Observable<any[]> {
     return this.bedService.getBeds();
+  }
+  addBed():any {
+    return this.bedService.add()
   }
   ngOnInit(): void {
   }

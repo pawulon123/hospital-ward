@@ -13,7 +13,6 @@ export class WardComponent implements AfterViewInit {
   rooms: Room[] | undefined;
   beds: any[] | undefined;
   @ViewChild('room') room: RoomComponent | undefined;
-
   @ViewChild('bed') bed: BedComponent | undefined;
 
 
@@ -28,9 +27,11 @@ export class WardComponent implements AfterViewInit {
   }
   createBeds(): void {
     this.bed?.beds.subscribe((beds: any[]) => {
-      this.beds = typeof this.bed !== 'undefined' ? beds : this.errorLog('can not read beds');
+        console.log(beds);
+        this.beds = typeof this.bed !== 'undefined' ? beds : this.errorLog('can not read beds');
     });
   }
+
   errorLog(message: string): undefined {
     console.error(message);
     return undefined;
