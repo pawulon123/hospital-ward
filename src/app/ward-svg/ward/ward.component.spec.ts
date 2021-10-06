@@ -1,9 +1,9 @@
-import { Room } from './../../../interfaces/room';
+import { Room } from './../../interfaces/room';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { WardComponent } from './ward.component';
-import { MockRoomComponent } from '../../../../testing/mock-room-component';
-import { MockBedComponent } from '../../../../testing/mock-bed-component';
-import asyncData from '../../../../testing/async-observable-helpers';
+import { MockRoomComponent } from '../../../testing/mock-room-component';
+import { MockBedComponent } from '../../../testing/mock-bed-component';
+import asyncData from '../../../testing/async-observable-helpers';
 describe('WardComponent', () => {
   let component: WardComponent;
   let fixture: ComponentFixture<WardComponent>;

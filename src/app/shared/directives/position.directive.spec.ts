@@ -35,7 +35,7 @@ describe('FooterComponent', () => {
     dir.polygonAndType = fixture.componentInstance.polygonAndType;
     dir.ngOnInit();
     expect(dir.svgCoordinates.x.getAttribute('x')).toBe('2');
-    expect(dir.svgCoordinates.x.getAttribute('y')).toBe('1');
+    expect(dir.svgCoordinates.y.getAttribute('y')).toBe('0');
   });
   it('position type have be string ', () => {
     const dir = des[0].injector.get(PositionDirective) as PositionDirective;

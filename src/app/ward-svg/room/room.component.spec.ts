@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import  asyncData  from '../../../../testing/async-observable-helpers';
-import { RoomService } from '../../services/room.service';
+import  asyncData  from '../../../testing/async-observable-helpers';
+import { RoomService } from '../../ward-svg/services/room.service';
 import { RoomComponent } from './room.component';
 
 describe('RoomComponent', () => {

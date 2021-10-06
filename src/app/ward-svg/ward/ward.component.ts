@@ -1,7 +1,7 @@
 import { RoomComponent } from './../room/room.component';
 import { BedComponent } from './../bed/bed.component'
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { Room } from '../../../interfaces/room';
+import { Room } from '../../interfaces/room';
 
 @Component({
   selector: 'app-ward',

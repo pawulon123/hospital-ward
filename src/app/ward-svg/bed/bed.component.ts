@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BedService } from '../../services/bed.service';
+import { BedService } from '../../ward-svg/services/bed.service';
 
 @Component({
   selector: 'app-bed',

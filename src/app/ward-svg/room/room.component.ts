@@ -1,6 +1,6 @@
-import { RoomService } from '../../services/room.service';
+import { RoomService } from '../services/room.service';
 import { Component } from '@angular/core';
-import { Room } from '../../../interfaces/room';
+import { Room } from '../../interfaces/room';
 import { Observable } from 'rxjs';
 
 
