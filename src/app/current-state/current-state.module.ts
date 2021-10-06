@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SvgModule } from './svg/svg.module';
 import { BaseWindowComponent } from './base-window/base-window.component';
 import { RoomService } from './services/room.service';
+import { BedService } from './services/bed.service';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,9 @@ import { RoomService } from './services/room.service';
   exports: [
     SvgModule,
     BaseWindowComponent],
-  providers:[RoomService]
+  providers:[
+    RoomService,
+    BedService
+  ]
 })
 export class CurrentStateModule { }

@@ -11,15 +11,28 @@ import { Room } from '../../../interfaces/room';
 export class WardComponent implements AfterViewInit {
   viewBox: string = '0 0 360 90';
   rooms: Room[] | undefined;
- @ViewChild('room') room: RoomComponent | undefined;
+  beds: any[] | undefined;
+  @ViewChild('room') room: RoomComponent | undefined;
+  @ViewChild('bed') bed: BedComponent | undefined;
+
+
   ngAfterViewInit() {
-   this.createRooms();
+    this.createBeds();
+    this.createRooms();
+
   }
   createRooms(): void {
     this.room?.rooms.subscribe((rooms: Room[]) => {
       this.rooms = typeof this.room !== 'undefined' ? rooms : this.errorLog('can not read rooms');
     });
   }
+  createBeds(): void {
+    this.bed?.beds.subscribe((beds: any[]) => {
+        console.log(beds);
+        this.beds = typeof this.bed !== 'undefined' ? beds : this.errorLog('can not read beds');
+    });
+  }
+
   errorLog(message: string): undefined {
     console.error(message);
     return undefined;

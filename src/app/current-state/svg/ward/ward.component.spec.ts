@@ -2,6 +2,7 @@ import { Room } from './../../../interfaces/room';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { WardComponent } from './ward.component';
 import { MockRoomComponent } from '../../../../testing/mock-room-component';
+import { MockBedComponent } from '../../../../testing/mock-bed-component';
 import asyncData from '../../../../testing/async-observable-helpers';
 describe('WardComponent', () => {
   let component: WardComponent;
@@ -10,7 +11,8 @@ describe('WardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         WardComponent,
-        MockRoomComponent
+        MockRoomComponent,
+        MockBedComponent
       ],
     })
       .compileComponents();
@@ -29,6 +31,9 @@ describe('WardComponent', () => {
     expect(spyCreateRooms).toHaveBeenCalled();
   });
   it('Room  should subscribed  ', () => {
+    expect(component.room?.rooms.subscribe.name).toBe('subscribe');
+  });
+  it('Bed  should subscribed  ', () => {
     expect(component.room?.rooms.subscribe.name).toBe('subscribe');
   });
  });
