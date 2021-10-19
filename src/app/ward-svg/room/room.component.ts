@@ -1,6 +1,6 @@
-import { RoomService } from '../services/room.service';
+import { RoomService } from '../../core/services/room.service';
 import { Component } from '@angular/core';
-import { Room } from '../../interfaces/room';
+import { Room } from '../../shared/models/room';
 import { Observable } from 'rxjs';
 
 
@@ -12,9 +12,9 @@ import { Observable } from 'rxjs';
 })
 export class RoomComponent {
 
-  constructor(private roomService: RoomService) { }
+  constructor(public roomService: RoomService) { }
 
-  get rooms(): Observable<Room[]> {
+  get rooms() {
     return this.roomService.getRooms();
   }
 }

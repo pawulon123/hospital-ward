@@ -1,4 +1,4 @@
-import { Room } from './../../interfaces/room';
+import { Room } from '../../shared/models/room';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { WardComponent } from './ward.component';
 import { MockRoomComponent } from '../../../testing/mock-room-component';
@@ -25,15 +25,15 @@ describe('WardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy()
   });
-  it('ngAfterViewInit should called createRooms', () => {
-    const spyCreateRooms = spyOn(component, 'createRooms');
+  it('ngAfterViewInit should assign ward', () => {
+    // const spyCreateRooms = spyOn(component, 'createRooms');
     component.ngAfterViewInit()
-    expect(spyCreateRooms).toHaveBeenCalled();
+    expect(component.ward).not.toBeUndefined();
   });
-  it('Room  should subscribed  ', () => {
-    expect(component.room?.rooms.subscribe.name).toBe('subscribe');
-  });
-  it('Bed  should subscribed  ', () => {
-    expect(component.room?.rooms.subscribe.name).toBe('subscribe');
-  });
+  // it('Room  should subscribed  ', () => {
+  //   expect(component.room?.rooms.subscribe.name).toBe('subscribe');
+  // });
+  // it('Bed  should subscribed  ', () => {
+  //   expect(component.room?.rooms.subscribe.name).toBe('subscribe');
+  // });
  });

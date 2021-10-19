@@ -4,8 +4,7 @@ import { BedComponent } from './bed/bed.component';
 import { RoomComponent } from './room/room.component';
 import { WardComponent } from './ward/ward.component';
 import { SharedModule } from '../shared/shared.module';
-import { RoomService } from './services/room.service';
-import { BedService } from './services/bed.service';
+
 
 
 
@@ -21,8 +20,7 @@ import { BedService } from './services/bed.service';
   ],
   exports:[WardComponent],
   providers:[
-    RoomService,
-    BedService
+
   ]
 })
 export class WardSvgModule { }

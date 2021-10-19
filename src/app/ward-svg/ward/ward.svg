@@ -6,29 +6,29 @@
     <!-- kinde of rooms -->
     <g [ngSwitch] = "room.type">
       <!-- with patients -->
-      <g *ngSwitchCase = "'forPatients'">
-        <polygon [attr.points]="room.polygon.join(' ')" style="fill:red;stroke:white;stroke-width:0.1"/>
+      <g *ngSwitchCase = "'forPatient'">
+        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
         <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">{{room.name}}</text>
       </g>
       <!-- with personel -->
       <g *ngSwitchCase = "'forPersonel'">
-        <polygon [attr.points]="room.polygon.join(' ')" style="fill:red;stroke:white;stroke-width:0.1"/>
+        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
         <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">personel</text>
       </g>
       <!--medical treatment -->
       <g *ngSwitchCase = "'forMedicalTreatment'">
-        <polygon [attr.points]="room.polygon.join(' ')" style="fill:red;stroke:white;stroke-width:0.1"/>
+        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
         <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">MedicalTreatment</text>
       </g>
       <!--pharmacy -->
       <g *ngSwitchCase = "'pharmacy'">
-        <polygon [attr.points]="room.polygon.join(' ')" style="fill:red;stroke:white;stroke-width:0.1"/>
+        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
         <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">pharmacy</text>
       </g>
       <!-- other -->
-      <g *ngSwitchCase = "''">
-        <polygon [attr.points]="room.polygon.join(' ')" style="fill:red;stroke:white;stroke-width:0.1"/>
-        <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white"></text>
+      <g *ngSwitchCase = "">
+        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+        <!-- <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white"></text> -->
       </g>
     </g>
   </g>

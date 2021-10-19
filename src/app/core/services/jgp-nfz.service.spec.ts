@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { WardService } from './ward.service';
 
-describe('WardService', () => {
-  let service: WardService;
+import { JgpNfzService } from './jgp-nfz.service';
+
+describe('JgpNfzService', () => {
+  let service: JgpNfzService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(WardService);
+    service = TestBed.inject(JgpNfzService);
   });
 
   it('should be created', () => {

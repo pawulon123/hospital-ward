@@ -1,40 +1,38 @@
+import { WardService } from '../../core/services/ward.service';
 import { RoomComponent } from './../room/room.component';
 import { BedComponent } from './../bed/bed.component'
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { Room } from '../../interfaces/room';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { Room } from '../../shared/models/room';
+import { Bed } from '../../shared/models/bed';
+import { Ward } from '../../shared/models/ward';
 
 @Component({
   selector: 'app-ward',
   templateUrl: './ward.svg',
   styleUrls: ['./ward.component.css']
 })
-export class WardComponent implements AfterViewInit {
+export class WardComponent implements  OnInit {
+
+  constructor(private wardService: WardService) { }
   viewBox: string = '0 0 360 90';
-  rooms: Room[] | undefined;
-  beds: any[] | undefined;
-  @ViewChild('room') room: RoomComponent | undefined;
-  @ViewChild('bed') bed: BedComponent | undefined;
-
-
-  ngAfterViewInit() {
-    this.createBeds();
-    this.createRooms();
+  ward?: Ward;
+  // @ViewChild('room') room: RoomComponent | undefined;
+  // @ViewChild('bed') bed: BedComponent | undefined;
+  ngOnInit(){
+    this.create()
   }
-  createRooms(): void {
-    this.room?.rooms.subscribe((rooms: Room[]) => {
-      this.rooms = typeof this.room !== 'undefined' ? rooms : this.errorLog('can not read rooms');
+  create() {
+    this.wardService.getWard().subscribe((ward: Ward) => {
+      this.ward = ward;
     });
   }
-  createBeds(): void {
-    this.bed?.beds.subscribe((beds: any[]) => {
-        console.log(beds);
-        this.beds = typeof this.bed !== 'undefined' ? beds : this.errorLog('can not read beds');
-    });
+  get rooms() {
+    return this.ward?.rooms
   }
-
-  errorLog(message: string): undefined {
-    console.error(message);
-    return undefined;
+  get beds() {
+    return this.ward?.rooms.reduce((arr: Bed[], room: Room) => {
+      room.beds.forEach((bed: Bed) => arr.push(bed));
+      return arr;
+    }, [])
   }
-
 }

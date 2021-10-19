@@ -1,11 +1,11 @@
+import { Bed } from "./bed";
 export interface Room {
 
     id: string;
     name: string;
     type: string;
-    equipment: [];
-    keepers: [];
-    polygon: string[];
-    bedsId: [];
+    polygon: string;
+    beds: Bed[]
+
 
 }
