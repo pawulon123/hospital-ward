@@ -1,59 +1,62 @@
-<svg id="ward" [attr.viewBox]="viewBox">
+<div>
+  <button>plan</button>
+</div>
+<svg [attr.viewBox]="viewBox">
   <rect x="0" y="0" width="100%" height="100%" style="transparent;stroke-width:1;stroke:rgb(20,0,0)" />
   <!-- ROOM -->
-  <app-room #room></app-room>
-<g *ngFor="let room of rooms; index as i">
-    <!-- kinde of rooms -->
-    <g [ngSwitch] = "room.type">
-      <!-- with patients -->
-      <g *ngSwitchCase = "'forPatient'">
-        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
-        <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">{{room.name}}</text>
-      </g>
-      <!-- with personel -->
-      <g *ngSwitchCase = "'forPersonel'">
-        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
-        <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">personel</text>
-      </g>
-      <!--medical treatment -->
-      <g *ngSwitchCase = "'forMedicalTreatment'">
-        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
-        <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">MedicalTreatment</text>
-      </g>
-      <!--pharmacy -->
-      <g *ngSwitchCase = "'pharmacy'">
-        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
-        <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">pharmacy</text>
-      </g>
-      <!-- other -->
-      <g *ngSwitchCase = "">
-        <polygon [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
-        <!-- <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white"></text> -->
-      </g>
-    </g>
-  </g>
-  <!-- BED -->
-  <app-bed #bed></app-bed>
-<g *ngFor="let bed of beds; index as i">
-    <!-- kinde of beds -->
-    <g [ngSwitch] = "bed.type">
-      <!-- basic -->
-      <g *ngSwitchCase = "'basic'">
-        <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
-      </g>
-      <!-- spare-->
-      <g *ngSwitchCase = "'spare'">
-        <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
-      </g>
-      <!-- broken-->
-      <g *ngSwitchCase = "'broken'">
-        <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
-      </g>
-      <!-- other -->
-      <g *ngSwitchCase = "''">
-        <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
+  <app-room #roomInstance></app-room>
+  <g *ngFor="let room of rooms; index as i">
+      <!-- kinde of rooms -->
+      <g [ngSwitch] = "room.type">
+        <!-- with patients -->
+        <g  *ngSwitchCase = "'forPatient'">
+          <polygon data-mode = "editRoom" [appRoomsEv]= "roomInstance" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+          <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">{{room.name}}</text>
+        </g>
+        <!-- with personel -->
+        <g *ngSwitchCase = "'forPersonel'">
+          <polygon data-mode = "editRoom" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+          <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">personel</text>
+        </g>
+        <!--medical treatment -->
+        <g *ngSwitchCase = "'forMedicalTreatment'">
+          <polygon data-mode = "editRoom" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+          <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">MedicalTreatment</text>
+        </g>
+        <!--pharmacy -->
+        <g *ngSwitchCase = "'pharmacy'">
+          <polygon data-mode = "editRoom" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+          <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white">pharmacy</text>
+        </g>
+        <!-- other -->
+        <g *ngSwitchCase = "">
+          <polygon data-mode = "editRoom" [appRoomsEv]= "roomInstance" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+          <!-- <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white"></text> -->
+        </g>
       </g>
     </g>
-  </g>
+    <!-- BED -->
+    <!-- <app-bed #bed></app-bed> -->
+    <g *ngFor="let bed of beds; index as i">
+      <!-- kinde of beds -->
+      <g [ngSwitch] = "bed.type">
+        <!-- basic -->
+        <g *ngSwitchCase = "'basic'">
+          <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
+        </g>
+        <!-- spare-->
+        <g *ngSwitchCase = "'spare'">
+          <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
+        </g>
+        <!-- broken-->
+        <g *ngSwitchCase = "'broken'">
+          <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
+        </g>
+        <!-- other -->
+        <g *ngSwitchCase = "''">
+          <rect [attr.x]="bed.x_svg" [attr.y]="bed.y_svg" width="18" height="10" style="fill:green;stroke:white;stroke-width:0.1"/>
+        </g>
+      </g>
+    </g>
 </svg>
 

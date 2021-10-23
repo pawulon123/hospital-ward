@@ -11,7 +11,8 @@ export class WardService {
   id: number = 1
   constructor(private http: HttpClient ) { }
   url: string = 'http://localhost:3000/ward/';
-  getWard(): Observable<Ward> {
+  getWard(): Observable<Ward> { console.log('okookokokokoko');
+
     this.ward = this.http.get<Ward>(this.url + this.id);
     return this.ward;
   }

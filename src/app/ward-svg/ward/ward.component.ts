@@ -1,11 +1,8 @@
 import { WardService } from '../../core/services/ward.service';
-import { RoomComponent } from './../room/room.component';
-import { BedComponent } from './../bed/bed.component'
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { Room } from '../../shared/models/room';
 import { Bed } from '../../shared/models/bed';
 import { Ward } from '../../shared/models/ward';
-
 @Component({
   selector: 'app-ward',
   templateUrl: './ward.svg',
@@ -14,22 +11,22 @@ import { Ward } from '../../shared/models/ward';
 export class WardComponent implements  OnInit {
 
   constructor(private wardService: WardService) { }
+
   viewBox: string = '0 0 360 90';
   ward?: Ward;
-  // @ViewChild('room') room: RoomComponent | undefined;
-  // @ViewChild('bed') bed: BedComponent | undefined;
+
   ngOnInit(){
-    this.create()
+    this.create();
   }
   create() {
     this.wardService.getWard().subscribe((ward: Ward) => {
       this.ward = ward;
     });
   }
-  get rooms() {
+  get rooms(): Room[] | undefined {
     return this.ward?.rooms
   }
-  get beds() {
+  get beds(): Bed[] | undefined {
     return this.ward?.rooms.reduce((arr: Bed[], room: Room) => {
       room.beds.forEach((bed: Bed) => arr.push(bed));
       return arr;

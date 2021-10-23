@@ -11,7 +11,8 @@ export class PositionDirective implements OnInit {
   }
   svgCoordinates = this.iteratioCoordinates(() => this.elementRef.nativeElement);
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit() {
     this.polygonAndType.polygon = this.polygonAndType.polygon.split(' ')
