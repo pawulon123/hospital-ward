@@ -10,6 +10,7 @@ import { ModeWardSvgService } from '../core/services/mode-ward-svg.service';
   declarations: [
     PositionDirective,
     RoomsEvDirective
+
   ],
   imports: [
     CommonModule
@@ -17,6 +18,7 @@ import { ModeWardSvgService } from '../core/services/mode-ward-svg.service';
   exports:[
     PositionDirective,
     RoomsEvDirective
+
   ],
   providers:[
     ModeWardSvgService
