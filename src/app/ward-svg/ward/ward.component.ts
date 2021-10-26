@@ -1,5 +1,6 @@
+import { Bed } from 'src/app/shared/models/bed';
 import { WardService } from '../../core/services/ward.service';
-import { AfterViewInit, Component, ViewChild, OnInit, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, ViewContainerRef, ElementRef } from '@angular/core';
 import { Room } from '../../shared/models/room';
 import { Ward } from '../../shared/models/ward';
 
@@ -35,8 +36,13 @@ export class WardComponent implements OnInit, AfterViewInit {
   }
   getRooms(): void {
     this.rooms = this.ward?.rooms;
+    this.roomInstance.setRooms(this.rooms)
   }
   getBeds(): void {
     this.beds = this.bedInstance?.extractOfWard(this.ward);
   }
+  setRoom(id:any){
+
+  }
+  // getRefBed(){}
 }

@@ -13,25 +13,36 @@ export class RoomComponent implements EventsRoom {
     public roomService: RoomService,
     private componentFactoryResolver: ComponentFactoryResolver
     ) { }
-  edit:any
+  edit:any;
+  rooms: any;
   manageBeds(element: any) {
-    this.resolveEditRoom();
+
+console.log();
+
+// const room = this.rooms.find((room:any) =>  element.id.split('_')[0])
+const room = this.rooms.find((room:any) => room.id == Number.parseInt(element.id))
+    this.resolveEditRoom(room);
   }
   hideBedsPatientInfo(element: any) {
-    console.log('hideinfo');
+    // console.log('hideinfo');
   }
   bedsPatientInfo(element: any) {
-    console.log('showinfo');
+    // console.log('showinfo');
   }
   setViewContainerRefEdit(vCREditRoom: any) {
     this.edit = vCREditRoom;
   }
+  setRooms(rooms: any){
+    this.rooms = rooms;
 
-  resolveEditRoom() {
+  }
+
+  resolveEditRoom(room:any) {
     const factory = this.componentFactoryResolver.resolveComponentFactory(
       <Type<EditRoomComponent>>EditRoomComponent
     );
-    this.edit.createComponent(factory);
+    const editRoom = this.edit.createComponent(factory);
+    editRoom.instance.room = room;
   }
 
 
