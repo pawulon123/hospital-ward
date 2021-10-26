@@ -13,3 +13,4 @@ export class BaseWindowComponent implements OnInit {
   }
 
 }
+

@@ -1,24 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SvgModule } from './svg/svg.module';
 import { BaseWindowComponent } from './base-window/base-window.component';
-import { RoomService } from './services/room.service';
-import { BedService } from './services/bed.service';
+import { WardSvgModule } from '../ward-svg/ward-svg.module';
 
 @NgModule({
-  declarations: [
-    BaseWindowComponent
-  ],
+  declarations: [BaseWindowComponent],
   imports: [
     CommonModule,
-    SvgModule
+    WardSvgModule
   ],
   exports: [
-    SvgModule,
-    BaseWindowComponent],
-  providers:[
-    RoomService,
-    BedService
-  ]
+    BaseWindowComponent
+  ],
+  providers: []
 })
 export class CurrentStateModule { }

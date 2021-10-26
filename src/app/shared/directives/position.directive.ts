@@ -5,15 +5,17 @@ import { Directive, Input, ElementRef, OnInit } from '@angular/core';
 })
 export class PositionDirective implements OnInit {
   @Input("appPosition") polygonAndType: any;
-  coordinates = {
+    coordinates = {
     x: [],
     y: []
   }
   svgCoordinates = this.iteratioCoordinates(() => this.elementRef.nativeElement);
 
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit() {
+    this.polygonAndType.polygon = this.polygonAndType.polygon.split(' ')
     const type: string = this.polygonAndType.type;
     if (type in this && (this as Record<string, any>)[type].constructor instanceof Function) {
       this.iteratioCoordinates(this.coordinatesAssign.bind(this));

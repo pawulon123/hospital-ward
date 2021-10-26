@@ -1,9 +1,11 @@
+import { CoreModule } from './core/core.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CurrentStateModule } from './current-state/current-state.module';
 import { HttpClientModule } from '@angular/common/http';
+import { WardSvgModule } from './ward-svg/ward-svg.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,10 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     CurrentStateModule,
     HttpClientModule,
+    CoreModule
+
+
+
 
 
   ],

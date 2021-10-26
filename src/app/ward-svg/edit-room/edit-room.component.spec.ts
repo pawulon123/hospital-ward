@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WindowInfoComponent } from './widow-info.component';
+import { EditRoomComponent } from './edit-room.component';
 
-describe('WidowInfoComponent', () => {
-  let component: WindowInfoComponent;
-  let fixture: ComponentFixture<WindowInfoComponent>;
+describe('EditRoomComponent', () => {
+  let component: EditRoomComponent;
+  let fixture: ComponentFixture<EditRoomComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WindowInfoComponent ]
+      declarations: [ EditRoomComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WindowInfoComponent);
+    fixture = TestBed.createComponent(EditRoomComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
