@@ -1,23 +1,34 @@
 import { EventsRoom } from '../../shared/models/events-room';
 import { RoomService } from '../../core/services/room.service';
-import { Component, ComponentFactoryResolver, Type } from '@angular/core';
+import { Component, ComponentFactoryResolver, Type, OnInit, Input } from '@angular/core';
 import { EditRoomComponent } from '../edit-room/edit-room.component';
+// import { runInThisContext } from 'vm';
 @Component({
   selector: 'app-room',
-  template: ``,
+  templateUrl: './room.component.html',
   styleUrls: ['./room.component.css']
 })
-export class RoomComponent implements EventsRoom {
-
+export class RoomComponent implements EventsRoom, OnInit {
+  @Input('ward') ward: any;
+  edit:any;
+  rooms: any;
   constructor(
     public roomService: RoomService,
     private componentFactoryResolver: ComponentFactoryResolver
     ) { }
-  edit:any;
-  rooms: any;
+  ngOnInit(): void {
+
+  }
+
+
+
+  ngOnChanges() {
+    this.rooms = this.ward ? this.ward.rooms : null;
+
+
+  }
   manageBeds(element: any) {
 
-console.log();
 
 // const room = this.rooms.find((room:any) =>  element.id.split('_')[0])
 const room = this.rooms.find((room:any) => room.id == Number.parseInt(element.id))
