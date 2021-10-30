@@ -15,7 +15,10 @@ import { EditRoomComponent } from './edit-room/edit-room.component';
     CommonModule,
     SharedModule,
   ],
-  exports:[WardComponent],
+  exports:[
+    WardComponent,
+    // RoomComponent
+  ],
   entryComponents:[EditRoomComponent],
   providers:[]
 })
