@@ -24,11 +24,9 @@ export class WardComponent implements OnInit {
   rooms?: Room[] = [];
 
   ngOnInit() {
-    this.editRoomService.objEditRoom$.subscribe(
-      objEdit => console.log('wardComponent',this.beds));
     this.create();
   }
-  create() {
+  create(): void {
     this.wardService.getWard().subscribe((ward: Ward) => {
       this.ward = ward;
       this.forBeds()
@@ -39,7 +37,7 @@ export class WardComponent implements OnInit {
     this.bedInstance.setBeds(this.ward);
     this.beds =  this.bedInstance.getBeds();
   }
-  forRooms(){
+  forRooms(): void{
     this.rooms = this.ward?.rooms;
     this.roomInstance.setRooms(this.rooms);
 

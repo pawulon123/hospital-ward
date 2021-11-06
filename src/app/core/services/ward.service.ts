@@ -14,6 +14,8 @@ export class WardService {
   getWard(): Observable<Ward> { console.log('okookokokokoko');
 
     this.ward = this.http.get<Ward>(this.url + this.id);
+
+
     return this.ward;
   }
 

@@ -1,5 +1,10 @@
+import { Room } from '../../shared/models/room';
+import { Bed } from '../../shared/models/bed';
+import { EditRoom } from '../../shared/models/edit-room';
 import { EditRoomService } from './../../core/services/edit-room.service';
 import { Component, OnInit } from '@angular/core';
+import { BedRotate } from './bed-rotate';
+import { cloneDeep, findById } from '../../shared/useful/useful';
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
@@ -9,29 +14,28 @@ export class EditRoomComponent implements OnInit {
 
   constructor(
     private editRoomService: EditRoomService
-    /** romm array with beds */
-    /** mode Service */
-    /** room Service */
-    /** bed Service */
   ) { }
-  room: any;
-  objectEdit:any;
+
+  room: Room|undefined;
+  objectEdit:any = {};
+  bedRotate = new BedRotate();
+
   ngOnInit(): void {
-    this.editRoomService.objEditRoom$.subscribe(
-      objEdit => this.objectEdit = objEdit
-    );
+    this.editRoomService.objEditRoom$.subscribe(this.assignStartObj.bind(this));
   }
-  rotate(){
+  private assignStartObj(objEditRoom: EditRoom): void {
+    this.objectEdit = objEditRoom;
+    if (!this.objectEdit.roomNotModified) this.objectEdit.roomNotModified = cloneDeep(this.room);
+    this.objectEdit.addOrUpdate(this.getMarkedBed);
+  }
 
-    const bed = this.room.beds.find((bed:any) => bed.id == this.objectEdit.marked);
-    bed.rotate = 45;
+  get getMarkedBed(): Bed|undefined {
+    return findById(this.room?.beds, this.objectEdit?.marked);
+  }
+
+  rotate(): void {
+    if (!this.objectEdit.marked) return;
+    this.bedRotate.rotate(this.getMarkedBed);
     this.editRoomService.modify(this.objectEdit);
-
-  }
-  sendObjectOutput(sendObjectOutput: any) {
-    console.log('sendObjectOutput');
-  }
-  pickUpIncoming() {
-    console.log('pickUpIncoming');
   }
 }
