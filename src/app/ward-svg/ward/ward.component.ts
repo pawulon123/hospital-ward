@@ -1,7 +1,6 @@
-import { EditRoomService } from './../../core/services/edit-room.service';
 import { Bed } from 'src/app/shared/models/bed';
 import { WardService } from '../../core/services/ward.service';
-import { AfterViewInit, Component, ViewChild, OnInit, ViewContainerRef, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Room } from '../../shared/models/room';
 import { Ward } from '../../shared/models/ward';
 
@@ -14,13 +13,12 @@ export class WardComponent implements OnInit {
 
   constructor(
     private wardService: WardService,
-    private editRoomService: EditRoomService
-    ) { }
+  ) { }
   @ViewChild('roomInstance') roomInstance: any;
   @ViewChild('bedInstance') bedInstance: any;
-  viewBox: string = '0 0 360 90';
+  viewBox: string = '0 0 1440 360';
   ward?: Ward;
-  beds?: any[] = [];
+  beds?: Bed[] = [];
   rooms?: Room[] = [];
 
   ngOnInit() {
@@ -35,12 +33,10 @@ export class WardComponent implements OnInit {
   }
   forBeds(): void {
     this.bedInstance.setBeds(this.ward);
-    this.beds =  this.bedInstance.getBeds();
+    this.beds = this.bedInstance.getBeds();
   }
-  forRooms(): void{
+  forRooms(): void {
     this.rooms = this.ward?.rooms;
     this.roomInstance.setRooms(this.rooms);
-
   }
-
 }

@@ -1,6 +1,7 @@
+import { Room } from '../../shared/models/room';
 import { EventsRoom } from '../../shared/models/events-room';
 import { RoomService } from '../../core/services/room.service';
-import { AfterViewInit, Component, ComponentFactoryResolver, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { EditRoomComponent } from '../edit-room/edit-room.component';
 @Component({
   selector: 'app-room',
@@ -13,15 +14,15 @@ export class RoomComponent implements EventsRoom {
     public roomService: RoomService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) { }
-
   edit: any;
-  rooms: any;
-  manageBeds(element: any) {
+  rooms:Room[] = [];
+  manageBeds(element: any): void {
     const room = this.getById(element.id);
+    if(!room)return;
     this.resolveEditRoom(room);
   }
-  getById(id: string) {
-    return this.rooms.find((room: any) => room.id == Number.parseInt(id)/*element.id.split('_')[0]*/)
+  getById(id: string): Room|undefined {
+    return this.rooms.find((room: Room) => Number.parseInt(room.id) === Number.parseInt(id)/*element.id.split('_')[0]*/);
   }
   hideRoomInfo(element: any) {
     // console.log('hideinfo');
@@ -29,21 +30,18 @@ export class RoomComponent implements EventsRoom {
   roomInfo(element: any) {
     // console.log('showinfo');
   }
-  setViewContainerRefEdit(vCREditRoom: any) {
+  setViewContainerRefEdit(vCREditRoom: any): void {
     this.edit = vCREditRoom;
   }
-  setRooms(rooms: any) {
+  setRooms(rooms: Room[]): void {
     this.rooms = rooms;
 
   }
-
-  resolveEditRoom(room: any) {
+  resolveEditRoom(room: Room): void {
     const factory = this.componentFactoryResolver.resolveComponentFactory(
       <Type<EditRoomComponent>>EditRoomComponent
-    );
-    const editRoom: any = this.editRoomContainer?.createComponent(factory);
-    editRoom.instance.room = room;
+      );
+      const editRoom: any = this.editRoomContainer?.createComponent(factory);
+      editRoom.instance.room = room;
+    }
   }
-
-
-}

@@ -1,5 +1,5 @@
 import { ModeWardSvgService } from './../../core/services/mode-ward-svg.service';
-import { Directive, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
 import { events } from '../../ward-svg/events';
 
 @Directive({
@@ -11,7 +11,11 @@ export class BedsEvDirective implements OnInit {
   mode: string = 'currentState';
   returned = {};
   events = events().bed;
-  constructor(private modeWardSvgService: ModeWardSvgService) { }
+
+  constructor(
+    private modeWardSvgService: ModeWardSvgService,
+    private renderer: Renderer2
+    ) {}
   ngOnInit() {
     this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode)
   }

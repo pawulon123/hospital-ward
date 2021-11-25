@@ -26,8 +26,10 @@
       <!-- type of beds -->
       <g  [ngSwitch] = "bed.type">
         <!-- basic -->
-        <g *ngSwitchCase = "'basic'">
-          <polygon  [appBedsEv] = "bedInstance" [attr.id]="bed.id+'_bed'" [attr.points]="bed.polygon" style="fill:green;stroke:white;stroke-width:0.1"/>
+        <g *ngSwitchCase = "'basic'"  >
+          <polygon  [appInnerBed] = "{bed, draw:'walking'}"  style="fill:rgb(53, 63, 27);stroke:rgb(156, 92, 92);stroke-width:0.1"/>
+          <polygon  [appInnerBed] = "{bed, draw:'sex'}"  style="fill:rgb(154, 194, 45);stroke:rgb(156, 92, 92);stroke-width:0.1"/>
+          <polygon  [appBedsEv] = "bedInstance" [attr.id] = "bed.id+'_bed'" [attr.points] = "bed.polygon" opacity="0.3" style=" fill:green;stroke:white;stroke-width:0.1"/>
         </g>
         <!-- other -->
         <!-- <g *ngSwitchCase = "">

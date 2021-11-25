@@ -5,4 +5,6 @@ export interface Bed {
   y_svg: string;
   rotate: string;
   type: string;
+  polygon: string;
+  patient:any
 }

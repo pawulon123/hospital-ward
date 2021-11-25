@@ -1,6 +1,6 @@
+import { EditRoom } from './../../shared/models/edit-room';
 import { Room } from '../../shared/models/room';
 import { Bed } from '../../shared/models/bed';
-import { EditRoom } from '../../shared/models/edit-room';
 import { EditRoomService } from './../../core/services/edit-room.service';
 import { Component, OnInit } from '@angular/core';
 import { BedRotate } from './bed-rotate';
@@ -17,10 +17,10 @@ export class EditRoomComponent implements OnInit {
   ) { }
 
   room: Room|undefined;
-  objectEdit:any = {};
+  objectEdit: any  = {};
   bedRotate = new BedRotate();
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.editRoomService.objEditRoom$.subscribe(this.assignStartObj.bind(this));
   }
   private assignStartObj(objEditRoom: EditRoom): void {

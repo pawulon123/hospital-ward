@@ -1,10 +1,11 @@
+import { EditRoom } from './../../shared/models/edit-room';
 import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../shared/useful/useful';
 import { Coordinates } from '../../shared/models/coordinate';
 export class BedRotate {
   bed: any;
   centerBed: any = null;
-  angle: number = 15;
   step: number = 15;
+  rotationAngle: number = 15
   height: number = 0;
   width: number = 0;
 
@@ -22,23 +23,28 @@ export class BedRotate {
       }
     }
     if (this.centerBed !== shape.quadrangle.center && bed.id === this.bed.id) this.centerBed = shape.quadrangle.center;
-
-    this.assignment(coordinates);
-    this.angle += this.step;
+    this.assignment(coordinates, this.rotationAngle);
+    this.rotationAngle += this.step;
     bed.polygon = polygonOfcoordinates(coordinates);
   }
-  private assignment(coordinates: Coordinates[]): void {
+  private assignment(coordinates: Coordinates[], angle: number): void {
+    coordinates[0].x = (-this.width * cos(angle)) - this.height * sin(angle) + this.centerBed.x;
+    coordinates[0].y = (-this.width * sin(angle)) + this.height * cos(angle) + this.centerBed.y;
+    // console.log('0x', coordinates[0].x);
+    // console.log('0y', coordinates[0].y);
 
-    coordinates[0].x = (-this.width * cos(this.angle)) - this.height * sin(this.angle) + this.centerBed.x;
-    coordinates[0].y = (-this.width * sin(this.angle)) + this.height * cos(this.angle) + this.centerBed.y;
-
-    coordinates[1].x = this.width * cos(this.angle) - this.height * sin(this.angle) + this.centerBed.x;
-    coordinates[1].y = this.width * sin(this.angle) + this.height * cos(this.angle) + this.centerBed.y;
-
-    coordinates[2].x = this.width * cos(this.angle) - (-this.height * sin(this.angle)) + this.centerBed.x;
-    coordinates[2].y = this.width * sin(this.angle) + (-this.height * cos(this.angle)) + this.centerBed.y;
-
-    coordinates[3].x = (-this.width * cos(this.angle)) - (-this.height * sin(this.angle)) + this.centerBed.x;
-    coordinates[3].y = (-this.width * sin(this.angle)) + (-this.height * cos(this.angle)) + this.centerBed.y;
+    coordinates[1].x = this.width * cos(angle) - this.height * sin(angle) + this.centerBed.x;
+    coordinates[1].y = this.width * sin(angle) + this.height * cos(angle) + this.centerBed.y;
+    // console.log('1x', coordinates[1].x);
+    // console.log('1y', coordinates[1].y);
+    coordinates[2].x = this.width * cos(angle) - (-this.height * sin(angle)) + this.centerBed.x;
+    coordinates[2].y = this.width * sin(angle) + (-this.height * cos(angle)) + this.centerBed.y;
+    // console.log('2x', coordinates[2].x);
+    // console.log('2y', coordinates[2].y);
+    coordinates[3].x = (-this.width * cos(angle)) - (-this.height * sin(angle)) + this.centerBed.x;
+    coordinates[3].y = (-this.width * sin(angle)) + (-this.height * cos(angle)) + this.centerBed.y;
+    // console.log('3x', coordinates[3].x);
+    // console.log('3y', coordinates[3].y);
   }
+
 }
