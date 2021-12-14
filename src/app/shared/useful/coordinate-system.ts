@@ -72,11 +72,19 @@ export function sumCoordinates(coordinates: Coordinates[], coordinate: Coordinat
     };
   });
 }
-export function move(coordinates: Coordinates[]): Coordinates[] {
+export function move(coordinates: Coordinates[], coordinate: Coordinates ): Coordinates[] {
   return coordinates.map((c: Coordinates) => {
     return {
-      x: 0 + c.x,
-      y: 0 + c.y
+      x: coordinate.x + c.x,
+      y: coordinate.y + c.y
+    };
+  });
+}
+export function subtrack(coordinates: Coordinates[], coordinate: Coordinates ): Coordinates[] {
+  return coordinates.map((c: Coordinates) => {
+    return {
+      x: coordinate.x - c.x,
+      y: coordinate.y - c.y
     };
   });
 }
@@ -92,4 +100,13 @@ export function scale(
     };
   });
 }
+export function polygonInPolygon(polygonOut: string, polygonIn: string ): boolean {
+  // console.log(polygonIn);
+  // console.log(polygonOut);
+
+  return false;
+}
+
+
+
 

@@ -5,7 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CurrentStateModule } from './current-state/current-state.module';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material/material.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSliderModule } from '@angular/material/slider';
 import { WardSvgModule } from './ward-svg/ward-svg.module';
+// import { WardSvgModule } from './ward-svg/ward-svg.module';
 
 @NgModule({
   declarations: [
@@ -16,10 +21,10 @@ import { WardSvgModule } from './ward-svg/ward-svg.module';
     BrowserModule,
     AppRoutingModule,
     CurrentStateModule,
+    WardSvgModule,
     HttpClientModule,
     CoreModule,
-
-
+    BrowserAnimationsModule,
 
 
 
@@ -27,4 +32,4 @@ import { WardSvgModule } from './ward-svg/ward-svg.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -8,7 +8,7 @@ export class BedRotate {
   rotationAngle: number = 15
   height: number = 0;
   width: number = 0;
-
+  polygon: string = ''
   rotate(bed: any): void {
     this.bed = bed;
     const coordinates: Coordinates[] = coordinateOfPolygon(this.bed.polygon);
@@ -25,7 +25,7 @@ export class BedRotate {
     if (this.centerBed !== shape.quadrangle.center && bed.id === this.bed.id) this.centerBed = shape.quadrangle.center;
     this.assignment(coordinates, this.rotationAngle);
     this.rotationAngle += this.step;
-    bed.polygon = polygonOfcoordinates(coordinates);
+    this.polygon = polygonOfcoordinates(coordinates);
   }
   private assignment(coordinates: Coordinates[], angle: number): void {
     coordinates[0].x = (-this.width * cos(angle)) - this.height * sin(angle) + this.centerBed.x;
@@ -45,6 +45,9 @@ export class BedRotate {
     coordinates[3].y = (-this.width * sin(angle)) + (-this.height * cos(angle)) + this.centerBed.y;
     // console.log('3x', coordinates[3].x);
     // console.log('3y', coordinates[3].y);
+  }
+  get points() {
+    return this.polygon;
   }
 
 }

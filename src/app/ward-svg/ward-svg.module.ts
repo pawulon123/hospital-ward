@@ -5,6 +5,7 @@ import { RoomComponent } from './room/room.component';
 import { WardComponent } from './ward/ward.component';
 import { SharedModule } from '../shared/shared.module';
 import { EditRoomComponent } from './edit-room/edit-room.component';
+import { MaterialModule } from '../material/material.module';
 @NgModule({
   declarations: [
     BedComponent,
@@ -14,6 +15,7 @@ import { EditRoomComponent } from './edit-room/edit-room.component';
   imports: [
     CommonModule,
     SharedModule,
+    MaterialModule
   ],
   exports:[
     WardComponent,

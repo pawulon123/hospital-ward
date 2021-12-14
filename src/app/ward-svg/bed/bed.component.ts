@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Bed } from 'src/app/shared/models/bed';
 import { Ward } from 'src/app/shared/models/ward';
 import { BedService } from '../../core/services/bed.service';
+import { EditRoom } from 'src/app/shared/models/edit-room';
 
 @Component({
   selector: 'app-bed',
@@ -11,7 +12,7 @@ import { BedService } from '../../core/services/bed.service';
   styleUrls: ['./bed.component.css'],
 })
 export class BedComponent implements OnInit{
-
+  objectEdit: any = {};
   beds?:any;
   constructor(
     private bedService: BedService,
@@ -19,6 +20,11 @@ export class BedComponent implements OnInit{
     ) {}
 
   ngOnInit(): void {
+    this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+  }
+  private passObjectEdit(objEditRoom: EditRoom): void {
+    this.objectEdit = objEditRoom;
+    // this.objectEdit.addOrUpdate({ id: this.objectEdit.marked});
   }
   setBeds(ward:any) {
     this.beds = this.bedService.extractOfWard(ward);
@@ -27,7 +33,10 @@ export class BedComponent implements OnInit{
    return this.beds;
   }
   mark(marked:any) {
-    this.editRoomService.modify({marked:Number.parseInt(marked.id)})
+    const idBed = Number.parseInt(marked.id).toString()
+    if(this.objectEdit.marked !== idBed){
+      this.editRoomService.modify({marked:idBed});
+    };
   }
   modalPatient(element:any) {
     console.log('modalPatient');

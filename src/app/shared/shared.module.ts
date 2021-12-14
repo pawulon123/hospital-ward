@@ -5,12 +5,14 @@ import { RoomsEvDirective } from './directives/rooms-ev.directive';
 import { ModeWardSvgService } from '../core/services/mode-ward-svg.service';
 import { BedsEvDirective } from './directives/beds-ev.directive';
 import { InnerBedDirective } from './directives/inner-bed.directive';
+import { MoveBedDirective } from './directives/move-bed.directive';
 @NgModule({
   declarations: [
     PositionDirective,
     RoomsEvDirective,
     BedsEvDirective,
-    InnerBedDirective
+    InnerBedDirective,
+    MoveBedDirective
 
   ],
   imports: [
@@ -20,7 +22,8 @@ import { InnerBedDirective } from './directives/inner-bed.directive';
     PositionDirective,
     RoomsEvDirective,
     BedsEvDirective,
-    InnerBedDirective
+    InnerBedDirective,
+    MoveBedDirective
   ],
   providers:[
     ModeWardSvgService

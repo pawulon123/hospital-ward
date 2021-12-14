@@ -13,8 +13,7 @@ export class BedsEvDirective implements OnInit {
   events = events().bed;
 
   constructor(
-    private modeWardSvgService: ModeWardSvgService,
-    private renderer: Renderer2
+    private modeWardSvgService: ModeWardSvgService
     ) {}
   ngOnInit() {
     this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode)
