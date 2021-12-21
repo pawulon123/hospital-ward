@@ -3,8 +3,6 @@ import { Bed } from 'src/app/shared/models/bed';
 import { findById } from '../../shared/useful/useful';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,12 +20,9 @@ export class EditRoomService {
   getOutputBed(id: string | number): Bed {
     return findById(this.outputBeds, id);
   }
-  addOrUpdate(bed: {id: string | number, polygon:string}) {
-    const bedFound = findById(this.outputBeds, bed.id);
+  addOrUpdate(bed: {id: string | number, polygon:string}): void {
+    // const bedFound = findById(this.outputBeds, bed.id);
+    const bedFound = this.getOutputBed(bed.id);
     bedFound ? Object.assign(bedFound, bed) : this.outputBeds.push(bed);
-
-
   }
-
-
 }

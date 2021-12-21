@@ -41,10 +41,8 @@ export class EditRoomComponent implements OnInit {
         polygon: this.bedRotate.points
       }
     )
-
       this.markedBed.polygon = this.bedRotate.points;
       this.editRoomService.modify(this.objectEdit);
-
   }
 
 }
