@@ -18,7 +18,6 @@ export class EditRoomComponent implements OnInit {
 
   room: Room | undefined;
   private objectEdit: EditRoom | {marked: string} = {marked: ''};
-  polygonBed: string | undefined = '';
   bedRotate = new BedRotate();
 
   ngOnInit() {
@@ -31,18 +30,13 @@ export class EditRoomComponent implements OnInit {
    return this.objectEdit?.marked && this.room ? findById(this.room.beds, this.objectEdit?.marked): null;
   }
   rotate(): void {
-    if (!this.objectEdit.marked) return;
-    this.polygonBed = this.editRoomService.getOutputBed(this.objectEdit.marked).polygon;
-    const polygon = !this.polygonBed ? this.markedBed?.polygon : this.polygonBed;
-    this.bedRotate.rotate({id: this.markedBed?.id, polygon});
-    this.editRoomService.addOrUpdate(
-      {
-        id: this.markedBed?.id ,
-        polygon: this.bedRotate.points
-      }
-    )
+    const id = this.objectEdit.marked;
+    if (!id) return;
+    const bed = this.editRoomService.getOutputBed(id);
+    const polygon = bed && 'polygon' in bed ? bed.polygon : this.markedBed?.polygon;
+    this.bedRotate.rotate({id, polygon});
+    this.editRoomService.addOrUpdate({id, polygon: this.bedRotate.points })
       this.markedBed.polygon = this.bedRotate.points;
       this.editRoomService.modify(this.objectEdit);
   }
-
 }
