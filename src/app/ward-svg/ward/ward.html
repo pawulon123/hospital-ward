@@ -31,8 +31,8 @@
         <g *ngSwitchCase = "'basic'" [appMoveBed] = 'bed' cdkDrag [appBedsEv] = "bedInstance">
           <polygon  [appBedMarked] =  "bed.id"  [attr.id] = "bed.id+'_bed'" [attr.points] = "bed.polygon" />
           <g *ngIf = "bed.patient" >
-            <polygon  [appInnerBed] = "{bed, draw:'walking'}"  style="fill:rgb(53, 63, 27);stroke:rgb(156, 92, 92);stroke-width:0.1"/>
-            <polygon  [appInnerBed] = "{bed, draw:'sex'}"  style="fill:rgb(154, 194, 45);stroke:rgb(156, 92, 92);stroke-width:0.1"/>
+            <polygon  [appInnerBed] = "{bed, draw:'walking'}" [attr.id] = "bed.id+'_walking'" style="fill:rgb(53, 63, 27);stroke:rgb(156, 92, 92);stroke-width:0.1"/>
+            <polygon  [appInnerBed] = "{bed, draw:'sex'}" [attr.id] = "bed.id+'_sex'"  style="fill:rgb(154, 194, 45);stroke:rgb(156, 92, 92);stroke-width:0.1"/>
           </g>
           <!-- <polygon  [appBedsEv] = "bedInstance" [attr.id] = "bed.id+'_bed'" [attr.points] = "bed.polygon" opacity="0.3" style=" fill:green;stroke:white;stroke-width:0.1"/> -->
         </g>
