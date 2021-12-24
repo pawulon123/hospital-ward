@@ -13,7 +13,7 @@ import { EditRoom } from 'src/app/shared/models/edit-room';
 })
 export class BedComponent implements OnInit{
   objectEdit: any = {};
-  beds?:any;
+  private beds?:any;
   constructor(
     private bedService: BedService,
     private editRoomService: EditRoomService
@@ -24,19 +24,17 @@ export class BedComponent implements OnInit{
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
-    // this.objectEdit.addOrUpdate({ id: this.objectEdit.marked});
   }
   setBeds(ward:any) {
     this.beds = this.bedService.extractOfWard(ward);
   }
-  getBeds() {
+  getBeds(): Bed[] {
    return this.beds;
   }
-  mark(marked:any) {
-    const idBed = Number.parseInt(marked.id).toString()
-    if(this.objectEdit.marked !== idBed){
-      this.editRoomService.modify({marked:idBed});
-    };
+  mark(marked:any): void {
+    const idBed = Number.parseInt(marked.id).toString();
+    if(!this.editRoomService.isPosibleBed(idBed))return;
+    if(this.objectEdit.marked!== idBed) this.editRoomService.modify({marked:idBed});
   }
   modalPatient(element:any) {
     console.log('modalPatient');

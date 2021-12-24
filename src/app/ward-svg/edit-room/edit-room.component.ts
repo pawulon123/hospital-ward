@@ -16,27 +16,28 @@ export class EditRoomComponent implements OnInit {
     private editRoomService: EditRoomService
   ) { }
 
-  room: Room | undefined;
-  private objectEdit: EditRoom | {marked: string} = {marked: ''};
+  markedRoom: Room | undefined;
+  private objectEdit: EditRoom | { marked: string } = { marked: '' };
   bedRotate = new BedRotate();
 
   ngOnInit() {
+    this.editRoomService.posibleBeds = this.markedRoom?.beds.map((bed: Bed) => bed.id);
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
   }
-  get markedBed(): Bed  {
-   return this.objectEdit?.marked && this.room ? findById(this.room.beds, this.objectEdit?.marked): null;
+  get markedBed(): Bed {
+    return this.objectEdit?.marked && this.markedRoom ? findById(this.markedRoom.beds, this.objectEdit?.marked) : null;
   }
   rotate(): void {
     const id = this.objectEdit.marked;
     if (!id) return;
     const bed = this.editRoomService.getOutputBed(id);
     const polygon = bed && 'polygon' in bed ? bed.polygon : this.markedBed?.polygon;
-    this.bedRotate.rotate({id, polygon});
-    this.editRoomService.addOrUpdate({id, polygon: this.bedRotate.points })
-      this.markedBed.polygon = this.bedRotate.points;
-      this.editRoomService.modify(this.objectEdit);
+    this.bedRotate.rotate({ id, polygon });
+    this.editRoomService.addOrUpdate({ id, polygon: this.bedRotate.points });
+    this.markedBed.polygon = this.bedRotate.points;
+    this.editRoomService.modify(this.objectEdit);
   }
 }

@@ -9,8 +9,9 @@ import { Subject } from 'rxjs';
 export class EditRoomService {
   objEditRoom$ = new Subject<any>()
   outputBeds: Bed[] = [];
-
+  bedsIds: any;
   modify(obj: any): void {
+   //trap
     const objEditRoom: EditRoom = {
       marked: '',
       roomNotModified: null,
@@ -20,9 +21,18 @@ export class EditRoomService {
   getOutputBed(id: string | number): Bed {
     return findById(this.outputBeds, id);
   }
-  addOrUpdate(bed: {id: string | number, polygon:string}): void {
+  addOrUpdate(bed: { id: string | number, polygon: string }): void {
     // const bedFound = findById(this.outputBeds, bed.id);
     const bedFound = this.getOutputBed(bed.id);
     bedFound ? Object.assign(bedFound, bed) : this.outputBeds.push(bed);
+  }
+  set posibleBeds(bedsIds: any[] | undefined) {
+    this.bedsIds = bedsIds?.map(id => id.toString());
+  }
+  get posibleBeds(): any[] {
+    return this.bedsIds;
+  }
+  isPosibleBed(id: string | undefined): boolean {
+    return this.posibleBeds.includes(id);
   }
 }

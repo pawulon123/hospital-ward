@@ -42,6 +42,6 @@ export class RoomComponent implements EventsRoom {
       <Type<EditRoomComponent>>EditRoomComponent
       );
       const editRoom: any = this.editRoomContainer?.createComponent(factory);
-      editRoom.instance.room = room;
+      editRoom.instance.markedRoom = room;
     }
   }
