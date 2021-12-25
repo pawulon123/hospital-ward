@@ -9,30 +9,32 @@ import { Subject } from 'rxjs';
 export class EditRoomService {
   objEditRoom$ = new Subject<any>()
   outputBeds: Bed[] = [];
-  bedsIds: any;
+  bedsIds: string[]  =[];
+  objEdit: EditRoom = { marked: ''};
   modify(obj: any): void {
-   //trap
-    const objEditRoom: EditRoom = {
-      marked: '',
-      roomNotModified: null,
-    }
-    this.objEditRoom$.next(Object.assign(objEditRoom, obj));
+    if (this.objEditRoom.marked !== obj.marked) this.objEditRoom = obj
+    this.objEditRoom$.next(this.objEditRoom);
+  }
+  get objEditRoom(): EditRoom {
+    return this.objEdit;
+  }
+  set objEditRoom(obj: EditRoom) {
+    if(this.isPosibleBed(obj.marked)) Object.assign(this.objEdit, obj);
   }
   getOutputBed(id: string | number): Bed {
     return findById(this.outputBeds, id);
   }
   addOrUpdate(bed: { id: string | number, polygon: string }): void {
-    // const bedFound = findById(this.outputBeds, bed.id);
     const bedFound = this.getOutputBed(bed.id);
     bedFound ? Object.assign(bedFound, bed) : this.outputBeds.push(bed);
   }
-  set posibleBeds(bedsIds: any[] | undefined) {
-    this.bedsIds = bedsIds?.map(id => id.toString());
+  set posibleBeds(bedsIds: any[]) {
+    this.bedsIds = bedsIds.length ? bedsIds?.map(id => id.toString()) : [];
   }
-  get posibleBeds(): any[] {
+  get posibleBeds(): string[]  {
     return this.bedsIds;
   }
-  isPosibleBed(id: string | undefined): boolean {
+  private isPosibleBed(id: string ): boolean {
     return this.posibleBeds.includes(id);
   }
 }

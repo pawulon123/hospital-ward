@@ -17,12 +17,11 @@ export class RoomsEvDirective implements OnInit {
 
   @HostListener('click', ['$event.target'])
   private onClick(element: any) {
-
-    const mode: string = element.dataset.mode
-    if (this.mode === mode) return;
-    this.modeWardSvgService.setMode(mode);
-
+    const mode = element.dataset.mode;
+    if(this.mode !== mode) this.modeWardSvgService.setMode(mode);
     const method: string = this.extractProperty(this.events.click);
+    let id = (this.returned as Record<string, any>)[method];
+    if (id === element.id) return;
     this.caller(method, element);
   };
   @HostListener('mouseenter', ['$event.target'])

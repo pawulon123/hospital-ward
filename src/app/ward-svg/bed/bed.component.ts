@@ -33,7 +33,6 @@ export class BedComponent implements OnInit{
   }
   mark(marked:any): void {
     const idBed = Number.parseInt(marked.id).toString();
-    if(!this.editRoomService.isPosibleBed(idBed))return;
     if(this.objectEdit.marked!== idBed) this.editRoomService.modify({marked:idBed});
   }
   modalPatient(element:any) {

@@ -21,7 +21,7 @@ export class EditRoomComponent implements OnInit {
   bedRotate = new BedRotate();
 
   ngOnInit() {
-    this.editRoomService.posibleBeds = this.markedRoom?.beds.map((bed: Bed) => bed.id);
+    this.editRoomService.posibleBeds = this.markedRoom? this.markedRoom?.beds.map((bed: Bed) => bed.id) : [];
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {

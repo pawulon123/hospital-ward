@@ -20,6 +20,7 @@ export class RoomComponent implements EventsRoom {
     const room = this.getById(element.id);
     if(!room)return;
     this.resolveEditRoom(room);
+    return element.id;
   }
   getById(id: string): Room|undefined {
     return this.rooms.find((room: Room) => Number.parseInt(room.id) === Number.parseInt(id)/*element.id.split('_')[0]*/);
@@ -30,12 +31,8 @@ export class RoomComponent implements EventsRoom {
   roomInfo(element: any) {
     // console.log('showinfo');
   }
-  setViewContainerRefEdit(vCREditRoom: any): void {
-    this.edit = vCREditRoom;
-  }
   setRooms(rooms: Room[]): void {
     this.rooms = rooms;
-
   }
   resolveEditRoom(room: Room): void {
     const factory = this.componentFactoryResolver.resolveComponentFactory(

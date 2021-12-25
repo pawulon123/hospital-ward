@@ -27,8 +27,10 @@ export class WardComponent implements OnInit {
   create(): void {
     this.wardService.getWard().subscribe((ward: Ward) => {
       this.ward = ward;
-      this.forBeds()
-      this.forRooms()
+
+      this.forBeds();
+      this.forRooms();
+      console.log(this.rooms);
     });
   }
   forBeds(): void {

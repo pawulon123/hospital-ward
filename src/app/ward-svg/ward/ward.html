@@ -18,7 +18,7 @@
         </g>
         <!-- other -->
         <g *ngSwitchCase = "">
-          <polygon   data-mode = "editRoom" [appRoomsEv]= "roomInstance" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
+          <polygon [attr.id]="room.id+'_room'"  data-mode = "editRoom" [appRoomsEv]= "roomInstance" [attr.points]="room.polygon" style="fill:red;stroke:white;stroke-width:0.1"/>
           <!-- <text [appPosition] ="{polygon: room.polygon, type:'centerBetweenFirstLastPoint'}" font-size="0.2em" fill="white"></text> -->
         </g>
       </g>
