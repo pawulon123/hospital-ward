@@ -6,7 +6,7 @@ import { events } from '../../ward-svg/events';
 })
 export class RoomsEvDirective implements OnInit {
   @Input("appRoomsEv") room: any;
-  mode: string = 'currentState';
+  mode: string = '';
   returned = {};
   events = events().room;
   constructor(private modeWardSvgService: ModeWardSvgService) { }
@@ -18,10 +18,14 @@ export class RoomsEvDirective implements OnInit {
   @HostListener('click', ['$event.target'])
   private onClick(element: any) {
     const mode = element.dataset.mode;
-    if(this.mode !== mode) this.modeWardSvgService.setMode(mode);
+    if(this.mode !== mode) {
+      this.modeWardSvgService.setMode(mode);
+    }else{
+      return;
+    }
+    ;
     const method: string = this.extractProperty(this.events.click);
     let id = (this.returned as Record<string, any>)[method];
-    if (id === element.id) return;
     this.caller(method, element);
   };
   @HostListener('mouseenter', ['$event.target'])

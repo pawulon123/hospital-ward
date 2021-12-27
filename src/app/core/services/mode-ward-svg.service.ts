@@ -6,7 +6,8 @@ import { Subject } from 'rxjs';
 })
 export class ModeWardSvgService {
   mode$ = new Subject<string>()
-  setMode(mode: string) {
+
+  setMode(mode: string = 'currentState') {
     this.mode$.next(mode);
   }
 }

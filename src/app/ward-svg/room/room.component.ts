@@ -14,15 +14,15 @@ export class RoomComponent implements EventsRoom {
     public roomService: RoomService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) { }
-  edit: any;
-  rooms:Room[] = [];
+  editRoom: any;
+  rooms: Room[] = [];
   manageBeds(element: any): void {
     const room = this.getById(element.id);
-    if(!room)return;
+    if (!room) return;
     this.resolveEditRoom(room);
     return element.id;
   }
-  getById(id: string): Room|undefined {
+  getById(id: string): Room | undefined {
     return this.rooms.find((room: Room) => Number.parseInt(room.id) === Number.parseInt(id)/*element.id.split('_')[0]*/);
   }
   hideRoomInfo(element: any) {
@@ -37,8 +37,12 @@ export class RoomComponent implements EventsRoom {
   resolveEditRoom(room: Room): void {
     const factory = this.componentFactoryResolver.resolveComponentFactory(
       <Type<EditRoomComponent>>EditRoomComponent
-      );
-      const editRoom: any = this.editRoomContainer?.createComponent(factory);
-      editRoom.instance.markedRoom = room;
-    }
+    );
+    this.editRoom = this.editRoomContainer?.createComponent(factory);
+    this.editRoom.instance.markedRoom = room;
+    this.editRoom.instance.removeEditingRoom = this.removeEditingRoom.bind(this);
   }
+  removeEditingRoom(): void {
+    if (this.editRoom) this.editRoom.destroy();
+  }
+}

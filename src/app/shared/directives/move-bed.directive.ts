@@ -29,7 +29,7 @@ export class MoveBedDirective implements OnInit {
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
-    if (objEditRoom.marked === this.bed.id.toString()) {
+    if (objEditRoom.marked === this.bed.id.toString() ) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
       this.objectEdit = objEditRoom;
     } else {
