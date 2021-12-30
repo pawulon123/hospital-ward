@@ -40,9 +40,9 @@ export class RoomComponent implements EventsRoom {
     );
     this.editRoom = this.editRoomContainer?.createComponent(factory);
     this.editRoom.instance.markedRoom = room;
-    this.editRoom.instance.removeEditingRoom = this.removeEditingRoom.bind(this);
+    this.editRoom.instance.endEditingRoom = this.endEditingRoom.bind(this);
   }
-  removeEditingRoom(): void {
+  endEditingRoom(): void {
     if (this.editRoom) this.editRoom.destroy();
   }
 }

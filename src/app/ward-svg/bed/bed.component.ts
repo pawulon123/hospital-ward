@@ -1,11 +1,8 @@
 import { EditRoomService } from './../../core/services/edit-room.service';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { Bed } from 'src/app/shared/models/bed';
-import { Ward } from 'src/app/shared/models/ward';
 import { BedService } from '../../core/services/bed.service';
 import { EditRoom } from 'src/app/shared/models/edit-room';
-
 @Component({
   selector: 'app-bed',
   templateUrl: './bed.component.html',
@@ -33,7 +30,10 @@ export class BedComponent implements OnInit{
   }
   mark(marked:any): void {
     const idBed = Number.parseInt(marked.id).toString();
-    if(this.objectEdit.marked!== idBed) this.editRoomService.modify({marked:idBed});
+    if(this.objectEdit.marked!== idBed) {
+      this.objectEdit.marked = idBed;
+      this.editRoomService.modify(this.objectEdit);
+    }
   }
   modalPatient(element:any) {
     console.log('modalPatient');

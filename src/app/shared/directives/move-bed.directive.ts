@@ -13,26 +13,36 @@ export class MoveBedDirective implements OnInit {
   @Input("appMoveBed") bed: any;
   @HostBinding('attr.points') set points(p: string) {
     this.bed.polygon = p;
-  };
-  private bedPolygon: Coordinates[] = [];
-  private objectEdit: EditRoom | {marked: string} = {marked: ''};
+  }
+
+
+  private bedPolygon: any //Coordinates[] = [];
+  private startPolygon: any //Coordinates[] = [];
+  private objectEdit: EditRoom | { marked: string } = { marked: '' };
   constructor(
     private editRoomService: EditRoomService,
     private cdkDrag: CdkDrag
   ) { }
   ngOnInit() {
-    this.bedPolygon = coordinateOfPolygon(this.bed.polygon)
+    this.bedPolygon = coordinateOfPolygon(this.bed.polygon);
+    this.startPolygon = this.bed.polygon;
     this.cdkDrag.disabled = true;
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
     this.cdkDrag.started.subscribe(this.started.bind(this));
     this.cdkDrag.moved.subscribe(this.moved.bind(this));
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
+
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
-    if (objEditRoom.marked === this.bed.id.toString() ) {
+const id = objEditRoom.marked;
+    if (id === this.bed.id.toString() && this.editRoomService.isPosibleBed(id) ) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
-      this.objectEdit = objEditRoom;
-    } else {
+          this.objectEdit = objEditRoom;
+    } else if (id === '') {
+      if (!this.cdkDrag.disabled) this.cdkDrag.disabled = true;
+      this.bedPolygon = coordinateOfPolygon(this.startPolygon);
+    }
+    else {
       if (!this.cdkDrag.disabled) this.cdkDrag.disabled = true;
     };
   }

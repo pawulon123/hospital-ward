@@ -9,7 +9,7 @@ import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service'
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
-  styleUrls: ['./edit-room.component.css']
+  styleUrls: ['./edit-room.component.css'],
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
@@ -18,10 +18,9 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     private modeWardSvgService: ModeWardSvgService
   ) { }
   private markedRoom: Room | undefined;
-  private removeEditingRoom: Function = () => { };
-  private setRoom: Function = () => { };
+  private endEditingRoom: Function = () => {};
   private subscribeEditRoomService: any;
-  private objectEdit: EditRoom | { marked: string } = { marked: '' };
+  private objectEdit: EditRoom |{ marked: string } = { marked: '' };
   bedRotate = new BedRotate();
 
   ngOnInit() {
@@ -37,7 +36,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   }
   rotate(): void {
     const id = this.objectEdit.marked;
-    if (!id) return;
+    if (!id || !this.editRoomService.isPosibleBed(id)) return;
     const bed = this.editRoomService.getOutputBed(id);
     const polygon = bed && 'polygon' in bed ? bed.polygon : this.markedBed?.polygon;
     this.bedRotate.rotate({ id, polygon });
@@ -46,12 +45,12 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.modify(this.objectEdit);
   }
   cancel(): void {
-    this.editRoomService.restoreBed(this.markedRoom?.beds);
-    this.editRoomService.modify({ marked: '' });
+    this.editRoomService.restoreBeds(this.markedRoom?.beds);
+    this.editRoomService.initialState();
     this.modeWardSvgService.setMode();
-    this.removeEditingRoom();
+    this.endEditingRoom();
   }
   ngOnDestroy(): void {
-    this.subscribeEditRoomService.unsubscribe()
+    this.subscribeEditRoomService.unsubscribe();
   }
 }

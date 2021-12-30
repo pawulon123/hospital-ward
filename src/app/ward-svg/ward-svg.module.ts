@@ -6,6 +6,7 @@ import { WardComponent } from './ward/ward.component';
 import { SharedModule } from '../shared/shared.module';
 import { EditRoomComponent } from './edit-room/edit-room.component';
 import { MaterialModule } from '../material/material.module';
+import { EditRoomService } from '../core/services/edit-room.service';
 @NgModule({
   declarations: [
     BedComponent,
@@ -22,6 +23,6 @@ import { MaterialModule } from '../material/material.module';
     // RoomComponent
   ],
   entryComponents:[EditRoomComponent],
-  providers:[]
+  // providers:[EditRoomService]
 })
 export class WardSvgModule { }
