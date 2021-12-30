@@ -16,8 +16,8 @@ export class MoveBedDirective implements OnInit {
   }
 
 
-  private bedPolygon: any //Coordinates[] = [];
-  private startPolygon: any //Coordinates[] = [];
+  private bedPolygon: Coordinates[] = [];
+  private startPolygon: string = '';
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
   constructor(
     private editRoomService: EditRoomService,
@@ -37,7 +37,7 @@ export class MoveBedDirective implements OnInit {
 const id = objEditRoom.marked;
     if (id === this.bed.id.toString() && this.editRoomService.isPosibleBed(id) ) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
-          this.objectEdit = objEditRoom;
+      this.objectEdit = objEditRoom;
     } else if (id === '') {
       if (!this.cdkDrag.disabled) this.cdkDrag.disabled = true;
       this.bedPolygon = coordinateOfPolygon(this.startPolygon);
