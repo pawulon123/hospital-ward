@@ -14,8 +14,6 @@ export class MoveBedDirective implements OnInit {
   @HostBinding('attr.points') set points(p: string) {
     this.bed.polygon = p;
   }
-
-
   private bedPolygon: Coordinates[] = [];
   private startPolygon: string = '';
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
@@ -34,7 +32,7 @@ export class MoveBedDirective implements OnInit {
 
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
-const id = objEditRoom.marked;
+    const id = objEditRoom.marked;
     if (id === this.bed.id.toString() && this.editRoomService.isPosibleBed(id) ) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
       this.objectEdit = objEditRoom;

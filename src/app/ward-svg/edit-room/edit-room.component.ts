@@ -6,6 +6,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BedRotate } from './bed-rotate';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
+import { BedService } from 'src/app/core/services/bed.service';
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
@@ -15,7 +16,8 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   constructor(
     private editRoomService: EditRoomService,
-    private modeWardSvgService: ModeWardSvgService
+    private modeWardSvgService: ModeWardSvgService,
+    private bedService: BedService
   ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => {};
@@ -49,6 +51,26 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.initialState();
     this.modeWardSvgService.setMode();
     this.endEditingRoom();
+  }
+  addBed(){
+    const bed = {
+      room: this.markedRoom?.id,
+      polygon: '10,10 20,20 30,30 49,49 50,50'
+    }
+    this.bedService.createBed(bed).subscribe((bed)=>{
+      console.log(bed);
+
+    });
+
+
+  }
+  deleteBed(){
+    const id = this.objectEdit.marked;
+    if (!id || !this.editRoomService.isPosibleBed(id)) return;
+
+  }
+  confirm(){
+
   }
   ngOnDestroy(): void {
     this.subscribeEditRoomService.unsubscribe();

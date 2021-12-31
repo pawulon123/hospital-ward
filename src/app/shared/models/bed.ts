@@ -1,6 +1,6 @@
 export interface Bed {
 
-  id: string | number;
+  id?: string | number;
   // x_svg: string;
   // y_svg: string;
   // rotate: string;

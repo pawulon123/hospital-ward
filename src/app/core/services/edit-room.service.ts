@@ -57,6 +57,7 @@ export class EditRoomService  {
   restoreBeds(beds: Bed[] | undefined): void {
     if (!beds) return;
     this.getOutputBeds.forEach(bed => {
+      if (!bed.id) return;
       const bedNotMod: Bed | undefined = findById(this.roomNotModify.beds, bed.id);
       if (bedNotMod) {
         beds.forEach((b: Bed) => {

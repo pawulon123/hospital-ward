@@ -1,10 +1,10 @@
 <div>
 
-  <button>dodaj łóżko</button>
-  <button>usuń łóżko</button>
+  <button (click) = "addBed()">dodaj łóżko</button>
+  <button (click) = "deleteBed()">usuń łóżko</button>
   <button (click) = "rotate()" >obróć</button>
   <div>
-    <button>zatwierdź</button>
+    <button (click) = "confirm()">zatwierdź</button>
     <button (click) = "cancel()">anuluj</button>
   </div>
 </div>

@@ -6,7 +6,7 @@ export function logError(message: string): void {
   console.error(message);
 }
 export function findById(arr: Object[] , id: number | string): any {
-  return arr?.find((obj: any) => 'id' in obj && obj.id == id);
+  return arr.find((obj: any) => 'id' in obj && obj.id == id);
 }
 export function cloneDeep(obj: Object | undefined): Object | undefined {
   return obj ? JSON.parse(JSON.stringify(obj)) : undefined;

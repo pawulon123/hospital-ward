@@ -6,7 +6,7 @@ import { EditRoom } from '../models/edit-room';
   selector: '[appBedMarked]'
 })
 export class BedMarkedDirective implements OnInit {
-  @Input("appBedMarked") id: number | string = '';
+  @Input("appBedMarked") id: number |undefined| string = '';
 
   styleDefault: string = "fill:white; opacity:0.3";
   @HostBinding('attr.style') style: string = this.styleDefault;
@@ -19,7 +19,7 @@ export class BedMarkedDirective implements OnInit {
   }
   passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;
-    this.style = id === this.id.toString() && this.editRoomService.isPosibleBed(id) ? this.marked : this.styleDefault;
+    this.style = this.id && id === this.id.toString() && this.editRoomService.isPosibleBed(id) ? this.marked : this.styleDefault;
   }
   get marked(): string {
     return "fill:rgb(154, 194, 45); opacity:0.3"
