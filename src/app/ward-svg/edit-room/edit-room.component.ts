@@ -6,7 +6,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BedRotate } from './bed-rotate';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
-import { BedService } from 'src/app/core/services/bed.service';
+import { BedService } from '../../core/services/bed.service';
+
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
@@ -20,10 +21,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     private bedService: BedService
   ) { }
   private markedRoom: Room | undefined;
-  private endEditingRoom: Function = () => {};
+  private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
-  private objectEdit: EditRoom |{ marked: string } = { marked: '' };
+  private objectEdit: EditRoom | { marked: string } = { marked: '' };
   bedRotate = new BedRotate();
+  roomPolygonAsArrays: any
 
   ngOnInit() {
     this.editRoomService.roomNotModify = this.markedRoom;
@@ -36,15 +38,17 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   get markedBed(): Bed {
     return this.objectEdit?.marked && this.markedRoom ? findById(this.markedRoom.beds, this.objectEdit?.marked) : null;
   }
-  rotate(): void {
+  rotateBed(): void {
     const id = this.objectEdit.marked;
     if (!id || !this.editRoomService.isPosibleBed(id)) return;
     const bed = this.editRoomService.getOutputBed(id);
     const polygon = bed && 'polygon' in bed ? bed.polygon : this.markedBed?.polygon;
     this.bedRotate.rotate({ id, polygon });
-    this.editRoomService.addOrUpdate({ id, polygon: this.bedRotate.points });
-    this.markedBed.polygon = this.bedRotate.points;
-    this.editRoomService.modify(this.objectEdit);
+    if (this.editRoomService.bedIsInRoom(this.bedRotate.coordinatesAsArrays)) {
+      this.editRoomService.addOrUpdate({ id, polygon: this.bedRotate.points });
+      this.markedBed.polygon = this.bedRotate.points;
+      this.editRoomService.modify(this.objectEdit);
+    }
   }
   cancel(): void {
     this.editRoomService.restoreBeds(this.markedRoom?.beds);
@@ -52,25 +56,20 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.modeWardSvgService.setMode();
     this.endEditingRoom();
   }
-  addBed(){
+  addBed() {
     const bed = {
       room: this.markedRoom?.id,
       polygon: '10,10 20,20 30,30 49,49 50,50'
     }
-    this.bedService.createBed(bed).subscribe((bed)=>{
+    this.bedService.createBed(bed).subscribe((bed) => {
       console.log(bed);
-
     });
-
-
   }
-  deleteBed(){
+  deleteBed() {
     const id = this.objectEdit.marked;
     if (!id || !this.editRoomService.isPosibleBed(id)) return;
-
   }
-  confirm(){
-
+  confirm() {
   }
   ngOnDestroy(): void {
     this.subscribeEditRoomService.unsubscribe();

@@ -8,12 +8,13 @@ export class BedRotate {
   rotationAngle: number = 15
   height: number = 0;
   width: number = 0;
-  polygon: string = ''
+  polygon: string = '';
+  coor:Coordinates[] =[];
   rotate(bed: any): void {
     this.bed = bed;
-    const coordinates: Coordinates[] = coordinateOfPolygon(this.bed.polygon);
+    this.coor = coordinateOfPolygon(this.bed.polygon);
 
-    const shape = shapeProperties(coordinates);
+    const shape = shapeProperties(this.coor);
     if (!this.centerBed || bed.id !== this.bed.id) {
       if ('quadrangle' in shape) {
         if (!shape.quadrangle.rect) logError('shape is not rectangle, the transformations may be inaccurate');
@@ -23,9 +24,10 @@ export class BedRotate {
       }
     }
     if (this.centerBed !== shape.quadrangle.center && bed.id === this.bed.id) this.centerBed = shape.quadrangle.center;
-    this.assignment(coordinates, this.rotationAngle);
+    this.assignment(this.coor, this.rotationAngle);
     this.rotationAngle += this.step;
-    this.polygon = polygonOfcoordinates(coordinates);
+
+    this.polygon = polygonOfcoordinates(this.coor);
   }
   private assignment(coordinates: Coordinates[], angle: number): void {
     coordinates[0].x = (-this.width * cos(angle)) - this.height * sin(angle) + this.centerBed.x;
@@ -48,6 +50,12 @@ export class BedRotate {
   }
   get points() {
     return this.polygon;
+  }
+  get coordinates() {
+    return this.coor;
+  }
+  get coordinatesAsArrays() {
+    return this.coordinates.map(c => [c.x, c.y]);
   }
 
 }

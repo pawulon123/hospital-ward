@@ -1,20 +1,22 @@
 import { EditRoom } from './../../shared/models/edit-room';
 import { Bed } from 'src/app/shared/models/bed';
-import { findById } from '../../shared/useful/useful';
+import { findById, polygonInPolygon, arraysOfPolygon} from '../../shared/useful/useful';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
 @Injectable({ providedIn: 'root' })
-export class EditRoomService  {
+export class EditRoomService {
   objEditRoom$ = new Subject<any>()
   outputBeds: Bed[] = [];
   bedsIds: string[] = [];
   objEdit: EditRoom = { marked: '' };
   roomJson: string = '';
+  cordinatesRoomAsArrays: number[][] = [];
 
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
+
   }
   initialState(): void {
     this.outputBeds.length = 0;
@@ -53,6 +55,13 @@ export class EditRoomService  {
   }
   set roomNotModify(room: Room | undefined) {
     this.roomJson = JSON.stringify(room);
+    this.roomAsArrays = room?.polygon
+  }
+  set roomAsArrays(polygon: any | undefined) {
+    this.cordinatesRoomAsArrays = arraysOfPolygon(polygon);
+  }
+  get roomAsArrays(): number[][] {
+    return this.cordinatesRoomAsArrays
   }
   restoreBeds(beds: Bed[] | undefined): void {
     if (!beds) return;
@@ -65,5 +74,8 @@ export class EditRoomService  {
         });
       }
     });
+  }
+  bedIsInRoom(bedAsArrays: number[][]):Boolean {
+    return polygonInPolygon(bedAsArrays, this.roomAsArrays);
   }
 }

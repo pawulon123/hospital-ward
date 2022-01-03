@@ -3,6 +3,7 @@ import { strategyRound } from './strategy-round';
 import { partial } from '../../shared/useful/useful';
 import multiplier from './shape-config';
 const round: Function = strategyRound('round', 2);
+const pointInPolygon = require('point-in-polygon');
 
 export function shapeProperties(coordinates: Coordinates[]): { quadrangle: any } {
   return {
@@ -100,13 +101,22 @@ export function scale(
     };
   });
 }
-export function polygonInPolygon(polygonOut: string, polygonIn: string ): boolean {
-  // console.log(polygonIn);
-  // console.log(polygonOut);
-
-  return false;
+export function polygonInPolygon(internal: number[][], external: number[][] ): boolean {
+  let isIn: boolean = true;
+  for (let i = 0; i < internal.length; i++) {
+    const point: number[] = internal[i];
+    if(!pointInPolygon(internal[i], external)) {
+      isIn = false ;
+      break;
+    }
+  }
+  return isIn;
 }
-
+export function arraysOfPolygon(polygon: string): number[][] {
+  return polygon.split(/ +/).map((corner: any) => {
+    return [ Number.parseInt(corner.split(',')[0]), Number.parseInt(corner.split(',')[1]) ]
+  });
+}
 
 
 

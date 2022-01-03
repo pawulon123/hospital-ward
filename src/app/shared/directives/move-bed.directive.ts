@@ -2,7 +2,7 @@ import { Coordinates } from './../models/coordinate';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Directive, Input, OnInit, HostBinding } from '@angular/core';
 import { EditRoom } from '../models/edit-room';
-import { coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
+import { arraysOfPolygon, coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
 import { EditRoomService } from './../../core/services/edit-room.service';
 import { Bed } from '../models/bed';
 
@@ -17,6 +17,7 @@ export class MoveBedDirective implements OnInit {
   private bedPolygon: Coordinates[] = [];
   private startPolygon: string = '';
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
+
   constructor(
     private editRoomService: EditRoomService,
     private cdkDrag: CdkDrag
@@ -28,8 +29,6 @@ export class MoveBedDirective implements OnInit {
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
     this.cdkDrag.started.subscribe(this.started.bind(this));
     this.cdkDrag.moved.subscribe(this.moved.bind(this));
-    this.cdkDrag.ended.subscribe(this.ended.bind(this));
-
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;
@@ -50,8 +49,10 @@ export class MoveBedDirective implements OnInit {
   }
   private moved(e: any): void {
     const movedBed: string = polygonOfcoordinates(move(this.bedPolygon, e.distance))
-    this.points = movedBed;
-    this.editRoomService.modify(this.objectEdit);
+    if (this.editRoomService.bedIsInRoom(arraysOfPolygon(movedBed))) {
+      this.points = movedBed;
+      this.editRoomService.modify(this.objectEdit);
+    }
     this.resetTransform();
   }
   private ended(): void {
