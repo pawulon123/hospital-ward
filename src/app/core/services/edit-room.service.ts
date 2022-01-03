@@ -16,7 +16,6 @@ export class EditRoomService {
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
-
   }
   initialState(): void {
     this.outputBeds.length = 0;

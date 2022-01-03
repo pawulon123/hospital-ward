@@ -6,7 +6,8 @@ import { Room } from 'src/app/shared/models/room';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
-
+import { arraysOfPolygon, logError, rect } from '../../shared/useful/useful';
+const center = require('svg-polygon-center');
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
@@ -34,4 +35,20 @@ export class BedService {
 
   }
   updateBed(){}
+
+  newPolygonInRoom(roomPoints: string, bedIsInRoom: Function, type = 'bedHorizontal'): string {
+    let bed = rect(center(roomPoints), type).polygon;
+    if (typeof bedIsInRoom.constructor === 'function') {
+      let bedArrays = arraysOfPolygon(bed);
+      if (!bedIsInRoom(bedArrays)) {
+        bed = rect(center(roomPoints), 'bedVertical').polygon
+        bedArrays = arraysOfPolygon(bed);
+        if(!bedIsInRoom(bedArrays)) {
+          logError(`cen't draw bed`);
+           return'';
+          }
+        }
+    }
+    return bed;
+  }
 }

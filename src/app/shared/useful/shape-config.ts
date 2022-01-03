@@ -23,14 +23,24 @@ export default {
       }
     ],
     rect: {
-      horizontal: {
+      notWalk: {
         width: 16,
         height: 9
       },
-      vertical: {
+      walk: {
         width: 9,
         height: 16
       },
+
+      bedHorizontal: {
+        width: 42,
+        height: 22
+      },
+      bedVertical: {
+        width: 22,
+        height: 42
+      },
+
       draw: (type: { width: number, height: number }) => {
         return [
           {

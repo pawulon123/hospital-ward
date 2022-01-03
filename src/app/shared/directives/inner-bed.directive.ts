@@ -32,6 +32,6 @@ export class InnerBedDirective implements OnInit {
   }
   walking(): void {
     const pivotCoordinates: Coordinates = pivotCoordinatesOfRect(this.bedDraw.bed.polygon).twoSymetricalSquares.two;
-    this.points = this.bedDraw.bed.patient.walking ? rect(pivotCoordinates, 'horizontal').polygon : rect(pivotCoordinates, 'horizontal').polygon;
+    this.points = this.bedDraw.bed.patient.walking ? rect(pivotCoordinates, 'notWalk').polygon : rect(pivotCoordinates, 'walk').polygon;
   }
 }

@@ -29,10 +29,11 @@ export class MoveBedDirective implements OnInit {
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
     this.cdkDrag.started.subscribe(this.started.bind(this));
     this.cdkDrag.moved.subscribe(this.moved.bind(this));
+    this.cdkDrag.ended.subscribe(this.ended.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;
-    if (id === this.bed.id.toString() && this.editRoomService.isPosibleBed(id) ) {
+    if (id === this.bed.id.toString() && this.editRoomService.isPosibleBed(id)) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
       this.objectEdit = objEditRoom;
     } else if (id === '') {
@@ -62,4 +63,5 @@ export class MoveBedDirective implements OnInit {
   private resetTransform(): void {
     this.cdkDrag.element.nativeElement.style.transform = "translate3d(0px, 0px, 0px)";
   }
+
 }
