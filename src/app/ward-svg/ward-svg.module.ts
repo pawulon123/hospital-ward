@@ -24,4 +24,4 @@ import { MaterialModule } from '../material/material.module';
   entryComponents:[EditRoomComponent],
   providers:[]
 })
-export class WardSvgModule { }
+export class WardSvgModule {}

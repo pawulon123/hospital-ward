@@ -41,6 +41,7 @@ export class RoomComponent implements EventsRoom {
     this.editRoom = this.editRoomContainer?.createComponent(factory);
     this.editRoom.instance.markedRoom = room;
     this.editRoom.instance.endEditingRoom = this.endEditingRoom.bind(this);
+  
   }
   endEditingRoom(): void {
     if (this.editRoom) this.editRoom.destroy();

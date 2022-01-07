@@ -11,10 +11,12 @@ export class WardService {
   id: number = 1
   constructor(private http: HttpClient ) { }
   url: string = 'http://localhost:3000/ward/';
+  refreshSvg: Function = ()=>{}
   getWard(): Observable<Ward> {
-
     this.ward = this.http.get<Ward>(this.url + this.id);
     return this.ward;
   }
-
+  refresh(refresh:Function){
+    this.refreshSvg = refresh;
+  }
 }

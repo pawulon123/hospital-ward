@@ -16,11 +16,12 @@ export class BedsEvDirective implements OnInit {
     private modeWardSvgService: ModeWardSvgService
     ) {}
   ngOnInit() {
-    this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode)
+    this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode);
   }
 
   @HostListener('click', ['$event.target'])
   private onClick(element: any) {
+
     const method: string = this.extractProperty(this.events.click);
     this.caller(method, element);
   };

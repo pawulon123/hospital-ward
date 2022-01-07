@@ -30,6 +30,7 @@ export class MoveBedDirective implements OnInit {
     this.cdkDrag.started.subscribe(this.started.bind(this));
     this.cdkDrag.moved.subscribe(this.moved.bind(this));
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
+
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;

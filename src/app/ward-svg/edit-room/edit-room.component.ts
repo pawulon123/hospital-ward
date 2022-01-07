@@ -1,3 +1,5 @@
+import { Ward } from 'src/app/shared/models/ward';
+import { WardService } from './../../core/services/ward.service';
 import { EditRoom } from './../../shared/models/edit-room';
 import { Room } from '../../shared/models/room';
 import { Bed } from '../../shared/models/bed';
@@ -7,6 +9,8 @@ import { BedRotate } from './bed-rotate';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
 import { BedService } from '../../core/services/bed.service';
+import { WardComponent } from '../ward/ward.component';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-edit-room',
@@ -15,16 +19,21 @@ import { BedService } from '../../core/services/bed.service';
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
+
   constructor(
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
-    private bedService: BedService
+    private bedService: BedService,
+    private wardService: WardService,
+    // private route:  ActivatedRoute
+    private router:  Router
   ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
   bedRotate = new BedRotate();
+
 
   ngOnInit() {
     this.editRoomService.roomNotModify = this.markedRoom;
@@ -67,11 +76,8 @@ export class EditRoomComponent implements OnInit, OnDestroy {
       polygon
     }
     this.bedService.createBed(bed).subscribe((bed) => {
-      // this.markedRoom?.beds.push(bed);
-      // if (bed.id) {
-      //   this.editRoomService.addOrUpdate({ id:bed?.id, polygon: bed.polygon });
-      //   this.editRoomService.posibleBeds.push(bed.id.toString())
-      // }
+      this.markedRoom?.beds.push(bed);
+      this.wardService.refreshSvg();
     });
   }
   deleteBed() {

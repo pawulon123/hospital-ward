@@ -18,12 +18,11 @@ export class RoomsEvDirective implements OnInit {
   @HostListener('click', ['$event.target'])
   private onClick(element: any) {
     const mode = element.dataset.mode;
-    if(this.mode !== mode) {
+    if (this.mode !== mode) {
       this.modeWardSvgService.setMode(mode);
-    }else{
+    } else {
       return;
     }
-    ;
     const method: string = this.extractProperty(this.events.click);
     let id = (this.returned as Record<string, any>)[method];
     this.caller(method, element);
