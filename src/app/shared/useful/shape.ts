@@ -33,16 +33,5 @@ function returnedShape(shape: Coordinates[]): { polygon: string, coordinates: Co
     coordinates: shape
   };
 }
-// export function createBed(roomPoints: string, bedIsInRoom: Function, type = 'bedHorizontal') {
-//   let bed = rect(center(roomPoints), type).polygon;
-//   if (typeof bedIsInRoom.constructor === 'function') {
-//     let bedArrays = arraysOfPolygon(bed);
-//     if (!bedIsInRoom(bedArrays)) {
-//       bed = rect(center(roomPoints), 'bedVertical').polygon
-//       bedArrays = arraysOfPolygon(bed);
-//       return (bedIsInRoom(bedArrays)) ? bed : logError(`cen't draw bed`);
-//     }
-//   }
-//   return bed;
-// }
+
 

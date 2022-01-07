@@ -1,9 +1,11 @@
 import { EditRoom } from './../../shared/models/edit-room';
 import { Bed } from 'src/app/shared/models/bed';
-import { findById, polygonInPolygon, arraysOfPolygon} from '../../shared/useful/useful';
+import { findById, polygonInPolygon, arraysOfPolygon, logError } from '../../shared/useful/useful';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
+import { BedService } from './bed.service';
+import { WardService } from './ward.service';
 @Injectable({ providedIn: 'root' })
 export class EditRoomService {
   objEditRoom$ = new Subject<any>()
@@ -12,9 +14,12 @@ export class EditRoomService {
   objEdit: EditRoom = { marked: '' };
   roomJson: string = '';
   cordinatesRoomAsArrays: number[][] = [];
-
+  constructor(
+    private bedService: BedService,
+    private wardService: WardService,
+  ) { }
   modify(obj: EditRoom): void {
-    if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
+    if (this.objEditRoom.marked !== obj.marked ) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
   }
   initialState(): void {
@@ -43,6 +48,9 @@ export class EditRoomService {
   set posibleBeds(bedsIds: any[]) {
     this.bedsIds = bedsIds.length ? bedsIds?.map(id => id.toString()) : [];
   }
+  set posibleBed(bedsId: any) {
+    this.bedsIds.push(bedsId);
+  }
   get posibleBeds(): string[] {
     return this.bedsIds;
   }
@@ -56,25 +64,57 @@ export class EditRoomService {
     this.roomJson = JSON.stringify(room);
     this.roomAsArrays = room?.polygon
   }
+  roomNotModifyAddBed(bed: Bed): void {
+    const room = Object.assign({}, this.roomNotModify);
+    room.beds = [...this.roomNotModify.beds, bed];
+    this.roomNotModify = room;
+  }
   set roomAsArrays(polygon: any | undefined) {
     this.cordinatesRoomAsArrays = arraysOfPolygon(polygon);
   }
   get roomAsArrays(): number[][] {
     return this.cordinatesRoomAsArrays
   }
-  restoreBeds(beds: Bed[] | undefined): void {
-    if (!beds) return;
-    this.getOutputBeds.forEach(bed => {
-      if (!bed.id) return;
-      const bedNotMod: Bed | undefined = findById(this.roomNotModify.beds, bed.id);
-      if (bedNotMod) {
-        beds.forEach((b: Bed) => {
-          if (bedNotMod.id == b.id) Object.assign(b, bedNotMod);
-        });
-      }
-    });
+  restoreBeds(beds: Bed[] | undefined ): void {
+    if(!beds) return;
+    beds.length = 0;
+    beds.push(...this.roomNotModify.beds);
+    this.wardService.refreshSvg();
   }
-  bedIsInRoom(bedAsArrays: number[][]):Boolean {
+  bedIsInRoom(bedAsArrays: number[][]): Boolean {
     return polygonInPolygon(bedAsArrays, this.roomAsArrays);
+  }
+  addBed(markedRoom: Room): void{
+    const polygon = this.newBedPolygon(markedRoom);
+    const bed = { room: markedRoom.id, polygon };
+    this.bedService.createBed(bed).subscribe(
+      (bed: Bed) => {
+        markedRoom?.beds.push(bed);
+        this.addedBed(bed);
+        this.wardService.refreshSvg();
+      },
+      (e: any) => this.error(e)
+    )
+  }
+  newBedPolygon(markedRoom: Room): string {
+    return markedRoom ?
+      this.bedService.newPolygonInRoom(
+        markedRoom.polygon,
+        this.bedIsInRoom.bind(this)
+      ) : '';
+  }
+  addedBed(bed: Bed): void {
+    let id = bed.id
+    if (!id) return;
+    id = id.toString()
+    bed.creatorComponent = 'editRoom';
+    this.addOrUpdate({ id, polygon: bed.polygon });
+    this.objEditRoom.marked = id;
+    this.posibleBed = id;
+    this.bedService.mark(id);
+    this.roomNotModifyAddBed(bed);
+  }
+  error(e: any): void {
+    logError(e);
   }
 }

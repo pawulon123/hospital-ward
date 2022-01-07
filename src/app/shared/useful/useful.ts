@@ -13,7 +13,6 @@ export function cloneDeep(obj: Object | undefined): Object | undefined {
 export function partial(fn: Function, ...args: any): Function {
   return (...additionalArgs: any) => fn(...additionalArgs, ...args);
 }
-
 export function compose(...args: any[]) {
   return args.length ? args.reduceRight((f: any, g: any) => (x: any) => f(g(x))) : () => { };
 }

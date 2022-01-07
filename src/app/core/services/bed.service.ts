@@ -19,6 +19,7 @@ const httpOptions = {
 })
 export class BedService {
   url: string = 'http://localhost:3000/bed/';
+  markFn: Function = ()=>{};
   constructor(private http: HttpClient) { }
 
   extractOfWard(ward: Ward): Bed[] {
@@ -50,5 +51,11 @@ export class BedService {
         }
     }
     return bed;
+  }
+  setMarkBed(mark: Function){
+    this.markFn = mark;
+  }
+  mark(id:any){
+    this.markFn(id);
   }
 }

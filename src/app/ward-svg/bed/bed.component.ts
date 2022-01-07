@@ -18,6 +18,7 @@ export class BedComponent implements OnInit{
 
   ngOnInit(): void {
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.bedService.setMarkBed(this.mark.bind(this))
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
@@ -29,11 +30,9 @@ export class BedComponent implements OnInit{
    return this.beds;
   }
   mark(marked:any): void {
-    const idBed = Number.parseInt(marked.id).toString();
-    if(this.objectEdit.marked!== idBed) {
-      this.objectEdit.marked = idBed;
+    if(!this.editRoomService.isPosibleBed(marked)) return;
+      this.objectEdit.marked = marked;console.log(marked);
       this.editRoomService.modify(this.objectEdit);
-    }
   }
   modalPatient(element:any) {
     console.log('modalPatient');

@@ -1,12 +1,12 @@
 import { ModeWardSvgService } from './../../core/services/mode-ward-svg.service';
-import { Directive, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+import { Directive,  HostListener, Input, OnInit } from '@angular/core';
 import { events } from '../../ward-svg/events';
 
 @Directive({
   selector: '[appBedsEv]'
 })
 export class BedsEvDirective implements OnInit {
-  @Input("appBedsEv") bed: any;
+  @Input("appBedsEv") InstanceEndCreator: any;
 
   mode: string = 'currentState';
   returned = {};
@@ -14,19 +14,21 @@ export class BedsEvDirective implements OnInit {
 
   constructor(
     private modeWardSvgService: ModeWardSvgService
-    ) {}
+    ) {
+    }
   ngOnInit() {
     this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode);
+    if (this.InstanceEndCreator.creator === 'editRoom') this.mode = 'editRoom';
   }
 
   @HostListener('click', ['$event.target'])
   private onClick(element: any) {
-
     const method: string = this.extractProperty(this.events.click);
-    this.caller(method, element);
+    const id: string = Number.parseInt(element.id).toString();
+    this.caller(method, id);
   };
-  private caller(method: string, element: any): void {
-    const returned: any = !method ? null : this.extractProperty(this.bed, method).call(this.bed, element);
+  private caller(method: string, id: string): void {
+    const returned: any = !method ? null : this.extractProperty(this.InstanceEndCreator.bed, method).call(this.InstanceEndCreator.bed, id);
     if (returned) (this.returned as Record<string, any>)[method] = returned;
   }
   private extractProperty(obj: any, key: string = this.mode): any {
