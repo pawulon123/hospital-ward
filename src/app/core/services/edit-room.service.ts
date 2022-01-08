@@ -19,7 +19,7 @@ export class EditRoomService {
     private wardService: WardService,
   ) { }
   modify(obj: EditRoom): void {
-    if (this.objEditRoom.marked !== obj.marked ) Object.assign(this.objEditRoom, obj);
+    if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
   }
   initialState(): void {
@@ -75,8 +75,8 @@ export class EditRoomService {
   get roomAsArrays(): number[][] {
     return this.cordinatesRoomAsArrays
   }
-  restoreBeds(beds: Bed[] | undefined ): void {
-    if(!beds) return;
+  restoreBeds(beds: Bed[] | undefined): void {
+    if (!beds) return;
     beds.length = 0;
     beds.push(...this.roomNotModify.beds);
     this.wardService.refreshSvg();
@@ -84,7 +84,7 @@ export class EditRoomService {
   bedIsInRoom(bedAsArrays: number[][]): Boolean {
     return polygonInPolygon(bedAsArrays, this.roomAsArrays);
   }
-  addBed(markedRoom: Room): void{
+  addBed(markedRoom: Room): void {
     const polygon = this.newBedPolygon(markedRoom);
     const bed = { room: markedRoom.id, polygon };
     this.bedService.createBed(bed).subscribe(
@@ -113,6 +113,27 @@ export class EditRoomService {
     this.posibleBed = id;
     this.bedService.mark(id);
     this.roomNotModifyAddBed(bed);
+  }
+  deleteNew() {
+    const ob = this.findBedByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
+    // this.bedService.deleteMany(ob.map((o:any) => o.id))
+  }
+  findBedByObjects(ar: any, beds = this.outputBeds): any {
+
+    const keys = ar.map((a: any) => a.key);
+    const values = ar.map((a: any) => a.value);
+    const a = beds.filter((bed: any) => {
+      for (const key in bed) {
+
+        return keys.includes(key) && values.includes(bed[key])
+
+
+      }
+      // const b  =
+      //  obj.key in bed &&  bed[obj.key] === obj[obj.value]
+    })
+
+    // return this.findBedIdsBykey('id', a );
   }
   error(e: any): void {
     logError(e);

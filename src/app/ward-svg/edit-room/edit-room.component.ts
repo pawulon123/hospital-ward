@@ -55,6 +55,8 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.initialState();
     this.modeWardSvgService.setMode();
     this.endEditingRoom();
+    // ServiceEditRoom.deleteNew()
+
   }
   addBed(): void {
     if (!this.markedRoom) return;
