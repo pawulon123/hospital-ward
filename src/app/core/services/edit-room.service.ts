@@ -57,16 +57,26 @@ export class EditRoomService {
   isPosibleBed(id: string): boolean {
     return this.posibleBeds.includes(id);
   }
-  get roomNotModify(): Room {
-    return JSON.parse(this.roomJson);
+  get roomNotModify(): any {
+    return this.roomJson ? JSON.parse(this.roomJson) : null;
   }
   set roomNotModify(room: Room | undefined) {
     this.roomJson = JSON.stringify(room);
     this.roomAsArrays = room?.polygon
   }
   roomNotModifyAddBed(bed: Bed): void {
+    if (!this.roomNotModify) return;
     const room = Object.assign({}, this.roomNotModify);
     room.beds = [...this.roomNotModify.beds, bed];
+    this.roomNotModify = room;
+  }
+  roomNotModifyRemoveBeds(ids: any[]): void {
+    if (!this.roomNotModify) return;
+    const room = Object.assign({}, this.roomNotModify);
+
+    room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));
+console.log(room.beds);
+
     this.roomNotModify = room;
   }
   set roomAsArrays(polygon: any | undefined) {
@@ -76,7 +86,7 @@ export class EditRoomService {
     return this.cordinatesRoomAsArrays
   }
   restoreBeds(beds: Bed[] | undefined): void {
-    if (!beds) return;
+    if (!beds || !this.roomNotModify) return;
     beds.length = 0;
     beds.push(...this.roomNotModify.beds);
     this.wardService.refreshSvg();
@@ -115,25 +125,24 @@ export class EditRoomService {
     this.roomNotModifyAddBed(bed);
   }
   deleteNew() {
-    const ob = this.findBedByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
-    // this.bedService.deleteMany(ob.map((o:any) => o.id))
+    const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
+    this.bedService.deleteMany(ids);
+    this.roomNotModifyRemoveBeds(ids);
+    console.log(this.roomNotModify);
+
+
+
   }
-  findBedByObjects(ar: any, beds = this.outputBeds): any {
-
-    const keys = ar.map((a: any) => a.key);
-    const values = ar.map((a: any) => a.value);
-    const a = beds.filter((bed: any) => {
-      for (const key in bed) {
-
-        return keys.includes(key) && values.includes(bed[key])
-
-
-      }
-      // const b  =
-      //  obj.key in bed &&  bed[obj.key] === obj[obj.value]
-    })
-
-    // return this.findBedIdsBykey('id', a );
+  findIdsBedsByObjects(keysValues: any[]): number[] {
+    return keysValues.reduce((arrIds: number[], keyValue: {key: string, value: string}) => {
+      let { key, value } = keyValue || {};
+      this.roomNotModify?.beds.forEach((bed: any) => {
+        if (key in bed && 'id' in bed && bed[key] === value && !bed.patient) {
+            arrIds.push(bed.id);
+        }
+      });
+      return arrIds;
+    }, [])
   }
   error(e: any): void {
     logError(e);

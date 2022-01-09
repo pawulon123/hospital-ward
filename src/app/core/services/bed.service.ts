@@ -58,4 +58,8 @@ export class BedService {
   mark(id:any){
     this.markFn(id);
   }
+  deleteMany(ids:any) {
+    console.log('deleteMany',ids);
+
+  }
 }

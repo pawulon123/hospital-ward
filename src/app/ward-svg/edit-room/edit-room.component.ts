@@ -16,7 +16,6 @@ import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service'
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
-
   constructor(
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
@@ -51,12 +50,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     }
   }
   cancel(): void {
+    this.editRoomService.deleteNew();
     this.editRoomService.restoreBeds(this.markedRoom?.beds);
     this.editRoomService.initialState();
     this.modeWardSvgService.setMode();
     this.endEditingRoom();
-    // ServiceEditRoom.deleteNew()
-
   }
   addBed(): void {
     if (!this.markedRoom) return;
