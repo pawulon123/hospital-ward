@@ -1,13 +1,13 @@
 import { EditRoom } from './../../shared/models/edit-room';
 import { Bed } from 'src/app/shared/models/bed';
 import { findById, polygonInPolygon, arraysOfPolygon, logError } from '../../shared/useful/useful';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
 import { BedService } from './bed.service';
 import { WardService } from './ward.service';
 @Injectable({ providedIn: 'root' })
-export class EditRoomService {
+export class EditRoomService implements OnDestroy {
   objEditRoom$ = new Subject<any>()
   outputBeds: Bed[] = [];
   bedsIds: string[] = [];
@@ -18,6 +18,10 @@ export class EditRoomService {
     private bedService: BedService,
     private wardService: WardService,
   ) { }
+  ngOnDestroy(): void {
+   console.log('destroy');
+
+  }
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
@@ -73,10 +77,7 @@ export class EditRoomService {
   roomNotModifyRemoveBeds(ids: any[]): void {
     if (!this.roomNotModify) return;
     const room = Object.assign({}, this.roomNotModify);
-
     room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));
-console.log(room.beds);
-
     this.roomNotModify = room;
   }
   set roomAsArrays(polygon: any | undefined) {
@@ -128,18 +129,12 @@ console.log(room.beds);
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
     this.bedService.deleteMany(ids);
     this.roomNotModifyRemoveBeds(ids);
-    console.log(this.roomNotModify);
-
-
-
   }
   findIdsBedsByObjects(keysValues: any[]): number[] {
     return keysValues.reduce((arrIds: number[], keyValue: {key: string, value: string}) => {
       let { key, value } = keyValue || {};
       this.roomNotModify?.beds.forEach((bed: any) => {
-        if (key in bed && 'id' in bed && bed[key] === value && !bed.patient) {
-            arrIds.push(bed.id);
-        }
+        if (key in bed && 'id' in bed && bed[key] === value && !bed.patient) arrIds.push(bed.id);
       });
       return arrIds;
     }, [])

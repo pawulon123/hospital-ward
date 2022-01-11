@@ -5,7 +5,7 @@ import { Bed } from '../../shared/models/bed';
 import { EditRoomService } from './../../core/services/edit-room.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BedRotate } from './bed-rotate';
-import { findById, logError } from '../../shared/useful/useful';
+import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
 
 
@@ -13,18 +13,19 @@ import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service'
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
+  providers: [BedRotate]
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
   constructor(
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
+    private bedRotate:BedRotate
     ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
-  bedRotate = new BedRotate();
 
   ngOnInit() {
     this.editRoomService.roomNotModify = this.markedRoom;
