@@ -2,12 +2,8 @@ import { Component } from '@angular/core';
 import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../shared/useful/useful';
 import { Coordinates } from '../../shared/models/coordinate';
 import { Injectable, OnDestroy } from '@angular/core';
-import { EditRoomComponent } from './edit-room.component'
 @Injectable()
-export class BedRotate  implements OnDestroy{
-  ngOnDestroy(): void {
-console.log('rptate');
-  }
+export class BedRotate {
 
   bed: any;
   centerBed: any = null;

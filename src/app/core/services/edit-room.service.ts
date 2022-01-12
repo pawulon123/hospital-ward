@@ -7,28 +7,27 @@ import { Room } from 'src/app/shared/models/room';
 import { BedService } from './bed.service';
 import { WardService } from './ward.service';
 @Injectable({ providedIn: 'root' })
-export class EditRoomService implements OnDestroy {
+export class EditRoomService  {
   objEditRoom$ = new Subject<any>()
   outputBeds: Bed[] = [];
-  bedsIds: string[] = [];
   objEdit: EditRoom = { marked: '' };
   roomJson: string = '';
   cordinatesRoomAsArrays: number[][] = [];
+  posibleBed:any;
   constructor(
     private bedService: BedService,
     private wardService: WardService,
   ) { }
-  ngOnDestroy(): void {
-   console.log('destroy');
-
+  setPosibleBed(instance:any){
+  this.posibleBed = instance;
   }
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
   }
   initialState(): void {
-    this.outputBeds.length = 0;
-    this.bedsIds.length = 0;
+
+    this.posibleBed.beds = undefined;
     this.roomJson = '';
     this.objEdit.marked = ''
     this.modify(this.objEdit);
@@ -37,7 +36,7 @@ export class EditRoomService implements OnDestroy {
     return this.objEdit;
   }
   set objEditRoom(obj: EditRoom) {
-    if (this.isPosibleBed(obj.marked)) Object.assign(this.objEdit, obj);
+    if (this.posibleBed.isPosibleBed(obj.marked)) Object.assign(this.objEdit, obj);
   }
   getOutputBed(id: string | number): Bed {
     return findById(this.outputBeds, id);
@@ -49,24 +48,12 @@ export class EditRoomService implements OnDestroy {
     const bedFound = this.getOutputBed(bed.id);
     bedFound ? Object.assign(bedFound, bed) : this.outputBeds.push(bed);
   }
-  set posibleBeds(bedsIds: any[]) {
-    this.bedsIds = bedsIds.length ? bedsIds?.map(id => id.toString()) : [];
-  }
-  set posibleBed(bedsId: any) {
-    this.bedsIds.push(bedsId);
-  }
-  get posibleBeds(): string[] {
-    return this.bedsIds;
-  }
-  isPosibleBed(id: string): boolean {
-    return this.posibleBeds.includes(id);
-  }
   get roomNotModify(): any {
     return this.roomJson ? JSON.parse(this.roomJson) : null;
   }
   set roomNotModify(room: Room | undefined) {
     this.roomJson = JSON.stringify(room);
-    this.roomAsArrays = room?.polygon
+    this.roomAsArrays = room?.polygon;
   }
   roomNotModifyAddBed(bed: Bed): void {
     if (!this.roomNotModify) return;
@@ -121,11 +108,11 @@ export class EditRoomService implements OnDestroy {
     bed.creatorComponent = 'editRoom';
     this.addOrUpdate({ id, polygon: bed.polygon });
     this.objEditRoom.marked = id;
-    this.posibleBed = id;
+    this.posibleBed.addBed = bed;
     this.bedService.mark(id);
     this.roomNotModifyAddBed(bed);
   }
-  deleteNew() {
+  deleteNewBeds() {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
     this.bedService.deleteMany(ids);
     this.roomNotModifyRemoveBeds(ids);

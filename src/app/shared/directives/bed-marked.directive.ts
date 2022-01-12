@@ -19,7 +19,7 @@ export class BedMarkedDirective implements OnInit {
   }
   passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;
-    this.style = this.id && id === this.id.toString() && this.editRoomService.isPosibleBed(id) ? this.marked : this.styleDefault;
+    this.style = this.id && id === this.id.toString() && this.editRoomService.posibleBed.exist(id) ? this.marked : this.styleDefault;
   }
   get marked(): string {
     return "fill:rgb(154, 194, 45); opacity:0.3"

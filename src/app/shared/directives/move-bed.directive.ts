@@ -33,7 +33,7 @@ export class MoveBedDirective implements OnInit {
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;
-    if (id === this.bed.id.toString() && this.editRoomService.isPosibleBed(id)) {
+    if (id === this.bed.id.toString() && this.editRoomService.posibleBed.exist(id)) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
       this.objectEdit = objEditRoom;
     } else if (id === '') {

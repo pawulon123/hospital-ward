@@ -30,7 +30,9 @@ export class BedComponent implements OnInit{
    return this.beds;
   }
   mark(marked:any): void {
-    if(!this.editRoomService.isPosibleBed(marked)) return;
+    console.log(this.editRoomService.posibleBed);
+
+    if(!this.editRoomService.posibleBed.exist(marked)) return;
       this.objectEdit.marked = marked;console.log(marked);
       this.editRoomService.modify(this.objectEdit);
   }

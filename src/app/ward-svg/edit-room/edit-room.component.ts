@@ -7,20 +7,22 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BedRotate } from './bed-rotate';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
+import { PosibleBed } from './posible-bed';
 
 
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
-  providers: [BedRotate]
+  providers: [BedRotate, PosibleBed]
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
   constructor(
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
-    private bedRotate:BedRotate
+    private bedRotate: BedRotate,
+    private posibleBed: PosibleBed
     ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
@@ -28,9 +30,10 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
 
   ngOnInit() {
+    this.editRoomService.setPosibleBed(this.posibleBed);
     this.editRoomService.roomNotModify = this.markedRoom;
-    this.editRoomService.posibleBeds = this.markedRoom ? this.markedRoom?.beds.map((bed: Bed) => bed.id) : [];
-    this.subscribeEditRoomService = this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.posibleBed.beds = this.markedRoom?.beds;
+       this.subscribeEditRoomService = this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
@@ -40,7 +43,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   }
   rotateBed(): void {
     const id = this.objectEdit.marked;
-    if (!id || !this.editRoomService.isPosibleBed(id)) return;
+    if (!id || !this.posibleBed.exist(id)) return;
     const bed = this.editRoomService.getOutputBed(id);
     const polygon = bed && 'polygon' in bed ? bed.polygon : this.markedBed?.polygon;
     this.bedRotate.rotate({ id, polygon });
@@ -51,7 +54,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     }
   }
   cancel(): void {
-    this.editRoomService.deleteNew();
+    this.editRoomService.deleteNewBeds();
     this.editRoomService.restoreBeds(this.markedRoom?.beds);
     this.editRoomService.initialState();
     this.modeWardSvgService.setMode();
@@ -63,7 +66,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   }
   deleteBed() {
     const id = this.objectEdit.marked;
-    if (!id || !this.editRoomService.isPosibleBed(id)) return;
+    if (!id || !this.posibleBed.exist(id)) return;
   }
   confirm() {
   }
