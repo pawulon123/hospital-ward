@@ -9,13 +9,14 @@ import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
 import { PosibleBed } from './posible-bed';
 import { OutputBed } from './output-bed';
+import { RoomEntry } from './room-entry';
 
 
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
-  providers: [BedRotate, PosibleBed, OutputBed]
+  providers: [BedRotate, PosibleBed, OutputBed, RoomEntry]
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
@@ -24,7 +25,8 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     private modeWardSvgService: ModeWardSvgService,
     private bedRotate: BedRotate,
     private posibleBed: PosibleBed,
-    private outputBed: OutputBed
+    private outputBed: OutputBed,
+    private roomEntry: RoomEntry
     ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
@@ -34,9 +36,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.editRoomService.setPosibleBed(this.posibleBed);
     this.editRoomService.setOutputBed(this.outputBed);
-    this.editRoomService.roomNotModify = this.markedRoom;
+    this.editRoomService.setRoomEntry(this.roomEntry);
+    this.roomEntry.roomNotModify = this.markedRoom;
     this.posibleBed.beds = this.markedRoom?.beds;
-       this.subscribeEditRoomService = this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.editRoomService.roomAsArrays = this.markedRoom?.polygon;
+    this.subscribeEditRoomService = this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
