@@ -8,13 +8,14 @@ import { BedRotate } from './bed-rotate';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
 import { PosibleBed } from './posible-bed';
+import { OutputBed } from './output-bed';
 
 
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
-  providers: [BedRotate, PosibleBed]
+  providers: [BedRotate, PosibleBed, OutputBed]
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
@@ -22,7 +23,8 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
     private bedRotate: BedRotate,
-    private posibleBed: PosibleBed
+    private posibleBed: PosibleBed,
+    private outputBed: OutputBed
     ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
@@ -31,6 +33,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editRoomService.setPosibleBed(this.posibleBed);
+    this.editRoomService.setOutputBed(this.outputBed);
     this.editRoomService.roomNotModify = this.markedRoom;
     this.posibleBed.beds = this.markedRoom?.beds;
        this.subscribeEditRoomService = this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
@@ -44,11 +47,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   rotateBed(): void {
     const id = this.objectEdit.marked;
     if (!id || !this.posibleBed.exist(id)) return;
-    const bed = this.editRoomService.getOutputBed(id);
+    const bed = this.outputBed.getOutputBed(id);
     const polygon = bed && 'polygon' in bed ? bed.polygon : this.markedBed?.polygon;
     this.bedRotate.rotate({ id, polygon });
     if (this.editRoomService.bedIsInRoom(this.bedRotate.coordinatesAsArrays)) {
-      this.editRoomService.addOrUpdate({ id, polygon: this.bedRotate.points });
+      this.outputBed.addOrUpdate({ id, polygon: this.bedRotate.points });
       this.markedBed.polygon = this.bedRotate.points;
       this.editRoomService.modify(this.objectEdit);
     }

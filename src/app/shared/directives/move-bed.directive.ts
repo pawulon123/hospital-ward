@@ -45,7 +45,7 @@ export class MoveBedDirective implements OnInit {
     };
   }
   private started(): void {
-    const bed: Bed = this.editRoomService.getOutputBed(this.bed.id);
+    const bed: Bed = this.editRoomService.outputBed.getOutputBed(this.bed.id);
     this.bedPolygon = bed && 'polygon' in bed ? coordinateOfPolygon(bed.polygon) : this.bedPolygon;
   }
   private moved(e: any): void {
@@ -58,7 +58,7 @@ export class MoveBedDirective implements OnInit {
   }
   private ended(): void {
     this.bedPolygon = coordinateOfPolygon(this.bed.polygon);
-    this.editRoomService.addOrUpdate({ id: this.bed.id, polygon: this.bed.polygon });
+    this.editRoomService.outputBed.addOrUpdate({ id: this.bed.id, polygon: this.bed.polygon });
   }
   private resetTransform(): void {
     this.cdkDrag.element.nativeElement.style.transform = "translate3d(0px, 0px, 0px)";

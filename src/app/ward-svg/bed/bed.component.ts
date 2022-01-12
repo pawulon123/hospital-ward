@@ -8,13 +8,13 @@ import { EditRoom } from 'src/app/shared/models/edit-room';
   templateUrl: './bed.component.html',
   styleUrls: ['./bed.component.css'],
 })
-export class BedComponent implements OnInit{
+export class BedComponent implements OnInit {
   objectEdit: any = {};
-  private beds?:any;
+  private beds?: any;
   constructor(
     private bedService: BedService,
     private editRoomService: EditRoomService
-    ) {}
+  ) { }
 
   ngOnInit(): void {
     this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
@@ -23,21 +23,18 @@ export class BedComponent implements OnInit{
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
   }
-  setBeds(ward:any) {
+  setBeds(ward: any) {
     this.beds = this.bedService.extractOfWard(ward);
   }
   getBeds(): Bed[] {
-   return this.beds;
+    return this.beds;
   }
-  mark(marked:any): void {
-    console.log(this.editRoomService.posibleBed);
-
-    if(!this.editRoomService.posibleBed.exist(marked)) return;
-      this.objectEdit.marked = marked;console.log(marked);
-      this.editRoomService.modify(this.objectEdit);
+  mark(marked: any): void {
+    if (!this.editRoomService.posibleBed.exist(marked)) return;
+    this.objectEdit.marked = marked; console.log(marked);
+    this.editRoomService.modify(this.objectEdit);
   }
-  modalPatient(element:any) {
+  modalPatient(element: any) {
     console.log('modalPatient');
-
   }
 }

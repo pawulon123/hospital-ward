@@ -9,10 +9,10 @@ import { WardService } from './ward.service';
 @Injectable({ providedIn: 'root' })
 export class EditRoomService  {
   objEditRoom$ = new Subject<any>()
-  outputBeds: Bed[] = [];
   objEdit: EditRoom = { marked: '' };
   roomJson: string = '';
   cordinatesRoomAsArrays: number[][] = [];
+  outputBed:any;
   posibleBed:any;
   constructor(
     private bedService: BedService,
@@ -21,13 +21,16 @@ export class EditRoomService  {
   setPosibleBed(instance:any){
   this.posibleBed = instance;
   }
+  setOutputBed(instance:any){
+  this.outputBed = instance;
+  }
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
   }
   initialState(): void {
 
-    this.posibleBed.beds = undefined;
+    // this.posibleBed.beds = undefined;
     this.roomJson = '';
     this.objEdit.marked = ''
     this.modify(this.objEdit);
@@ -37,16 +40,6 @@ export class EditRoomService  {
   }
   set objEditRoom(obj: EditRoom) {
     if (this.posibleBed.isPosibleBed(obj.marked)) Object.assign(this.objEdit, obj);
-  }
-  getOutputBed(id: string | number): Bed {
-    return findById(this.outputBeds, id);
-  }
-  get getOutputBeds(): Bed[] {
-    return this.outputBeds;
-  }
-  addOrUpdate(bed: { id: string | number, polygon: string }): void {
-    const bedFound = this.getOutputBed(bed.id);
-    bedFound ? Object.assign(bedFound, bed) : this.outputBeds.push(bed);
   }
   get roomNotModify(): any {
     return this.roomJson ? JSON.parse(this.roomJson) : null;
@@ -106,7 +99,7 @@ export class EditRoomService  {
     if (!id) return;
     id = id.toString()
     bed.creatorComponent = 'editRoom';
-    this.addOrUpdate({ id, polygon: bed.polygon });
+    this.outputBed.addOrUpdate({ id, polygon: bed.polygon });
     this.objEditRoom.marked = id;
     this.posibleBed.addBed = bed;
     this.bedService.mark(id);
