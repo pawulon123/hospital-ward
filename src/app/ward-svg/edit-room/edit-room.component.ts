@@ -27,16 +27,18 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     private posibleBed: PosibleBed,
     private outputBed: OutputBed,
     private roomEntry: RoomEntry
-    ) { }
+  ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
 
   ngOnInit() {
-    this.editRoomService.setPosibleBed(this.posibleBed);
-    this.editRoomService.setOutputBed(this.outputBed);
-    this.editRoomService.setRoomEntry(this.roomEntry);
+    this.editRoomService.setServices({
+      posibleBed: this.posibleBed,
+      outputBed: this.outputBed,
+      roomEntry: this.roomEntry
+    })
     this.roomEntry.roomNotModify = this.markedRoom;
     this.posibleBed.beds = this.markedRoom?.beds;
     this.editRoomService.roomAsArrays = this.markedRoom?.polygon;
@@ -63,7 +65,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   cancel(): void {
     this.editRoomService.deleteNewBeds();
     this.editRoomService.restoreBeds(this.markedRoom?.beds);
-    this.editRoomService.initialState();
+    this.editRoomService.modify({marked : ''});
     this.modeWardSvgService.setMode();
     this.endEditingRoom();
   }

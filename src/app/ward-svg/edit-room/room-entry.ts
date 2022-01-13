@@ -11,13 +11,13 @@ room:string ='';
   set roomNotModify(room: Room | undefined) {
     this.room = JSON.stringify(room);
   }
-  roomNotModifyAddBed(bed: Bed): void {
+  addBed(bed: Bed): void {
     if (!this.roomNotModify) return;
     const room = Object.assign({}, this.roomNotModify);
     room.beds = [...this.roomNotModify.beds, bed];
     this.roomNotModify = room;
   }
-  roomNotModifyRemoveBeds(ids: any[]): void {
+  removeBeds(ids: any[]): void {
     if (!this.roomNotModify) return;
     const room = Object.assign({}, this.roomNotModify);
     room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));

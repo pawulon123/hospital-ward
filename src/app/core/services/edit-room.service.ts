@@ -1,41 +1,36 @@
 import { EditRoom } from './../../shared/models/edit-room';
 import { Bed } from 'src/app/shared/models/bed';
-import { findById, polygonInPolygon, arraysOfPolygon, logError } from '../../shared/useful/useful';
-import { Injectable, OnDestroy } from '@angular/core';
+import { polygonInPolygon, arraysOfPolygon, logError } from '../../shared/useful/useful';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
 import { BedService } from './bed.service';
 import { WardService } from './ward.service';
+
 @Injectable({ providedIn: 'root' })
-export class EditRoomService  {
+export class EditRoomService {
   objEditRoom$ = new Subject<any>()
   objEdit: EditRoom = { marked: '' };
   cordinatesRoomAsArrays: number[][] = [];
-  outputBed:any;
-  posibleBed:any;
-  roomEntry:any;
+  outputBed: any;
+  posibleBed: any;
+  roomEntry: any;
+
   constructor(
     private bedService: BedService,
     private wardService: WardService,
   ) { }
-  setPosibleBed(instance:any){
-  this.posibleBed = instance;
-  }
-  setOutputBed(instance:any){
-  this.outputBed = instance;
-  }
-  setRoomEntry(instance:any){
-  this.roomEntry = instance;
+  setServices(services: any) {
+    Object.assign(this, services);
   }
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
   }
-  initialState(): void {
-
-    this.objEdit.marked = ''
-    this.modify(this.objEdit);
-  }
+  // initialState(): void {
+  //   this.objEdit.marked = ''
+  //   this.modify(this.objEdit);
+  // }
   get objEditRoom(): EditRoom {
     return this.objEdit;
   }
@@ -85,15 +80,15 @@ export class EditRoomService  {
     this.objEditRoom.marked = id;
     this.posibleBed.addBed = bed;
     this.bedService.mark(id);
-    this.roomEntry.roomNotModifyAddBed(bed);
+    this.roomEntry.addBed(bed);
   }
   deleteNewBeds() {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
     this.bedService.deleteMany(ids);
-    this.roomEntry.roomNotModifyRemoveBeds(ids);
+    this.roomEntry.removeBeds(ids);
   }
   findIdsBedsByObjects(keysValues: any[]): number[] {
-    return keysValues.reduce((arrIds: number[], keyValue: {key: string, value: string}) => {
+    return keysValues.reduce((arrIds: number[], keyValue: { key: string, value: string }) => {
       let { key, value } = keyValue || {};
       this.roomEntry.roomNotModify?.beds.forEach((bed: any) => {
         if (key in bed && 'id' in bed && bed[key] === value && !bed.patient) arrIds.push(bed.id);
