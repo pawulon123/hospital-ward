@@ -1,6 +1,6 @@
 import { EditRoom } from './../../shared/models/edit-room';
 import { Bed } from 'src/app/shared/models/bed';
-import { polygonInPolygon, arraysOfPolygon, logError } from '../../shared/useful/useful';
+import { logError } from '../../shared/useful/useful';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
@@ -11,10 +11,10 @@ import { WardService } from './ward.service';
 export class EditRoomService {
   objEditRoom$ = new Subject<any>()
   objEdit: EditRoom = { marked: '' };
-  cordinatesRoomAsArrays: number[][] = [];
   outputBed: any;
   posibleBed: any;
   roomEntry: any;
+  bedInRoom:any;
 
   constructor(
     private bedService: BedService,
@@ -27,24 +27,11 @@ export class EditRoomService {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
     this.objEditRoom$.next(this.objEditRoom);
   }
-  // initialState(): void {
-  //   this.objEdit.marked = ''
-  //   this.modify(this.objEdit);
-  // }
   get objEditRoom(): EditRoom {
     return this.objEdit;
   }
   set objEditRoom(obj: EditRoom) {
-    if (this.posibleBed.isPosibleBed(obj.marked)) Object.assign(this.objEdit, obj);
-  }
-  set roomAsArrays(polygon: any | undefined) {
-    this.cordinatesRoomAsArrays = arraysOfPolygon(polygon);
-  }
-  get roomAsArrays(): number[][] {
-    return this.cordinatesRoomAsArrays;
-  }
-  bedIsInRoom(bedAsArrays: number[][]): Boolean {
-    return polygonInPolygon(bedAsArrays, this.roomAsArrays);
+    if (this.posibleBed.exist(obj.marked)) Object.assign(this.objEdit, obj);
   }
   restoreBeds(beds: Bed[] | undefined): void {
     if (!beds || !this.roomEntry.roomNotModify) return;
@@ -68,7 +55,7 @@ export class EditRoomService {
     return markedRoom ?
       this.bedService.newPolygonInRoom(
         markedRoom.polygon,
-        this.bedIsInRoom.bind(this)
+        this.bedInRoom.check.bind(this.bedInRoom)
       ) : '';
   }
   addedBed(bed: Bed): void {
@@ -84,6 +71,7 @@ export class EditRoomService {
   }
   deleteNewBeds() {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
+    if (!ids.length) return;
     this.bedService.deleteMany(ids);
     this.roomEntry.removeBeds(ids);
   }

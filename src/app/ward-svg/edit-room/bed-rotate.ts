@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+
 import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../shared/useful/useful';
 import { Coordinates } from '../../shared/models/coordinate';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 @Injectable()
 export class BedRotate {
 
@@ -57,8 +57,4 @@ export class BedRotate {
   get coordinates() {
     return this.coor;
   }
-  get coordinatesAsArrays() {
-    return this.coordinates.map(c => [c.x, c.y]);
-  }
-
 }

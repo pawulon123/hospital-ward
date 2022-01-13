@@ -2,7 +2,7 @@ import { Coordinates } from './../models/coordinate';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Directive, Input, OnInit, HostBinding } from '@angular/core';
 import { EditRoom } from '../models/edit-room';
-import { arraysOfPolygon, coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
+import { coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
 import { EditRoomService } from './../../core/services/edit-room.service';
 import { Bed } from '../models/bed';
 
@@ -50,7 +50,7 @@ export class MoveBedDirective implements OnInit {
   }
   private moved(e: any): void {
     const movedBed: string = polygonOfcoordinates(move(this.bedPolygon, e.distance))
-    if (this.editRoomService.bedIsInRoom(arraysOfPolygon(movedBed))) {
+    if (this.editRoomService.bedInRoom.check(movedBed)) {
       this.points = movedBed;
       this.editRoomService.modify(this.objectEdit);
     }

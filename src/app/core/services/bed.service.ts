@@ -10,7 +10,7 @@ import { arraysOfPolygon, logError, rect } from '../../shared/useful/useful';
 const center = require('svg-polygon-center');
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json'
+    'Content-Type': 'application/json'
   })
 };
 
@@ -19,7 +19,7 @@ const httpOptions = {
 })
 export class BedService {
   url: string = 'http://localhost:3000/bed/';
-  markFn: Function = ()=>{};
+  markFn: Function = () => { };
   constructor(private http: HttpClient) { }
 
   extractOfWard(ward: Ward): Bed[] {
@@ -28,38 +28,36 @@ export class BedService {
       return arr;
     }, [])
   };
-  createBed(bed: Bed): Observable<Bed>{
+  createBed(bed: Bed): Observable<Bed> {
     return this.http.post<Bed>(this.url, bed, httpOptions);
 
   }
-  deleteBed():any{
+  deleteBed(): any {
 
   }
-  updateBed(){}
+  updateBed() { }
 
   newPolygonInRoom(roomPoints: string, bedIsInRoom: Function, type = 'bedHorizontal'): string {
-    let bed = rect(center(roomPoints), type).polygon;
+    let bed: string = rect(center(roomPoints), type).polygon;
     if (typeof bedIsInRoom.constructor === 'function') {
-      let bedArrays = arraysOfPolygon(bed);
-      if (!bedIsInRoom(bedArrays)) {
+      if (!bedIsInRoom(bed)) {
         bed = rect(center(roomPoints), 'bedVertical').polygon
-        bedArrays = arraysOfPolygon(bed);
-        if(!bedIsInRoom(bedArrays)) {
+        if (!bedIsInRoom(bed)) {
           logError(`cen't draw bed`);
-           return'';
-          }
+          return '';
         }
+      }
     }
     return bed;
   }
-  setMarkBed(mark: Function){
+  setMarkBed(mark: Function) {
     this.markFn = mark;
   }
-  mark(id:any){
+  mark(id: any) {
     this.markFn(id);
   }
-  deleteMany(ids:any) {
-    console.log('deleteMany',ids);
+  deleteMany(ids: any) {
+    console.log('deleteMany', ids);
 
   }
 }
