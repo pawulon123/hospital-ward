@@ -14,7 +14,8 @@ export class EditRoomService {
   outputBed: any;
   posibleBed: any;
   roomEntry: any;
-  bedInRoom:any;
+  bedInRoom: any;
+  bedRotate: any
 
   constructor(
     private bedService: BedService,
@@ -40,7 +41,7 @@ export class EditRoomService {
     this.wardService.refreshSvg();
   }
   addBed(markedRoom: Room): void {
-    const polygon = this.newBedPolygon(markedRoom);
+    const polygon = this.newBedPolygon(markedRoom?.polygon);
     const bed = { room: markedRoom.id, polygon };
     this.bedService.createBed(bed).subscribe(
       (bed: Bed) => {
@@ -51,12 +52,11 @@ export class EditRoomService {
       (e: any) => this.error(e)
     )
   }
-  newBedPolygon(markedRoom: Room): string {
-    return markedRoom ?
-      this.bedService.newPolygonInRoom(
-        markedRoom.polygon,
+  newBedPolygon(markedRoomPolygon: string): string {
+    return this.bedService.newPolygonInRoom(
+        markedRoomPolygon,
         this.bedInRoom.check.bind(this.bedInRoom)
-      ) : '';
+      );
   }
   addedBed(bed: Bed): void {
     let id = bed.id
@@ -86,5 +86,15 @@ export class EditRoomService {
   }
   error(e: any): void {
     logError(e);
+  }
+  rotateBed(bed: any,id:string){
+    const b = this.outputBed.getOutputBed(id);
+    const polygon = b && 'polygon' in b ? b.polygon : bed?.polygon;
+    this.bedRotate.rotate({id, polygon });
+    if (this.bedInRoom.check(this.bedRotate.points)) {
+      this.outputBed.addOrUpdate({ id, polygon: this.bedRotate.points });
+      bed.polygon = this.bedRotate.points;
+      this.modify({marked: id});
+    }
   }
 }
