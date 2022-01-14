@@ -60,8 +60,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.rotateBed(this.markedBed, id);
   }
   cancel(): void {
-    this.editRoomService.deleteNewBeds();
-    this.editRoomService.restoreBeds(this.markedRoom?.beds);
+    this.editRoomService.deleteNewBeds(this.markedRoom?.beds);
     this.editRoomService.modify({marked: ''});
     this.modeWardSvgService.setMode();
     this.endEditingRoom();

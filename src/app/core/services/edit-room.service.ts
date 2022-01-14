@@ -69,11 +69,17 @@ export class EditRoomService {
     this.bedService.mark(id);
     this.roomEntry.addBed(bed);
   }
-  deleteNewBeds() {
+  deleteNewBeds(beds: Bed[] | undefined) {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
     if (!ids.length) return;
-    this.bedService.deleteMany(ids);
-    this.roomEntry.removeBeds(ids);
+    this.bedService.deleteMany(ids).subscribe(
+      d=>{
+        this.roomEntry.removeBeds(ids);
+        this.restoreBeds(beds)
+        this.wardService.refreshSvg();
+      },
+      (e)=>logError(e)
+      );
   }
   findIdsBedsByObjects(keysValues: any[]): number[] {
     return keysValues.reduce((arrIds: number[], keyValue: { key: string, value: string }) => {
@@ -84,9 +90,6 @@ export class EditRoomService {
       return arrIds;
     }, [])
   }
-  error(e: any): void {
-    logError(e);
-  }
   rotateBed(bed: any,id:string){
     const b = this.outputBed.getOutputBed(id);
     const polygon = b && 'polygon' in b ? b.polygon : bed?.polygon;
@@ -96,5 +99,8 @@ export class EditRoomService {
       bed.polygon = this.bedRotate.points;
       this.modify({marked: id});
     }
+  }
+  error(e: any): void {
+    logError(e);
   }
 }

@@ -32,6 +32,10 @@ export class BedService {
     return this.http.post<Bed>(this.url, bed, httpOptions);
 
   }
+  deleteMany(ids: any) {
+    const url = `${this.url}many/${ids}`;
+    return this.http.delete<Bed>(url, httpOptions);
+  }
   deleteBed(): any {
 
   }
@@ -56,8 +60,5 @@ export class BedService {
   mark(id: any) {
     this.markFn(id);
   }
-  deleteMany(ids: any) {
-    console.log('deleteMany', ids);
 
-  }
 }
