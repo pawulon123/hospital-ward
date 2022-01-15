@@ -1,6 +1,6 @@
 import { Bed } from 'src/app/shared/models/bed';
 import { Injectable } from "@angular/core";
-import { findById } from '../../shared/useful/useful';
+import { findById } from '../../../shared/useful/useful';
 
 @Injectable()
 export class OutputBed {

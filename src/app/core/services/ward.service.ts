@@ -7,8 +7,8 @@ import { Ward } from '../../shared/models/ward';
   providedIn: 'root'
 })
 export class WardService {
-  id: number = 1
-  refreshSvg: Function = ()=>{}
+  id: number = 1;
+  refreshSvg: Function = ()=>{};
 
   constructor(
     private http: HttpClient,

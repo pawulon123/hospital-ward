@@ -1,5 +1,5 @@
 import { Coordinates } from './../models/coordinate';
-import { EditRoomService } from './../../core/services/edit-room.service';
+import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Directive, HostBinding, Input, OnInit } from '@angular/core';
 import { pivotCoordinatesOfRect, circle, rect, partial, triangle, charX } from '../../shared/useful/useful';
 import { Sex } from '../models/sex';

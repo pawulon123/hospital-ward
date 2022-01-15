@@ -8,7 +8,7 @@ import { events } from '../../ward-svg/events';
 export class BedsEvDirective implements OnInit {
   @Input("appBedsEv") InstanceEndCreator: any;
 
-  mode: string = 'currentState';
+  mode: string = '';
   returned = {};
   events = events().bed;
 
@@ -17,6 +17,7 @@ export class BedsEvDirective implements OnInit {
     ) {
     }
   ngOnInit() {
+    this.mode = this.InstanceEndCreator.mode;
     this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode);
     if (this.InstanceEndCreator.creator === 'editRoom') this.mode = 'editRoom';
   }

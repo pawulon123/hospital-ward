@@ -1,4 +1,4 @@
-import { EditRoomService } from './../../core/services/edit-room.service';
+import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Component, OnInit } from '@angular/core';
 import { Bed } from 'src/app/shared/models/bed';
 import { BedService } from '../../core/services/bed.service';

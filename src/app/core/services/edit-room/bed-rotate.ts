@@ -1,6 +1,6 @@
 
-import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../shared/useful/useful';
-import { Coordinates } from '../../shared/models/coordinate';
+import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../../shared/useful/useful';
+import { Coordinates } from '../../../shared/models/coordinate';
 import { Injectable } from '@angular/core';
 @Injectable()
 export class BedRotate {
