@@ -32,11 +32,12 @@ export class BedService {
     return this.http.post<Bed>(this.url, bed, httpOptions);
 
   }
-  deleteMany(ids: any) {
-    const url = `${this.url}many/${ids}`;
-    return this.http.delete<Bed>(url, httpOptions);
+  deleteMany(ids: any ) {
+    const url = `${this.url}many/`;
+    return this.http.post<any>(url, ids, httpOptions);
   }
-  deleteBed(): any {
+  deleteBed(id:any): any {
+console.log(id,'bedService');
 
   }
   updateBed() { }

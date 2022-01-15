@@ -34,7 +34,6 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   private subscribeEditRoomService: any;
   private objectEdit: EditRoom | { marked: string } = { marked: '' };
 
-
   ngOnInit() {
     this.editRoomService.setServices({
       posibleBed: this.posibleBed,
@@ -69,9 +68,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     if (!this.markedRoom) return;
     this.editRoomService.addBed(this.markedRoom);
   }
-  deleteBed() {
+  deleteBed() {console.log('ok');
+
     const id = this.objectEdit.marked;
-    if (!id || !this.posibleBed.exist(id)) return;
+    if (!id || !this.posibleBed.exist(id) || this.markedBed.patient) return;
+    this.editRoomService.deleteBed(this.markedBed.id);
   }
   confirm() {
   }

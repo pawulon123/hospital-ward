@@ -21,7 +21,7 @@ export class EditRoomService {
     private bedService: BedService,
     private wardService: WardService,
   ) { }
-  setServices(services: any) {
+  setServices(services: any): void {
     Object.assign(this, services);
   }
   modify(obj: EditRoom): void {
@@ -49,7 +49,7 @@ export class EditRoomService {
         this.addedBed(bed);
         this.wardService.refreshSvg();
       },
-      (e: any) => this.error(e)
+      (e: any) => logError(e)
     )
   }
   newBedPolygon(markedRoomPolygon: string): string {
@@ -69,11 +69,12 @@ export class EditRoomService {
     this.bedService.mark(id);
     this.roomEntry.addBed(bed);
   }
-  deleteNewBeds(beds: Bed[] | undefined) {
+  deleteNewBeds(beds: Bed[] | undefined): void {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
     if (!ids.length) return;
     this.bedService.deleteMany(ids).subscribe(
       d=>{
+        if (typeof d !== 'boolean') logError(d.message);
         this.roomEntry.removeBeds(ids);
         this.restoreBeds(beds)
         this.wardService.refreshSvg();
@@ -90,9 +91,9 @@ export class EditRoomService {
       return arrIds;
     }, [])
   }
-  rotateBed(bed: any,id:string){
-    const b = this.outputBed.getOutputBed(id);
-    const polygon = b && 'polygon' in b ? b.polygon : bed?.polygon;
+  rotateBed(bed: any,id:string): void {
+    const b: Bed = this.outputBed.getOutputBed(id);
+    const polygon: string = b && 'polygon' in b ? b.polygon : bed?.polygon;
     this.bedRotate.rotate({id, polygon });
     if (this.bedInRoom.check(this.bedRotate.points)) {
       this.outputBed.addOrUpdate({ id, polygon: this.bedRotate.points });
@@ -100,7 +101,9 @@ export class EditRoomService {
       this.modify({marked: id});
     }
   }
-  error(e: any): void {
-    logError(e);
+  deleteBed(id:any){
+    this.bedService.deleteBed(id);
+
   }
+
 }
