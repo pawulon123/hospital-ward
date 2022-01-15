@@ -8,18 +8,17 @@ import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
 import { arraysOfPolygon, logError, rect } from '../../shared/useful/useful';
 const center = require('svg-polygon-center');
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class BedService {
+   httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
   url: string = 'http://localhost:3000/bed/';
-  markFn: Function = () => { };
   constructor(private http: HttpClient) { }
 
   extractOfWard(ward: Ward): Bed[] {
@@ -29,15 +28,15 @@ export class BedService {
     }, [])
   };
   createBed(bed: Bed): Observable<Bed> {
-    return this.http.post<Bed>(this.url, bed, httpOptions);
+    return this.http.post<Bed>(this.url, bed, this.httpOptions);
 
   }
   deleteMany(ids: any ) {
     const url = `${this.url}many/`;
-    return this.http.post<any>(url, ids, httpOptions);
+    return this.http.post<any>(url, ids, this.httpOptions);
   }
   deleteBed(id:any): any {
-console.log(id,'bedService');
+  console.log(id,'bedService');
 
   }
   updateBed() { }
@@ -55,11 +54,6 @@ console.log(id,'bedService');
     }
     return bed;
   }
-  setMarkBed(mark: Function) {
-    this.markFn = mark;
-  }
-  mark(id: any) {
-    this.markFn(id);
-  }
+
 
 }

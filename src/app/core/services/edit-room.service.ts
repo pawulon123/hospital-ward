@@ -46,30 +46,28 @@ export class EditRoomService {
     this.bedService.createBed(bed).subscribe(
       (bed: Bed) => {
         markedRoom?.beds.push(bed);
-        this.addedBed(bed);
         this.wardService.refreshSvg();
+        this.addedBed(bed);
       },
       (e: any) => logError(e)
     )
   }
   newBedPolygon(markedRoomPolygon: string): string {
     return this.bedService.newPolygonInRoom(
-        markedRoomPolygon,
-        this.bedInRoom.check.bind(this.bedInRoom)
+      markedRoomPolygon,
+      this.bedInRoom.check.bind(this.bedInRoom)
       );
-  }
-  addedBed(bed: Bed): void {
-    let id = bed.id
-    if (!id) return;
-    id = id.toString()
-    bed.creatorComponent = 'editRoom';
-    this.outputBed.addOrUpdate({ id, polygon: bed.polygon });
-    this.objEditRoom.marked = id;
-    this.posibleBed.addBed = bed;
-    this.bedService.mark(id);
-    this.roomEntry.addBed(bed);
-  }
-  deleteNewBeds(beds: Bed[] | undefined): void {
+    }
+    addedBed(bed: Bed): void {
+      let id = bed.id
+      if (!id) return;
+      id = id.toString()
+      bed.creatorComponent = 'editRoom';
+      this.outputBed.addOrUpdate({ id, polygon: bed.polygon });
+      this.posibleBed.addBed = bed;
+      this.roomEntry.addBed(bed);
+    }
+    deleteNewBeds(beds: Bed[] | undefined): void {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }])
     if (!ids.length) return;
     this.bedService.deleteMany(ids).subscribe(
@@ -103,7 +101,6 @@ export class EditRoomService {
   }
   deleteBed(id:any){
     this.bedService.deleteBed(id);
-
   }
 
 }
