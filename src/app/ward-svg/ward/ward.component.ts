@@ -23,10 +23,13 @@ export class WardComponent implements OnInit {
   ward?: Ward;
   beds?: Bed[] = [];
   rooms?: Room[] = [];
-
+mod:string = '';
   ngOnInit() {
     this.create();
     this.wardService.refresh(this.load.bind(this));
+  }
+  set modeIs(mode:string) {
+    this.mod = mode;
   }
   create(): void {
     this.wardService.getWard().subscribe(

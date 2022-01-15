@@ -22,7 +22,6 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   constructor(
     private editRoomService: EditRoomService,
-    private modeWardSvgService: ModeWardSvgService,
     private bedRotate: BedRotate,
     private posibleBed: PosibleBed,
     private outputBed: OutputBed,
@@ -61,7 +60,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   cancel(): void {
     this.editRoomService.deleteNewBeds(this.markedRoom?.beds);
     this.editRoomService.modify({marked: ''});
-    this.modeWardSvgService.setMode();
+    this.editRoomService.setMode('currentState');
     this.endEditingRoom();
   }
   addBed(): void {

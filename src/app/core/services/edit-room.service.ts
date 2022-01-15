@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
 import { BedService } from './bed.service';
 import { WardService } from './ward.service';
+import { ModeWardSvgService } from './mode-ward-svg.service';
 
 @Injectable({ providedIn: 'root' })
 export class EditRoomService {
@@ -20,9 +21,13 @@ export class EditRoomService {
   constructor(
     private bedService: BedService,
     private wardService: WardService,
+    private modeWardSvgService: ModeWardSvgService,
   ) { }
   setServices(services: any): void {
     Object.assign(this, services);
+  }
+  setMode(mode: string): void {
+    this.modeWardSvgService.setMode(mode);
   }
   modify(obj: EditRoom): void {
     if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
