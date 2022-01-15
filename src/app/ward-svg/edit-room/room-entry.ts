@@ -23,4 +23,10 @@ room:string ='';
     room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));
     this.roomNotModify = room;
   }
+  removeBed(id: string): void {
+    if (!this.roomNotModify) return;
+    const room = Object.assign({}, this.roomNotModify);
+    room.beds = room.beds.filter((bed: any) => bed.id != id);
+    this.roomNotModify = room;
+  }
 }

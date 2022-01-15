@@ -31,13 +31,13 @@ export class BedService {
     return this.http.post<Bed>(this.url, bed, this.httpOptions);
 
   }
-  deleteMany(ids: any ) {
+  deleteBed(id: string): Observable<boolean> {
+    return this.http.delete<any>(this.url + id,  this.httpOptions);
+
+  }
+  deleteMany(ids: number[] ): Observable<boolean | { message: string }>{
     const url = `${this.url}many/`;
     return this.http.post<any>(url, ids, this.httpOptions);
-  }
-  deleteBed(id:any): any {
-  console.log(id,'bedService');
-
   }
   updateBed() { }
 

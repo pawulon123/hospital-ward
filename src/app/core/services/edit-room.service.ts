@@ -99,8 +99,23 @@ export class EditRoomService {
       this.modify({marked: id});
     }
   }
-  deleteBed(id:any){
-    this.bedService.deleteBed(id);
+  deleteBed(id: string, beds:Bed[] | undefined) :void{
+    if(!beds) return;
+    this.bedService.deleteBed(id).subscribe(
+      (isDeleted)=>{
+        if (!isDeleted) {
+          logError('the bed cannot be removed')
+        }else{
+          this.roomEntry.removeBeds(id);
+          beds.length = 0;
+          beds.push(...this.roomEntry.roomNotModify.beds);
+          this.outputBed.delete(id);
+          this.wardService.refreshSvg();
+          // this.modify({marked: ''})
+          console.log(this.objEditRoom);
+
+        }
+    });
   }
 
 }

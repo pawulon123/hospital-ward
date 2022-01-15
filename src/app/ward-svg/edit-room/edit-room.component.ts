@@ -68,10 +68,10 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     if (!this.markedRoom) return;
     this.editRoomService.addBed(this.markedRoom);
   }
-  deleteBed() {console.log('ok');
+  deleteBed(): void {
     const id = this.objectEdit.marked;
-    if (!id || !this.posibleBed.exist(id) || this.markedBed.patient) return;
-    this.editRoomService.deleteBed(this.markedBed.id);
+    if (!id || !this.posibleBed.exist(id)) return;
+    this.editRoomService.deleteBed(id, this.markedRoom?.beds);
   }
   confirm() {
   }

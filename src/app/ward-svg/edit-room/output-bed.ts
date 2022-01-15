@@ -16,4 +16,7 @@ export class OutputBed {
     const bedFound = this.getOutputBed(bed.id);
     bedFound ? Object.assign(bedFound, bed) : this.beds.push(bed);
   }
+  delete(id: string): void {
+    this.beds = this.beds.filter(bed => bed.id != id);
+  }
 }
