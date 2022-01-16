@@ -1,6 +1,6 @@
 import { EditRoom } from '../../../shared/models/edit-room';
 import { Bed } from 'src/app/shared/models/bed';
-import { logError } from '../../../shared/useful/useful';
+import { findById, logError } from '../../../shared/useful/useful';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Room } from 'src/app/shared/models/room';
@@ -32,8 +32,6 @@ export class EditRoomService {
     this.roomEntry.roomNotModify = markedRoom;
     this.posibleBed.beds = markedRoom?.beds;
     this.bedInRoom.roomPolygon = markedRoom?.polygon;
-
-
   }
   setMode(mode: string): void {
     this.modeWardSvgService.setMode(mode);
@@ -84,6 +82,8 @@ export class EditRoomService {
   deleteNewBeds(beds: Bed[] | undefined): void {
     const ids = this.findIdsBedsByObjects([{ key: 'creatorComponent', value: 'editRoom' }]);
     this.roomEntry.removeBeds(ids);
+    this.outputBed.beds = [];
+    this.posibleBed.beds = [];
     this.wardService.refreshSvg('currentState');
     if (!ids.length) return;
     this.bedService.deleteMany(ids).subscribe(
@@ -112,15 +112,21 @@ export class EditRoomService {
   }
   deleteBed(id: string, beds: Bed[] | undefined): void {
     if (!beds) return;
+    const bed = findById(beds,id)
+   if (bed && 'patient' in bed  && bed.patient){
+    logError('bed have patient cannot delete');
+    return;
+   }
     this.roomEntry.removeBed(id);
-    beds.length = 0;
-    beds.push(...this.roomEntry.roomNotModify.beds);
     this.outputBed.delete(id);
-    this.wardService.refreshSvg('editRoom');
+    const newBeds = beds.filter(bed => bed.id != id );
+    beds.length = 0;
+    beds.push(...newBeds);
+    this.modify({marked: ''})
+    this.wardService.refreshSvg();
     this.bedService.deleteBed(id).subscribe(
       isDeleted => {if (!isDeleted)logError('the bed cannot be removed')},
       e => logError(e)
       );
   }
-
 }
