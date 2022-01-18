@@ -16,7 +16,7 @@ import { BedInRoom } from './bed-in-room';
 @Injectable()
 export class EditRoomService {
   objEditRoom$ = new Subject<any>()
-  objEdit: EditRoom = { marked: '' };
+  objEdit: EditRoom = { marked: null };
 
   constructor(
     private bedService: BedService,
@@ -73,7 +73,8 @@ export class EditRoomService {
   addedBed(bed: Bed): void {
     let id = bed.id
     if (!id) return;
-    id = id.toString()
+
+
     bed.creatorComponent = 'editRoom';
     this.outputBed.addOrUpdate({ id, polygon: bed.polygon });
     this.posibleBed.addBed = bed;
@@ -100,33 +101,40 @@ export class EditRoomService {
       return arrIds;
     }, [])
   }
-  rotateBed(bed: any, id: string): void {
+  rotateBed(bed: any, id: number): void {
     const b: Bed = this.outputBed.getOutputBed(id);
     const polygon: string = b && 'polygon' in b ? b.polygon : bed?.polygon;
     this.bedRotate.rotate({ id, polygon });
     if (this.bedInRoom.check(this.bedRotate.points)) {
-      this.outputBed.addOrUpdate({ id, polygon: this.bedRotate.points });
-      bed.polygon = this.bedRotate.points;
+      const polygon = this.bedRotate.points
+      this.outputBed.addOrUpdate({ id, polygon });
+      bed.polygon = polygon;
       this.modify({ marked: id });
     }
   }
-  deleteBed(id: string, beds: Bed[] | undefined): void {
+  deleteBed(id: number, beds: Bed[] | undefined): void {
     if (!beds) return;
-    const bed = findById(beds,id)
-   if (bed && 'patient' in bed  && bed.patient){
-    logError('bed have patient cannot delete');
-    return;
-   }
+    const bed = findById(beds, id)
+    if (bed && 'patient' in bed && bed.patient) {
+      logError('bed have patient cannot delete');
+      return;
+    }
     this.roomEntry.removeBed(id);
     this.outputBed.delete(id);
-    const newBeds = beds.filter(bed => bed.id != id );
+    const newBeds = beds.filter(bed => bed.id != id);
     beds.length = 0;
     beds.push(...newBeds);
-    this.modify({marked: ''})
+    this.modify({ marked: null })
     this.wardService.refreshSvg();
     this.bedService.deleteBed(id).subscribe(
-      isDeleted => {if (!isDeleted)logError('the bed cannot be removed')},
+      isDeleted => { if (!isDeleted) logError('the bed cannot be removed') },
       e => logError(e)
-      );
+    );
+  }
+  confirm() {
+    this.bedService.updateBed(this.outputBed.getOutputBeds).subscribe(
+      data => console.log('response', data),
+      e => logError(e)
+    )
   }
 }

@@ -4,19 +4,19 @@ import { findById } from '../../../shared/useful/useful';
 
 @Injectable()
 export class OutputBed {
-  beds: { id: string | number, polygon: string }[] = []
+  beds: { id: number, polygon: string }[] = []
 
-  getOutputBed(id: string | number): Bed {
+  getOutputBed(id:  number): Bed {
     return this.beds ? findById(this.beds, id) : null;
   }
   get getOutputBeds(): Bed[] {
     return this.beds;
   }
-  addOrUpdate(bed: { id: string | number, polygon: string }): void {
+  addOrUpdate(bed: { id:  number, polygon: string }): void {
     const bedFound = this.getOutputBed(bed.id);
     bedFound ? Object.assign(bedFound, bed) : this.beds.push(bed);
   }
-  delete(id: string): void {
+  delete(id: number): void {
     this.beds = this.beds.filter(bed => bed.id != id);
   }
 }

@@ -23,16 +23,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   constructor(
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
-    // private bedRotate: BedRotate,
-    // private posibleBed: PosibleBed,
-    // private outputBed: OutputBed,
-    // private roomEntry: RoomEntry,
-    // private bedInRoom: BedInRoom
   ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
-  private objectEdit: EditRoom | { marked: string } = { marked: '' };
+  private objectEdit: EditRoom | { marked: number | null } = { marked: null };
 
   ngOnInit() {
     this.editRoomService.init(this.markedRoom);
@@ -46,14 +41,17 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     return this.objectEdit?.marked && this.markedRoom ? findById(this.markedRoom.beds, this.objectEdit?.marked) : null;
   }
   rotateBed(): void {
-    const id = this.objectEdit.marked;
-    if (!id || !this.editRoomService.posibleBed.exist(id)) return;
-    this.editRoomService.rotateBed(this.markedBed, id);
+    const id: number | null = this.objectEdit.marked;
+    if (id === null || !this.editRoomService.posibleBed.exist(id)) {
+      return;
+    } else {
+      this.editRoomService.rotateBed(this.markedBed, id);
+    };
   }
   cancel(): void {
     this.editRoomService.deleteNewBeds(this.markedRoom?.beds);
     this.editRoomService.restoreBeds(this.markedRoom?.beds);
-    this.editRoomService.modify({marked: ''});
+    this.editRoomService.modify({ marked: null });
     this.modeWardSvgService.setMode('currentState');
     this.endEditingRoom();
   }
@@ -67,6 +65,8 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.deleteBed(id, this.markedRoom?.beds);
   }
   confirm() {
+    // if (true) return;
+    this.editRoomService.confirm();
   }
   ngOnDestroy(): void {
     this.subscribeEditRoomService.unsubscribe();

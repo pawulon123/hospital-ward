@@ -25,10 +25,10 @@ export class BedsEvDirective implements OnInit {
   @HostListener('click', ['$event.target'])
   private onClick(element: any) {
     const method: string = this.extractProperty(this.events.click);
-    const id: string = Number.parseInt(element.id).toString();
+    const id: number = Number.parseInt(element.id);
     this.caller(method, id);
   };
-  private caller(method: string, id: string): void {
+  private caller(method: string,  id: string | number): void {
     const returned: any = !method ? null : this.extractProperty(this.InstanceEndCreator.bed, method).call(this.InstanceEndCreator.bed, id);
     if (returned) (this.returned as Record<string, any>)[method] = returned;
   }

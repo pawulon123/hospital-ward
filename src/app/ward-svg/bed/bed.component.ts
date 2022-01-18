@@ -28,7 +28,10 @@ export class BedComponent implements OnInit {
   getBeds(): Bed[] {
     return this.beds;
   }
-  mark(marked: any): void {
+  mark(marked: number): void {
+    console.log(this.editRoomService.posibleBed);
+    console.log(marked);
+
     if (!this.editRoomService.posibleBed.exist(marked)) return;
     this.objectEdit.marked = marked;
     this.editRoomService.modify(this.objectEdit);

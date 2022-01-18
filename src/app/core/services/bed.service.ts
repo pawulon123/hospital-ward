@@ -31,7 +31,7 @@ export class BedService {
     return this.http.post<Bed>(this.url, bed, this.httpOptions);
 
   }
-  deleteBed(id: string): Observable<boolean> {
+  deleteBed(id: number): Observable<boolean> {
     return this.http.delete<any>(this.url + id,  this.httpOptions);
 
   }
@@ -39,7 +39,9 @@ export class BedService {
     const url = `${this.url}many/`;
     return this.http.post<any>(url, ids, this.httpOptions);
   }
-  updateBed() { }
+  updateBed(beds:any): Observable<any> { console.log('serviceBed',beds);
+    return this.http.put<any>(this.url, beds, this.httpOptions);
+  }
 
   newPolygonInRoom(roomPoints: string, bedIsInRoom: Function, type = 'bedHorizontal'): string {
     let bed: string = rect(center(roomPoints), type).polygon;

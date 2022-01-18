@@ -3,18 +3,19 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class PosibleBed {
- private ids: any;
+ private ids: any[] = [];
 
   set beds(beds: Bed[] | undefined) {
-    this.ids = beds ? beds.map((bed: Bed) => bed.id?.toString()) : [];
+    this.ids = beds ? beds.map((bed: Bed) => bed.id) : [];
   }
-  private getIds() {
+  private getIds(): number[] {
     return this.ids;
   }
   set addBed(bed: Bed) {
-    this.getIds().push(bed.id?.toString());
+    if(!bed.id)return
+    this.getIds().push(bed.id);
   }
-  exist(id: string): boolean {
-    return this.getIds().includes(id);
+  exist(id: number | null): boolean {
+    return id && id >= 0 ? this.getIds().includes(id) : false;
   }
 }
