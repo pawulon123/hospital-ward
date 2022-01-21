@@ -5,6 +5,7 @@ import { EditRoom } from '../models/edit-room';
 import { coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Bed } from '../models/bed';
+import { BedMarkedService } from '../../core/services/edit-room/bed-marked';
 
 @Directive({
   selector: '[appMoveBed]'
@@ -20,13 +21,14 @@ export class MoveBedDirective implements OnInit {
 
   constructor(
     private editRoomService: EditRoomService,
-    private cdkDrag: CdkDrag
+    private cdkDrag: CdkDrag,
+    private bedMarkedService: BedMarkedService,
   ) { }
   ngOnInit() {
     this.bedPolygon = coordinateOfPolygon(this.bed.polygon);
     this.startPolygon = this.bed.polygon;
     this.cdkDrag.disabled = true;
-    this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
     this.cdkDrag.started.subscribe(this.started.bind(this));
     this.cdkDrag.moved.subscribe(this.moved.bind(this));
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
@@ -52,7 +54,7 @@ export class MoveBedDirective implements OnInit {
     const movedBed: string = polygonOfcoordinates(move(this.bedPolygon, e.distance))
     if (this.editRoomService.bedInRoom.check(movedBed)) {
       this.points = movedBed;
-      this.editRoomService.modify(this.objectEdit);
+      this.bedMarkedService.modify(this.objectEdit);
     }
     this.resetTransform();
   }

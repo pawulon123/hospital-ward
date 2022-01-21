@@ -1,9 +1,8 @@
 import { EditRoom } from '../../../shared/models/edit-room';
-import { Bed } from 'src/app/shared/models/bed';
+import { Bed } from '../../../shared/models/bed';
 import { findById, logError } from '../../../shared/useful/useful';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Room } from 'src/app/shared/models/room';
+import { Room } from '../../../shared/models/room';
 import { BedService } from '../bed.service';
 import { WardService } from '../ward.service';
 import { ModeWardSvgService } from '../mode-ward-svg.service';
@@ -12,39 +11,33 @@ import { OutputBed } from './output-bed';
 import { RoomEntry } from './room-entry';
 import { BedRotate } from './bed-rotate';
 import { BedInRoom } from './bed-in-room';
+import { BedMarkedService } from './bed-marked';
 
 @Injectable()
 export class EditRoomService {
-  objEditRoom$ = new Subject<any>()
-  objEdit: EditRoom = { marked: null };
+  end: Function = () => { }
+  markedRoom: any
 
   constructor(
     private bedService: BedService,
+    private bedMarkedService: BedMarkedService,
     private wardService: WardService,
     private modeWardSvgService: ModeWardSvgService,
     private bedRotate: BedRotate,
     public posibleBed: PosibleBed,
     public outputBed: OutputBed,
-    private roomEntry: RoomEntry,
+    public roomEntry: RoomEntry,
     public bedInRoom: BedInRoom
   ) { }
-  init(markedRoom: any): void {
+  init(markedRoom: any, end: Function): void {
+    this.markedRoom = markedRoom;
+    this.end = end;
     this.roomEntry.roomNotModify = markedRoom;
     this.posibleBed.beds = markedRoom?.beds;
     this.bedInRoom.roomPolygon = markedRoom?.polygon;
   }
   setMode(mode: string): void {
     this.modeWardSvgService.setMode(mode);
-  }
-  modify(obj: EditRoom): void {
-    if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
-    this.objEditRoom$.next(this.objEditRoom);
-  }
-  get objEditRoom(): EditRoom {
-    return this.objEdit;
-  }
-  set objEditRoom(obj: EditRoom) {
-    if (this.posibleBed.exist(obj.marked)) Object.assign(this.objEdit, obj);
   }
   restoreBeds(beds: Bed[] | undefined): void {
     if (!beds || !this.roomEntry.roomNotModify) return;
@@ -73,8 +66,6 @@ export class EditRoomService {
   addedBed(bed: Bed): void {
     let id = bed.id
     if (!id) return;
-
-
     bed.creatorComponent = 'editRoom';
     this.outputBed.addOrUpdate({ id, polygon: bed.polygon });
     this.posibleBed.addBed = bed;
@@ -93,10 +84,18 @@ export class EditRoomService {
     );
   }
   findIdsBedsByObjects(keysValues: any[]): number[] {
+    // console.log(this.markedRoom.beds.length);
+
     return keysValues.reduce((arrIds: number[], keyValue: { key: string, value: string }) => {
       let { key, value } = keyValue || {};
+
       this.roomEntry.roomNotModify?.beds.forEach((bed: any) => {
-        if (key in bed && 'id' in bed && bed[key] === value && !bed.patient) arrIds.push(bed.id);
+        if (key in bed && 'id' in bed && bed[key] === value && !bed.patient) {
+          bed[key] = null;
+          arrIds.push(bed.id)
+        };
+
+
       });
       return arrIds;
     }, [])
@@ -109,7 +108,7 @@ export class EditRoomService {
       const polygon = this.bedRotate.points
       this.outputBed.addOrUpdate({ id, polygon });
       bed.polygon = polygon;
-      this.modify({ marked: id });
+      this.bedMarkedService.modify({ marked: id });
     }
   }
   deleteBed(id: number, beds: Bed[] | undefined): void {
@@ -124,7 +123,7 @@ export class EditRoomService {
     const newBeds = beds.filter(bed => bed.id != id);
     beds.length = 0;
     beds.push(...newBeds);
-    this.modify({ marked: null })
+    this.bedMarkedService.modify({ marked: null });
     this.wardService.refreshSvg();
     this.bedService.deleteBed(id).subscribe(
       isDeleted => { if (!isDeleted) logError('the bed cannot be removed') },
@@ -133,8 +132,27 @@ export class EditRoomService {
   }
   confirm() {
     this.bedService.updateBed(this.outputBed.getOutputBeds).subscribe(
-      data => console.log('response', data),
+      beds => {
+        beds.forEach((bed: any) => {
+          let r = findById(this.markedRoom?.beds, bed.id);
+          if (r) {
+            r = Object.assign({}, r, bed)
+          }
+        });
+        console.log(this.markedRoom.beds);
+        this.bedMarkedService.modify({ marked: null });
+        this.setMode('currentState');
+        this.outputBed.beds = [];
+        this.posibleBed.beds = [];
+        this.roomEntry.room = '';
+        this.markedRoom = '';
+        this.wardService.refreshSvg();
+        this.end();
+      },
       e => logError(e)
     )
+  }
+  outputIsEmpty(): boolean {
+    return (this.outputBed.getOutputBeds.length > 0);
   }
 }

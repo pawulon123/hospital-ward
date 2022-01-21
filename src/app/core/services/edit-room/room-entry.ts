@@ -8,7 +8,7 @@ export class RoomEntry {
   get roomNotModify(): any {
     return this.room ? JSON.parse(this.room) : null;
   }
-  set roomNotModify(room: Room | undefined) {
+  set roomNotModify(room: Room | string | undefined) {
     this.room = JSON.stringify(room);
   }
   addBed(bed: Bed): void {

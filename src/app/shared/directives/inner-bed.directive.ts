@@ -1,3 +1,4 @@
+import { BedMarkedService } from './../../core/services/edit-room/bed-marked';
 import { Coordinates } from './../models/coordinate';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Directive, HostBinding, Input, OnInit } from '@angular/core';
@@ -11,12 +12,12 @@ export class InnerBedDirective implements OnInit {
   @Input("appInnerBed") bedDraw: any;
   @HostBinding('attr.points') points: string = "";
   constructor(
-    private editRoomService: EditRoomService
+      private bedMarkedService: BedMarkedService,
   ) { }
 
   ngOnInit() {
     this.draw();
-    this.editRoomService.objEditRoom$.subscribe(() => this.draw());
+    this.bedMarkedService.objEditRoom$.subscribe(() => this.draw());
   }
   draw(): void {
     (this as Record<string, any>)[this.bedDraw.draw]();

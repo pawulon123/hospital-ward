@@ -39,7 +39,7 @@ export class BedService {
     const url = `${this.url}many/`;
     return this.http.post<any>(url, ids, this.httpOptions);
   }
-  updateBed(beds:any): Observable<any> { console.log('serviceBed',beds);
+  updateBed(beds:any): Observable<any> {
     return this.http.put<any>(this.url, beds, this.httpOptions);
   }
 

@@ -1,17 +1,11 @@
+import { BedMarkedService } from 'src/app/core/services/edit-room/bed-marked';
 import { EditRoom } from './../../shared/models/edit-room';
 import { Room } from '../../shared/models/room';
 import { Bed } from '../../shared/models/bed';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-// import { BedRotate } from './bed-rotate';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
-// import { PosibleBed } from './posible-bed';
-// import { OutputBed } from './output-bed';
-// import { RoomEntry } from './room-entry';
-// import { BedInRoom } from '../../core/services/edit-room/bed-in-room';
-
-
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
@@ -23,6 +17,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   constructor(
     private editRoomService: EditRoomService,
     private modeWardSvgService: ModeWardSvgService,
+    private bedMarkedService: BedMarkedService,
   ) { }
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
@@ -30,9 +25,9 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   private objectEdit: EditRoom | { marked: number | null } = { marked: null };
 
   ngOnInit() {
-    this.editRoomService.init(this.markedRoom);
 
-    this.subscribeEditRoomService = this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.editRoomService.init(this.markedRoom, this.endEditingRoom);
+    this.subscribeEditRoomService = this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
   }
   private passObjectEdit(objEditRoom: EditRoom): void {
     this.objectEdit = objEditRoom;
@@ -49,11 +44,15 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     };
   }
   cancel(): void {
-    this.editRoomService.deleteNewBeds(this.markedRoom?.beds);
-    this.editRoomService.restoreBeds(this.markedRoom?.beds);
-    this.editRoomService.modify({ marked: null });
+    if (this.editRoomService.outputIsEmpty()){
+      this.editRoomService.deleteNewBeds(this.markedRoom?.beds);
+      this.editRoomService.restoreBeds(this.markedRoom?.beds);
+    }
+    this.bedMarkedService.modify({ marked: null });
     this.modeWardSvgService.setMode('currentState');
+    this.editRoomService.roomEntry.roomNotModify = ''
     this.endEditingRoom();
+
   }
   addBed(): void {
     if (!this.markedRoom) return;
@@ -65,7 +64,6 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.deleteBed(id, this.markedRoom?.beds);
   }
   confirm() {
-    // if (true) return;
     this.editRoomService.confirm();
   }
   ngOnDestroy(): void {

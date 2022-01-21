@@ -1,3 +1,4 @@
+import { BedMarkedService } from './../../core/services/edit-room/bed-marked';
 import { Directive, HostBinding, Input, OnInit } from '@angular/core';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { EditRoom } from '../models/edit-room';
@@ -12,10 +13,11 @@ export class BedMarkedDirective implements OnInit {
   @HostBinding('attr.style') style: string = this.styleDefault;
 
   constructor(
-    private editRoomService: EditRoomService
+    private editRoomService: EditRoomService,
+    private bedMarkedService: BedMarkedService,
   ) { }
   ngOnInit(): void {
-    this.editRoomService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
   }
   passObjectEdit(objEditRoom: EditRoom): void {
     const id = objEditRoom.marked;
