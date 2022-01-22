@@ -1,7 +1,6 @@
-import { EditRoom } from '../../../shared/models/edit-room';
 import { Bed } from '../../../shared/models/bed';
 import { findById, logError } from '../../../shared/useful/useful';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Room } from '../../../shared/models/room';
 import { BedService } from '../bed.service';
 import { WardService } from '../ward.service';
@@ -12,12 +11,12 @@ import { RoomEntry } from './room-entry';
 import { BedRotate } from './bed-rotate';
 import { BedInRoom } from './bed-in-room';
 import { BedMarkedService } from './bed-marked';
+import { InstanceEditRoomService } from './instance-edit-room-service';
 
 @Injectable()
-export class EditRoomService {
+export class EditRoomService implements OnDestroy {
   end: Function = () => { }
   markedRoom: any
-
   constructor(
     private bedService: BedService,
     private bedMarkedService: BedMarkedService,
@@ -27,9 +26,15 @@ export class EditRoomService {
     public posibleBed: PosibleBed,
     public outputBed: OutputBed,
     public roomEntry: RoomEntry,
-    public bedInRoom: BedInRoom
+    public bedInRoom: BedInRoom,
+    private instanceEditRoomService: InstanceEditRoomService,
   ) { }
+  ngOnDestroy(): void {
+   console.log('destroy');
+
+  }
   init(markedRoom: any, end: Function): void {
+    this.instanceEditRoomService.setInstance(this);
     this.markedRoom = markedRoom;
     this.end = end;
     this.roomEntry.roomNotModify = markedRoom;
@@ -84,8 +89,6 @@ export class EditRoomService {
     );
   }
   findIdsBedsByObjects(keysValues: any[]): number[] {
-    // console.log(this.markedRoom.beds.length);
-
     return keysValues.reduce((arrIds: number[], keyValue: { key: string, value: string }) => {
       let { key, value } = keyValue || {};
 
@@ -94,8 +97,6 @@ export class EditRoomService {
           bed[key] = null;
           arrIds.push(bed.id)
         };
-
-
       });
       return arrIds;
     }, [])

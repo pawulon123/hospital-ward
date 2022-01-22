@@ -29,12 +29,7 @@ import { BedInRoom } from '../core/services/edit-room/bed-in-room';
   ],
   entryComponents:[EditRoomComponent],
   providers:[
-    EditRoomService,
-    RoomEntry,
-    PosibleBed,
-    OutputBed,
-    BedRotate,
-    BedInRoom
+
   ]
 })
 export class WardSvgModule {}

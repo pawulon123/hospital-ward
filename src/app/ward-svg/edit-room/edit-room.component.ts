@@ -1,3 +1,8 @@
+import { BedInRoom } from './../../core/services/edit-room/bed-in-room';
+import { OutputBed } from './../../core/services/edit-room/output-bed';
+import { PosibleBed } from './../../core/services/edit-room/posible-bed';
+import { BedRotate } from './../../core/services/edit-room/bed-rotate';
+
 import { BedMarkedService } from 'src/app/core/services/edit-room/bed-marked';
 import { EditRoom } from './../../shared/models/edit-room';
 import { Room } from '../../shared/models/room';
@@ -6,11 +11,12 @@ import { EditRoomService } from '../../core/services/edit-room/edit-room.service
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { findById } from '../../shared/useful/useful';
 import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
+import { RoomEntry } from 'src/app/core/services/edit-room/room-entry';
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
-
+  providers: [EditRoomService, RoomEntry, BedInRoom, PosibleBed, OutputBed, BedRotate]
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 

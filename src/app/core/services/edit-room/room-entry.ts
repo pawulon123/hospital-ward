@@ -1,8 +1,13 @@
 import { Room } from 'src/app/shared/models/room';
 import { Bed } from 'src/app/shared/models/bed';
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
+import { EditRoomService } from './edit-room.service';
 @Injectable()
-export class RoomEntry {
+export class RoomEntry implements OnDestroy {
+  ngOnDestroy(): void {
+
+console.log('destroy entryroom');
+  }
 
   room: string = '';
   get roomNotModify(): any {
