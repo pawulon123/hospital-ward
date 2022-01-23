@@ -16,8 +16,7 @@ export class BedsEvDirective implements OnInit {
     private modeWardSvgService: ModeWardSvgService
     ) {
     }
-  ngOnInit() {console.log(this.instanceIsNewMode);
-
+  ngOnInit() {
     this.mode = this.instanceIsNewMode.mode;
     this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode);
     if (this.instanceIsNewMode.isNew) this.mode = 'editRoom';

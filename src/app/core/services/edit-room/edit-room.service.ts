@@ -64,7 +64,6 @@ export class EditRoomService implements OnDestroy, OnInit {
     if (!beds || !this.roomEntry.roomNotModify) return;
     // const bedWithoutNew = this.roomEntry.roomNotModify.beds.
     console.log(this.roomEntry.roomNotModify);
-
     beds.length = 0;
     beds.push(...this.roomEntry.roomNotModify.beds);
     // this.wardService.refreshSvg('currentState');

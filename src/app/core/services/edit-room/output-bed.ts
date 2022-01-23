@@ -20,8 +20,6 @@ export class OutputBed {
     this.beds = this.beds.filter(bed => bed.id != id);
   }
   start(markedRoom:any){
-    console.log("output bed");
-
   }
   addedBed(bed:any){
     this.addOrUpdate({ id: bed.id, polygon: bed.polygon });
