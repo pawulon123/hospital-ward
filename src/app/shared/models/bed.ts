@@ -1,7 +1,7 @@
 export interface Bed {
 
   id?:  number;
-  creatorComponent?:string;
+  isNew?:boolean;
   // x_svg: string;
   // y_svg: string;
   // rotate: string;

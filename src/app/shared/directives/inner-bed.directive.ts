@@ -17,7 +17,7 @@ export class InnerBedDirective implements OnInit {
 
   ngOnInit() {
     this.draw();
-    this.bedMarkedService.objEditRoom$.subscribe(() => this.draw());
+    this.bedMarkedService.markingRoom$.subscribe(() => this.draw());
   }
   draw(): void {
     (this as Record<string, any>)[this.bedDraw.draw]();

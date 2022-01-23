@@ -10,4 +10,13 @@ export class BedInRoom {
     const bedArrays = arraysOfPolygon(bedPolygon)
   return polygonInPolygon(bedArrays, this.roomArrays);
   }
+  start(markedRoom:any){
+    this.roomPolygon = markedRoom?.polygon;
+  }
+  addedBed(bed:any){
+
+  }
+  deletedBed(id: number){
+
+  }
 }

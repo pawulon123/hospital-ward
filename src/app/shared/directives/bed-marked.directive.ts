@@ -18,13 +18,12 @@ export class BedMarkedDirective implements OnInit {
     private bedMarkedService: BedMarkedService,
   ) { }
   ngOnInit(): void {
-    this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.bedMarkedService.markingRoom$.subscribe(this.setStyleByBedId.bind(this));
     this.setEditRoomService();
   }
-  passObjectEdit(objEditRoom: EditRoom): void {
+  setStyleByBedId(idBedMarked: number | null): void {
     if(!this.editRoomService) return;
-    const id = objEditRoom.marked;
-    this.style = this.id && id === this.id && this.editRoomService.posibleBed.exist(id) ? this.marked : this.styleDefault;
+    this.style = this.id && idBedMarked === this.id && this.editRoomService.posibleBed.exist(idBedMarked) ? this.marked : this.styleDefault;
   }
   get marked(): string {
     return "fill:rgb(154, 194, 45); opacity:0.3"

@@ -18,7 +18,7 @@ export class MoveBedDirective implements OnInit {
   }
   private bedPolygon: Coordinates[] = [];
   private startPolygon: string = '';
-  private objectEdit: EditRoom | { marked: number} = { marked: null };
+  private idBedMarked: number | null = null;
   private editRoomService: EditRoomService | null = null
   constructor(
     private instanceEditRoomService: InstanceEditRoomService,
@@ -26,23 +26,23 @@ export class MoveBedDirective implements OnInit {
     private bedMarkedService: BedMarkedService,
   ) {
   }
-  ngOnInit() {console.log(this.instanceEditRoomService.instance$)
+  ngOnInit() {
     this.bedPolygon = coordinateOfPolygon(this.bed.polygon);
     this.startPolygon = this.bed.polygon;
     this.cdkDrag.disabled = true;
     this.setEditRoomService();
-    this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.bedMarkedService.markingRoom$.subscribe(this.initialStateBasedOnBedId.bind(this));
     this.cdkDrag.started.subscribe(this.started.bind(this));
     this.cdkDrag.moved.subscribe(this.moved.bind(this));
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
   }
-  private passObjectEdit(objEditRoom: EditRoom): void {
+  private initialStateBasedOnBedId(idBedMarked: number | null): void {
     if(!this.editRoomService) return;
-    const id = objEditRoom.marked;
-    if (id === this.bed.id && this.editRoomService.posibleBed.exist(id)) {
+
+    if (idBedMarked === this.bed.id && this.editRoomService.posibleBed.exist(idBedMarked)) {
       if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
-      this.objectEdit = objEditRoom;
-    } else if (id === null) {
+      this.idBedMarked = idBedMarked;
+    } else if (idBedMarked === null) {
       if (!this.cdkDrag.disabled) this.cdkDrag.disabled = true;
       this.bedPolygon = coordinateOfPolygon(this.startPolygon);
     }
@@ -60,7 +60,7 @@ export class MoveBedDirective implements OnInit {
     const movedBed: string = polygonOfcoordinates(move(this.bedPolygon, e.distance))
     if (this.editRoomService.bedInRoom.check(movedBed)) {
       this.points = movedBed;
-      this.bedMarkedService.modify(this.objectEdit);
+      this.bedMarkedService.mark(this.idBedMarked);
     }
     this.resetTransform();
   }

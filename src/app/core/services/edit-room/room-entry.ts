@@ -3,11 +3,7 @@ import { Bed } from 'src/app/shared/models/bed';
 import { Injectable, OnDestroy } from "@angular/core";
 import { EditRoomService } from './edit-room.service';
 @Injectable()
-export class RoomEntry implements OnDestroy {
-  ngOnDestroy(): void {
-
-console.log('destroy entryroom');
-  }
+export class RoomEntry  {
 
   room: string = '';
   get roomNotModify(): any {
@@ -33,5 +29,14 @@ console.log('destroy entryroom');
     const room = Object.assign({}, this.roomNotModify);
     room.beds = room.beds.filter((bed: any) => bed.id != id);
     this.roomNotModify = room;
+  }
+  start(markedRoom:any){
+    this.roomNotModify = markedRoom;
+  }
+  addedBed(bed:any){
+    this.addBed(bed);
+  }
+  deletedBed(id: number){
+    this.removeBed(id);
   }
 }

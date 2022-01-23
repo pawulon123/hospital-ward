@@ -6,7 +6,7 @@ import { events } from '../../ward-svg/events';
   selector: '[appBedsEv]'
 })
 export class BedsEvDirective implements OnInit {
-  @Input("appBedsEv") InstanceEndCreator: any;
+  @Input("appBedsEv") instanceIsNewMode: any;
 
   mode: string = '';
   returned = {};
@@ -16,10 +16,11 @@ export class BedsEvDirective implements OnInit {
     private modeWardSvgService: ModeWardSvgService
     ) {
     }
-  ngOnInit() {
-    this.mode = this.InstanceEndCreator.mode;
+  ngOnInit() {console.log(this.instanceIsNewMode);
+
+    this.mode = this.instanceIsNewMode.mode;
     this.modeWardSvgService.mode$.subscribe(mode => this.mode = mode);
-    if (this.InstanceEndCreator.creator === 'editRoom') this.mode = 'editRoom';
+    if (this.instanceIsNewMode.isNew) this.mode = 'editRoom';
   }
 
   @HostListener('click', ['$event.target'])
@@ -29,7 +30,7 @@ export class BedsEvDirective implements OnInit {
     this.caller(method, id);
   };
   private caller(method: string,  id: string | number): void {
-    const returned: any = !method ? null : this.extractProperty(this.InstanceEndCreator.bed, method).call(this.InstanceEndCreator.bed, id);
+    const returned: any = !method ? null : this.extractProperty(this.instanceIsNewMode.bed, method).call(this.instanceIsNewMode.bed, id);
     if (returned) (this.returned as Record<string, any>)[method] = returned;
   }
   private extractProperty(obj: any, key: string = this.mode): any {

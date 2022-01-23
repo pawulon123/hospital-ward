@@ -2,7 +2,6 @@ import { BedInRoom } from './../../core/services/edit-room/bed-in-room';
 import { OutputBed } from './../../core/services/edit-room/output-bed';
 import { PosibleBed } from './../../core/services/edit-room/posible-bed';
 import { BedRotate } from './../../core/services/edit-room/bed-rotate';
-
 import { BedMarkedService } from 'src/app/core/services/edit-room/bed-marked';
 import { EditRoom } from './../../shared/models/edit-room';
 import { Room } from '../../shared/models/room';
@@ -10,7 +9,6 @@ import { Bed } from '../../shared/models/bed';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { findById } from '../../shared/useful/useful';
-import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
 import { RoomEntry } from 'src/app/core/services/edit-room/room-entry';
 @Component({
   selector: 'app-edit-room',
@@ -20,42 +18,39 @@ import { RoomEntry } from 'src/app/core/services/edit-room/room-entry';
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
-  constructor(
-    private editRoomService: EditRoomService,
-    private modeWardSvgService: ModeWardSvgService,
-    private bedMarkedService: BedMarkedService,
-  ) { }
+  private idBedMarked: number | null = null;
   private markedRoom: Room | undefined;
   private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
-  private objectEdit: EditRoom | { marked: number | null } = { marked: null };
+  constructor(
+    private editRoomService: EditRoomService,
+    private bedMarkedService: BedMarkedService,
+  ) { }
+
 
   ngOnInit() {
-
     this.editRoomService.init(this.markedRoom, this.endEditingRoom);
-    this.subscribeEditRoomService = this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.subscribeEditRoomService = this.bedMarkedService.markingRoom$.subscribe(this.setMarkedBedId.bind(this));
   }
-  private passObjectEdit(objEditRoom: EditRoom): void {
-    this.objectEdit = objEditRoom;
+  private setMarkedBedId(idBedMarked: number | null): void {
+    this.idBedMarked = idBedMarked;
   }
   get markedBed(): Bed {
-    return this.objectEdit?.marked && this.markedRoom ? findById(this.markedRoom.beds, this.objectEdit?.marked) : null;
+    return this.idBedMarked && this.markedRoom ? findById(this.markedRoom.beds, this.idBedMarked) : null;
   }
   rotateBed(): void {
-    const id: number | null = this.objectEdit.marked;
-    if (id === null || !this.editRoomService.posibleBed.exist(id)) {
+    if (!this.idBedMarked || !this.editRoomService.posibleBed.exist(this.idBedMarked)) {
       return;
     } else {
-      this.editRoomService.rotateBed(this.markedBed, id);
+      this.editRoomService.rotateBed(this.markedBed, this.idBedMarked);
     };
   }
   cancel(): void {
-    if (this.editRoomService.outputIsEmpty()){
-      this.editRoomService.deleteNewBeds(this.markedRoom?.beds);
+    if (this.editRoomService.outputIsEmpty()) {
       this.editRoomService.restoreBeds(this.markedRoom?.beds);
     }
-    this.bedMarkedService.modify({ marked: null });
-    this.modeWardSvgService.setMode('currentState');
+    this.bedMarkedService.mark(null);
+    this.editRoomService.setMode('currentState');
     this.editRoomService.roomEntry.roomNotModify = ''
     this.endEditingRoom();
 
@@ -65,9 +60,9 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     this.editRoomService.addBed(this.markedRoom);
   }
   deleteBed(): void {
-    const id = this.objectEdit.marked;
-    if (!id || !this.editRoomService.posibleBed.exist(id)) return;
-    this.editRoomService.deleteBed(id, this.markedRoom?.beds);
+    if (!this.idBedMarked || !this.editRoomService.posibleBed.exist(this.idBedMarked)) return;
+
+    this.editRoomService.deleteBed(this.idBedMarked);
   }
   confirm() {
     this.editRoomService.confirm();

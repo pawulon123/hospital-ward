@@ -6,8 +6,8 @@ import { Room } from 'src/app/shared/models/room';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
-import { arraysOfPolygon, logError, rect } from '../../shared/useful/useful';
-const center = require('svg-polygon-center');
+// import { arraysOfPolygon, logError, rect } from '../../shared/useful/useful';
+// const center = require('svg-polygon-center');
 
 @Injectable({
   providedIn: 'root'
@@ -35,27 +35,7 @@ export class BedService {
     return this.http.delete<any>(this.url + id,  this.httpOptions);
 
   }
-  deleteMany(ids: number[] ): Observable<boolean | { message: string }>{
-    const url = `${this.url}many/`;
-    return this.http.post<any>(url, ids, this.httpOptions);
-  }
   updateBed(beds:any): Observable<any> {
     return this.http.put<any>(this.url, beds, this.httpOptions);
   }
-
-  newPolygonInRoom(roomPoints: string, bedIsInRoom: Function, type = 'bedHorizontal'): string {
-    let bed: string = rect(center(roomPoints), type).polygon;
-    if (typeof bedIsInRoom.constructor === 'function') {
-      if (!bedIsInRoom(bed)) {
-        bed = rect(center(roomPoints), 'bedVertical').polygon
-        if (!bedIsInRoom(bed)) {
-          logError(`cen't draw bed`);
-          return '';
-        }
-      }
-    }
-    return bed;
-  }
-
-
 }

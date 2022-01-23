@@ -4,17 +4,14 @@ import { Injectable } from '@angular/core';
 @Injectable({providedIn: 'root'})
 export class BedMarkedService {
 
-  objEditRoom$ = new Subject<any>()
-  objEdit: EditRoom = { marked: null };
+  markingRoom$ = new Subject<any>()
+  marked: number | null = null ;
 
-  modify(obj: EditRoom): void {
-    if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
-    this.objEditRoom$.next(this.objEditRoom);
+  mark(marked: number | null): void {
+    // if (this.objEditRoom.marked !== obj.marked) Object.assign(this.objEditRoom, obj);
+    // this.objEditRoom$.next(this.objEditRoom);
+    this.marked = marked;
+    this.markingRoom$.next(this.marked);
   }
-  get objEditRoom(): EditRoom {
-    return this.objEdit;
-  }
-  set objEditRoom(obj: EditRoom) {
-     Object.assign(this.objEdit, obj);
-  }
+
 }

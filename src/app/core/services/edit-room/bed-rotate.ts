@@ -57,4 +57,8 @@ export class BedRotate {
   get coordinates() {
     return this.coor;
   }
+  start(markedRoom:any){
+    console.log("editRoomService");
+
+  }
 }

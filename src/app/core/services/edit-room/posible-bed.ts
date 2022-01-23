@@ -18,4 +18,13 @@ export class PosibleBed {
   exist(id: number | null): boolean {
     return id && id >= 0 ? this.getIds().includes(id) : false;
   }
+  start(markedRoom:any){
+    this.beds = markedRoom.beds;
+  }
+  addedBed(bed:any){
+    this.addBed = bed;
+  }
+  deletedBed(idBed: number){
+    this.ids = this.ids.filter(id => id !== idBed);
+   }
 }

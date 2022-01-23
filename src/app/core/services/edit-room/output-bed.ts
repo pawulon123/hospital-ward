@@ -19,4 +19,14 @@ export class OutputBed {
   delete(id: number): void {
     this.beds = this.beds.filter(bed => bed.id != id);
   }
+  start(markedRoom:any){
+    console.log("output bed");
+
+  }
+  addedBed(bed:any){
+    this.addOrUpdate({ id: bed.id, polygon: bed.polygon });
+  }
+  deletedBed(id: number){
+    this.delete(id);
+  }
 }

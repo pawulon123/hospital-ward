@@ -11,7 +11,7 @@ import { BedMarkedService } from 'src/app/core/services/edit-room/bed-marked';
   styleUrls: ['./bed.component.css'],
 })
 export class BedComponent implements OnInit {
-  objectEdit: any = {};
+  private idBedMarked: number | null = null;
   private beds?: any;
   private editRoomService: EditRoomService | null = null;
   constructor(
@@ -21,11 +21,11 @@ export class BedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.bedMarkedService.objEditRoom$.subscribe(this.passObjectEdit.bind(this));
+    this.bedMarkedService.markingRoom$.subscribe(this.setMarkedBedId.bind(this));
     this.instanceEditRoomService.instance$.subscribe( editRoomService => this.editRoomService = editRoomService);
   }
-  private passObjectEdit(objEditRoom: EditRoom): void {
-    this.objectEdit = objEditRoom;
+  private setMarkedBedId(idBedMarked: number | null): void {
+    this.idBedMarked = idBedMarked;
   }
   setBeds(ward: any) {
     this.beds = this.bedService.extractOfWard(ward);
@@ -33,11 +33,11 @@ export class BedComponent implements OnInit {
   getBeds(): Bed[] {
     return this.beds;
   }
-  mark(marked: number): void {
+  mark(idBedMarked: number): void {
     if(!this.editRoomService) return;
-    if (!this.editRoomService.posibleBed.exist(marked)) return;
-    this.objectEdit.marked = marked;
-    this.bedMarkedService.modify(this.objectEdit);
+    if (!this.editRoomService.posibleBed.exist(idBedMarked)) return;
+    this.idBedMarked = idBedMarked;
+    this.bedMarkedService.mark(idBedMarked);
   }
   modalPatient(element: any) {
     console.log('modalPatient');
