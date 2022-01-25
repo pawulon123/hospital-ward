@@ -15,8 +15,8 @@ import { InstanceEditRoomService } from './instance-edit-room-service';
 import { newPolygonInRoom } from '../../../ward-svg/bed/bed-new-polygon';
 
 @Injectable()
-export class EditRoomService implements OnDestroy {
-  end: Function = () => { }
+export class EditRoomService {
+
   markedRoom: any
   constructor(
     private bedService: BedService,
@@ -33,30 +33,37 @@ export class EditRoomService implements OnDestroy {
 
   services: any[] = [this.posibleBed, this.outputBed, this.roomEntry, this.bedInRoom, this];
 
-  ngOnDestroy(): void {
-    // console.log(' markedRoom in ngOnDestroy', this.markedRoom);
-  }
-  init(markedRoom: any, end: Function): void {
-    // console.log(' markedRoom in the init()', markedRoom);
-    // console.log('services in the init()', this.services);
+  init(markedRoom: any): void {
     callsIfInContext('start', this.services, markedRoom);
-
-    this.end = end;
   }
-  start(markedRoom: any) {
+  start(markedRoom: any): void {
     this.markedRoom = markedRoom;
     this.instanceEditRoomService.setOrRemoveInstance(this);
   }
-  addedBed(bed: any) {
+  addedBed(bed: any): void {
+    bed.isNew = true;
     this.markedRoom.beds.push(bed);
     this.wardService.refreshSvg();
   }
-  deletedBed(id: number) {
+  deletedBed(id: number): void {
     const newBeds = withoutId(this.markedRoom.beds, id);
     this.markedRoom.beds.length = 0;
     this.markedRoom.beds.push(...newBeds);
     this.bedMarkedService.mark(null);
     this.wardService.refreshSvg();
+  }
+  saved(bedsSaved :Bed[]){
+    bedsSaved.forEach((bedSaved: any) => {
+      let bed = findById(this.markedRoom?.beds, bedSaved.id);
+      if (bed) {
+        delete bed.isNew
+        Object.assign(bed, bedSaved)
+      }
+    });
+    this.bedMarkedService.mark(null);
+    this.setMode('currentState');
+    this.instanceEditRoomService.setOrRemoveInstance(this);
+
   }
 
   setMode(mode: string): void {
@@ -66,7 +73,6 @@ export class EditRoomService implements OnDestroy {
     if (!beds || !this.roomEntry.roomNotModify) return;
     beds.length = 0;
     beds.push(...this.roomEntry.roomNotModify.beds);
-
     this.wardService.refreshSvg('currentState');
   }
   addBed(markedRoom: Room): void {
@@ -74,8 +80,7 @@ export class EditRoomService implements OnDestroy {
     const bed = { room: markedRoom.id, polygon };
     this.bedService.createBed(bed).subscribe(
       (bed: Bed) => {
-        bed.isNew = true;
-        this.services.forEach(s => s.addedBed(bed));
+        callsIfInContext('addedBed', this.services, bed);
       },
       (e: any) => logError(e)
     )
@@ -104,25 +109,15 @@ export class EditRoomService implements OnDestroy {
           logError('the bed cannot be removed');
           return;
         }
-        this.services.forEach(s => s.deletedBed(id));
+        callsIfInContext('deletedBed', this.services, id);
       },
       e => logError(e)
     );
   }
-  confirm() {
+  confirm(): void {
     this.bedService.updateBed(this.outputBed.getOutputBeds).subscribe(
       bedsSaved => {
-        bedsSaved.forEach((bedSaved: any) => {
-          let bed = findById(this.markedRoom?.beds, bedSaved.id);
-          if (bed) {
-            delete bed.isNew
-            Object.assign(bed, bedSaved)
-          }
-        });
-        this.bedMarkedService.mark(null);
-        this.setMode('currentState');
-         this.instanceEditRoomService.setOrRemoveInstance(this);
-         this.end();
+        callsIfInContext('saved', this.services, bedsSaved);
       },
       e => logError(e)
     )

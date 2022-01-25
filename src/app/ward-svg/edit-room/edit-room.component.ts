@@ -29,7 +29,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.editRoomService.init(this.markedRoom, this.endEditingRoom);
+    this.editRoomService.init(this.markedRoom);
     this.subscribeEditRoomService = this.bedMarkedService.markingRoom$.subscribe(idBedMarked => this.idBedMarked = idBedMarked);
   }
   get markedBed(): Bed {
@@ -57,11 +57,12 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     if (!this.idBedMarked || !this.editRoomService.posibleBed.exist(this.idBedMarked)) return;
     this.editRoomService.deleteBed(this.idBedMarked);
   }
-  confirm() {
+  confirm(): void {
+    // if (!this.editRoomService.outputIsEmpty()) this.editRoomService.confirm();
     this.editRoomService.confirm();
+    this.endEditingRoom();
   }
   ngOnDestroy(): void {
     this.subscribeEditRoomService.unsubscribe();
   }
-
 }
