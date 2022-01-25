@@ -1,9 +1,10 @@
-import { Bed } from 'src/app/shared/models/bed';
-import { Injectable } from "@angular/core";
+import { Room } from './../../../shared/models/room';
+import { Bed } from '../../../shared/models/bed';
+import { Injectable, OnDestroy } from "@angular/core";
 
 @Injectable()
-export class PosibleBed {
- private ids: any[] = [];
+export class PosibleBed implements OnDestroy {
+  private ids: any[] = [];
 
   set beds(beds: Bed[] | undefined) {
     this.ids = beds ? beds.map((bed: Bed) => bed.id) : [];
@@ -18,13 +19,16 @@ export class PosibleBed {
   exist(id: number | null): boolean {
     return id && id >= 0 ? this.getIds().includes(id) : false;
   }
-  start(markedRoom:any){
+  start(markedRoom: Room): void{
     this.beds = markedRoom.beds;
   }
-  addedBed(bed:any){
+  addedBed(bed: Bed): void{
     this.addBed = bed;
   }
-  deletedBed(idBed: number){
+  deletedBed(idBed: number): void{
     this.ids = this.ids.filter(id => id !== idBed);
-   }
+  }
+  ngOnDestroy(): void {
+    this.ids.length = 0;
+  }
 }

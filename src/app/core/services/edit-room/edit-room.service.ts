@@ -68,9 +68,6 @@ export class EditRoomService implements OnDestroy {
     beds.push(...this.roomEntry.roomNotModify.beds);
 
     this.wardService.refreshSvg('currentState');
-    console.log(this.outputBed.beds);
-
-
   }
   addBed(markedRoom: Room): void {
     const polygon = newPolygonInRoom(markedRoom?.polygon, this.bedInRoom.check.bind(this.bedInRoom));
@@ -131,6 +128,6 @@ export class EditRoomService implements OnDestroy {
     )
   }
   outputIsEmpty(): boolean {
-    return (this.outputBed.getOutputBeds.length > 0);
+    return !(this.outputBed.getOutputBeds.length > 0);
   }
 }

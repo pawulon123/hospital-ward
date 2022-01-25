@@ -5,7 +5,6 @@ import { EditRoomService } from './edit-room.service';
 @Injectable()
 export class RoomEntry implements OnDestroy {
   ngOnDestroy(): void {
-
     this.room = '';
   }
 
@@ -21,12 +20,6 @@ export class RoomEntry implements OnDestroy {
     const room = this.copiedRoom();
     room.beds = [...this.roomNotModify.beds, bed];
     this.roomNotModify = room;
-  }
-  removeBeds(ids: any[]): void {
-    // if (!this.roomNotModify) return;
-    // const room = this.copiedRoom();
-    // room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));
-    // this.roomNotModify = room;
   }
   removeBed(id: number): void {
     if (!this.roomNotModify) return;
