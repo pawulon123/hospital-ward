@@ -1,9 +1,12 @@
 import { Bed } from 'src/app/shared/models/bed';
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { findById } from '../../../shared/useful/useful';
 
 @Injectable()
-export class OutputBed {
+export class OutputBed implements OnDestroy{
+  ngOnDestroy(): void {
+    this.beds.length = 0;
+  }
   beds: { id: number, polygon: string }[] = []
 
   getOutputBed(id:  number): Bed {
@@ -20,6 +23,7 @@ export class OutputBed {
     this.beds = this.beds.filter(bed => bed.id != id);
   }
   start(markedRoom:any){
+
   }
   addedBed(bed:any){
     this.addOrUpdate({ id: bed.id, polygon: bed.polygon });

@@ -51,7 +51,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
     }
     this.bedMarkedService.mark(null);
     this.editRoomService.setMode('currentState');
-    this.editRoomService.roomEntry.roomNotModify = ''
+    // this.editRoomService.roomEntry.roomNotModify = ''
     this.endEditingRoom();
 
   }

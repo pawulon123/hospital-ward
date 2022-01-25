@@ -1,8 +1,7 @@
 import { InstanceEditRoomService } from '../../core/services/edit-room/instance-edit-room-service';
 import { Coordinates } from './../models/coordinate';
-import { CdkDrag } from '@angular/cdk/drag-drop';
-import { Directive, Input, OnInit, HostBinding } from '@angular/core';
-import { EditRoom } from '../models/edit-room';
+import { CdkDrag, CdkDragMove } from '@angular/cdk/drag-drop';
+import { Directive, Input, OnInit } from '@angular/core';
 import { coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Bed } from '../models/bed';
@@ -13,12 +12,14 @@ import { BedMarkedService } from '../../core/services/edit-room/bed-marked';
 })
 export class MoveBedDirective implements OnInit {
   @Input("appMoveBed") bed: any;
-  @HostBinding('attr.points') set points(p: string) {
-    this.bed.polygon = p;
+  set points(points: string) {
+    this.bed.polygon = points;
+  }
+  get points(): string {
+    return this.bed.polygon;
   }
   private bedPolygon: Coordinates[] = [];
   private startPolygon: string = '';
-  private idBedMarked: number | null = null;
   private editRoomService: EditRoomService | null = null
   constructor(
     private instanceEditRoomService: InstanceEditRoomService,
@@ -27,8 +28,8 @@ export class MoveBedDirective implements OnInit {
   ) {
   }
   ngOnInit() {
-    this.bedPolygon = coordinateOfPolygon(this.bed.polygon);
-    this.startPolygon = this.bed.polygon;
+    this.bedPolygon = coordinateOfPolygon(this.points);
+    this.startPolygon = this.points;
     this.cdkDrag.disabled = true;
     this.setEditRoomService();
     this.bedMarkedService.markingRoom$.subscribe(this.initialStateBasedOnBedId.bind(this));
@@ -37,44 +38,54 @@ export class MoveBedDirective implements OnInit {
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
   }
   private initialStateBasedOnBedId(idBedMarked: number | null): void {
-    if(!this.editRoomService) return;
 
+    if (!this.editRoomService) return;
     if (idBedMarked === this.bed.id && this.editRoomService.posibleBed.exist(idBedMarked)) {
-      if (this.cdkDrag.disabled) this.cdkDrag.disabled = false;
-      this.idBedMarked = idBedMarked;
+      this.activation();
     } else if (idBedMarked === null) {
-      if (!this.cdkDrag.disabled) this.cdkDrag.disabled = true;
-      this.bedPolygon = coordinateOfPolygon(this.startPolygon);
-    }
-    else {
-      if (!this.cdkDrag.disabled) this.cdkDrag.disabled = true;
+      this.restore();
+    } else {
+      this.deactivation();
     };
   }
-  private started(): void {
-    if(!this.editRoomService) return;
-    const bed: Bed = this.editRoomService.outputBed.getOutputBed(this.bed.id);
-    this.bedPolygon = bed && 'polygon' in bed ? coordinateOfPolygon(bed.polygon) : this.bedPolygon;
+  private activation():void {
+    this.cdkDrag.disabled = false;
   }
-  private moved(e: any): void {
-    if(!this.editRoomService) return;
+  private restore():void {
+    this.cdkDrag.disabled = true;
+    this.bedPolygon = coordinateOfPolygon(this.startPolygon);
+  }
+  private deactivation():void {
+    this.cdkDrag.disabled = true;
+  }
+  private started(): void {
+    if (!this.editRoomService) return;
+    const bedInOutput: Bed = this.editRoomService.outputBed.getOutputBed(this.bed.id);
+    this.bedPolygon = bedInOutput && 'polygon' in bedInOutput ? coordinateOfPolygon(bedInOutput.polygon) : coordinateOfPolygon(this.points);
+  }
+  private moved(e: CdkDragMove): void {
+    if (!this.editRoomService) return;
     const movedBed: string = polygonOfcoordinates(move(this.bedPolygon, e.distance))
     if (this.editRoomService.bedInRoom.check(movedBed)) {
       this.points = movedBed;
-      this.bedMarkedService.mark(this.idBedMarked);
+      this.bedMarkedService.mark(this.bed.id);
     }
     this.resetTransform();
   }
   private ended(): void {
-    if(!this.editRoomService) return;
-    this.bedPolygon = coordinateOfPolygon(this.bed.polygon);
-    this.editRoomService.outputBed.addOrUpdate({ id: this.bed.id, polygon: this.bed.polygon });
+    if (!this.editRoomService) return;
+    this.bedPolygon = coordinateOfPolygon(this.points);
+    this.editRoomService.outputBed.addOrUpdate({ id: this.bed.id, polygon: this.points });
+  }
+  private setEditRoomService(): void {
+    this.editRoomService = this.instanceEditRoomService.getInstance();
+    this.instanceEditRoomService.instance$.subscribe(editRoomService => {
+      this.editRoomService = this.editRoomService === editRoomService ? null : editRoomService;
+    });
   }
   private resetTransform(): void {
     this.cdkDrag.element.nativeElement.style.transform = "translate3d(0px, 0px, 0px)";
   }
-  private setEditRoomService(): void{
-    this.editRoomService = this.instanceEditRoomService.getInstance()
-    this.instanceEditRoomService.instance$.subscribe( editRoomService => this.editRoomService = editRoomService);
-  }
-
 }
+
+

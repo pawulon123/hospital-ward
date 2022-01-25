@@ -23,10 +23,10 @@ export class RoomEntry implements OnDestroy {
     this.roomNotModify = room;
   }
   removeBeds(ids: any[]): void {
-    if (!this.roomNotModify) return;
-    const room = this.copiedRoom();
-    room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));
-    this.roomNotModify = room;
+    // if (!this.roomNotModify) return;
+    // const room = this.copiedRoom();
+    // room.beds = room.beds.filter((bed: any) => !ids.includes(bed.id));
+    // this.roomNotModify = room;
   }
   removeBed(id: number): void {
     if (!this.roomNotModify) return;

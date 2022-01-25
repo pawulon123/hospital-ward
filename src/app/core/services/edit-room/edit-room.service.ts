@@ -1,6 +1,6 @@
 import { Bed } from '../../../shared/models/bed';
-import { callsIfInContext, cloneDeep, findById, findIdsByObjects, logError, partial, withoutId } from '../../../shared/useful/useful';
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { callsIfInContext, findById, logError, withoutId } from '../../../shared/useful/useful';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Room } from '../../../shared/models/room';
 import { BedService } from '../bed.service';
 import { WardService } from '../ward.service';
@@ -15,7 +15,7 @@ import { InstanceEditRoomService } from './instance-edit-room-service';
 import { newPolygonInRoom } from '../../../ward-svg/bed/bed-new-polygon';
 
 @Injectable()
-export class EditRoomService implements OnDestroy, OnInit {
+export class EditRoomService implements OnDestroy {
   end: Function = () => { }
   markedRoom: any
   constructor(
@@ -32,18 +32,20 @@ export class EditRoomService implements OnDestroy, OnInit {
   ) { }
 
   services: any[] = [this.posibleBed, this.outputBed, this.roomEntry, this.bedInRoom, this];
-  ngOnInit() { console.log('cannot call !!'); }
-  ngOnDestroy(): void {
 
+  ngOnDestroy(): void {
+    // console.log(' markedRoom in ngOnDestroy', this.markedRoom);
   }
   init(markedRoom: any, end: Function): void {
+    // console.log(' markedRoom in the init()', markedRoom);
+    // console.log('services in the init()', this.services);
     callsIfInContext('start', this.services, markedRoom);
 
     this.end = end;
   }
   start(markedRoom: any) {
     this.markedRoom = markedRoom;
-    this.instanceEditRoomService.setInstance(this);
+    this.instanceEditRoomService.setOrRemoveInstance(this);
   }
   addedBed(bed: any) {
     this.markedRoom.beds.push(bed);
@@ -62,11 +64,13 @@ export class EditRoomService implements OnDestroy, OnInit {
   }
   restoreBeds(beds: Bed[] | undefined): void {
     if (!beds || !this.roomEntry.roomNotModify) return;
-    // const bedWithoutNew = this.roomEntry.roomNotModify.beds.
-    console.log(this.roomEntry.roomNotModify);
     beds.length = 0;
     beds.push(...this.roomEntry.roomNotModify.beds);
-    // this.wardService.refreshSvg('currentState');
+
+    this.wardService.refreshSvg('currentState');
+    console.log(this.outputBed.beds);
+
+
   }
   addBed(markedRoom: Room): void {
     const polygon = newPolygonInRoom(markedRoom?.polygon, this.bedInRoom.check.bind(this.bedInRoom));
@@ -110,21 +114,18 @@ export class EditRoomService implements OnDestroy, OnInit {
   }
   confirm() {
     this.bedService.updateBed(this.outputBed.getOutputBeds).subscribe(
-      beds => {
-        beds.forEach((bed: any) => {
-          let r = findById(this.markedRoom?.beds, bed.id);
-          if (r) {
-            delete r.isNew
-            Object.assign(r, bed)
+      bedsSaved => {
+        bedsSaved.forEach((bedSaved: any) => {
+          let bed = findById(this.markedRoom?.beds, bedSaved.id);
+          if (bed) {
+            delete bed.isNew
+            Object.assign(bed, bedSaved)
           }
         });
         this.bedMarkedService.mark(null);
         this.setMode('currentState');
-        this.outputBed.beds = [];
-        this.posibleBed.beds = [];
-        this.roomEntry.room = '';
-        this.wardService.refreshSvg();
-        this.end();
+         this.instanceEditRoomService.setOrRemoveInstance(this);
+         this.end();
       },
       e => logError(e)
     )
