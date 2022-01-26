@@ -23,7 +23,7 @@ export class EditRoomService implements OnDestroy {
     private roomMarked: RoomMarked,
     private instanceEditRoomService: InstanceEditRoomService,
   ) { }
-  services: any[] = [this.posibleBed, this.outputBed, this.roomEntry, this.bedInRoom, this.roomMarked];
+  private services: any[] = [this.posibleBed, this.outputBed, this.roomEntry, this.bedInRoom, this.roomMarked];
 
   init(markedRoom: any): void {
     callsIfInContext('start', this.services, markedRoom);
@@ -37,20 +37,10 @@ export class EditRoomService implements OnDestroy {
     this.wardService.refreshSvg();
   }
 
-  addBed(markedRoom: Room): void {
-    const polygon = newPolygonInRoom(markedRoom?.polygon, this.polygonInRoom.bind(this));
-    const bed = { room: markedRoom.id, polygon };
-    this.bedService.createBed(bed).subscribe(
-      (bed: Bed) => {
-        callsIfInContext('addedBed', this.services, bed);
-        this.wardService.refreshSvg();
-      },
-      (e: any) => logError(e)
-    )
-  }
 
-  rotateBed(bed: any): void {
-    const id: number = bed.id
+  rotateBed(bed: Bed): void {
+    if (!bed.id) return
+    const id = bed.id;
     const bedInOutput: Bed = this.getOutputBed(id);
     const polygon: string = bedInOutput && 'polygon' in bedInOutput ? bedInOutput.polygon : bed?.polygon;
     this.bedRotate.rotate({ id, polygon });
@@ -62,36 +52,43 @@ export class EditRoomService implements OnDestroy {
     }
   }
 
-  deleteBed(id: number): void {
-    const bed = findById(this.roomMarked.beds, id);
-    if (bed && 'patient' in bed && bed.patient) {
-      logError('bed has patient cannot delete');
-      return;
-    }
-
+  addBed(markedRoom: Room): void {
+    const polygon = newPolygonInRoom(markedRoom?.polygon, this.polygonInRoom.bind(this));
+    const bed = { room: markedRoom.id, polygon };
+    this.bedService.createBed(bed).subscribe(
+      (bed: Bed) => this.addedBed(bed),
+      (e: any) => logError(e)
+    )
+  }
+  private addedBed(bed: Bed) {
+    callsIfInContext('addedBed', this.services, bed);
+    this.wardService.refreshSvg();
+  }
+  deleteBed(id: number ): void {
     this.bedService.deleteBed(id).subscribe(
-      isDeleted => {
-        if (!isDeleted) {
-          logError('the bed cannot be removed');
-          return;
-        }
-        callsIfInContext('deletedBed', this.services, id);
-        this.bedMarkedService.mark(null);
-        this.wardService.refreshSvg();
-      },
+      isDeleted => this.deletedBed(id, isDeleted),
       e => logError(e)
     );
+  }
+  private deletedBed(id: number, isDeleted: boolean) {
+    if (!isDeleted) {
+      logError('the bed cannot be removed');
+      return;
+    }
+    callsIfInContext('deletedBed', this.services, id);
+    this.bedMarkedService.mark(null);
+    this.wardService.refreshSvg();
   }
 
   confirm(): void {
     this.bedService.updateBed(this.outputBed.getOutputBeds).subscribe(
-      bedsSaved => {
-        callsIfInContext('saved', this.services, bedsSaved);
-      },
+      bedsSaved => this.saved(bedsSaved),
       e => logError(e)
     )
   }
-
+  private saved(bedsSaved: Bed[]) {
+    callsIfInContext('saved', this.services, bedsSaved);
+  }
   outputIsEmpty(): boolean {
     return !(this.outputBed.getOutputBeds.length > 0);
   }
@@ -110,6 +107,11 @@ export class EditRoomService implements OnDestroy {
 
   polygonInRoom(bedPolygon: string): boolean {
     return this.bedInRoom.check(bedPolygon);
+  }
+
+  bedHasPatient(id: any){
+    const bed: Bed = this.roomMarked.gedBed(id);
+    return (bed && 'patient' in bed && bed.patient);
   }
 
   ngOnDestroy(): void {

@@ -1,5 +1,4 @@
-import { EditRoom } from './../../shared/models/edit-room';
-import { ModeWardSvgService } from 'src/app/core/services/mode-ward-svg.service';
+
 import { Bed } from 'src/app/shared/models/bed';
 import { WardService } from '../../core/services/ward.service';
 import { Component, ViewChild, OnInit } from '@angular/core';
@@ -17,7 +16,6 @@ export class WardComponent implements OnInit {
   constructor(
     private wardService: WardService,
 
-    private modeWardSvgService: ModeWardSvgService,
   ) { }
 
   @ViewChild('bedInstance') bedInstance: any;
@@ -51,8 +49,7 @@ export class WardComponent implements OnInit {
     this.ward = ward;
     this.load();
   }
-  load(mode: string = this.defaultMode): void {
-    this.mode = mode;
+  load(): void {
     this.forBeds();
     this.forRooms();
   }

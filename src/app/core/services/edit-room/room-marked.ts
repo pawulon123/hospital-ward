@@ -1,19 +1,8 @@
 import { Bed } from './../../../shared/models/bed';
 import { Injectable } from "@angular/core";
 import { findById, withoutId } from "../../../shared/useful/useful";
-import { WardService } from "../ward.service";
-import { BedInRoom } from "./bed-in-room";
-import { BedMarkedService } from "./bed-marked";
-import { InstanceEditRoomService } from "./instance-edit-room-service";
-
-
 @Injectable()
 export class RoomMarked {
-  constructor(
-    // private bedMarkedService: BedMarkedService,
-    // private wardService: WardService,
-    private instanceEditRoomService: InstanceEditRoomService,
-  ) { }
 
   markedRoom:any
   start(markedRoom: any): void {
@@ -37,6 +26,9 @@ export class RoomMarked {
         Object.assign(bed, bedSaved)
       }
     });
+  }
+  gedBed(id: number): Bed {
+    return findById(this.markedRoom.beds, id);
   }
   get beds (): Bed[]{
     return this.markedRoom.beds;

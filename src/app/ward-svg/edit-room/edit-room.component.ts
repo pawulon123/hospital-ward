@@ -1,7 +1,7 @@
 import { Room } from '../../shared/models/room';
 import { Bed } from '../../shared/models/bed';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { findById } from '../../shared/useful/useful';
+import { findById, logError } from '../../shared/useful/useful';
 import { RoomEntry, BedMarkedService, BedRotate, PosibleBed, OutputBed, BedInRoom, RoomMarked, EditRoomService } from '../../core/services/edit-room'
 @Component({
   selector: 'app-edit-room',
@@ -46,7 +46,12 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   deleteBed(): void {
     if (!this.idBedMarked || !this.editRoomService.markedBedExist(this.idBedMarked)) return;
-    this.editRoomService.deleteBed(this.idBedMarked);
+    if(this.editRoomService.bedHasPatient(this.idBedMarked)) {
+      logError('the bed has patient cannot be removed');
+      return;
+    }else{
+      this.editRoomService.deleteBed(this.idBedMarked);
+    }
   }
 
   confirm(): void {
