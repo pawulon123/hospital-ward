@@ -1,6 +1,6 @@
 import { Bed } from '../../../shared/models/bed';
 import { callsIfInContext, findById, logError } from '../../../shared/useful/useful';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Room } from '../../../shared/models/room';
 import { BedService } from '../bed.service';
 import { WardService } from '../ward.service';
@@ -8,7 +8,7 @@ import { ModeWardSvgService } from '../mode-ward-svg.service';
 import { newPolygonInRoom } from '../../../ward-svg/bed/bed-new-polygon';
 import { RoomEntry, BedMarkedService, BedRotate, PosibleBed, OutputBed, BedInRoom, RoomMarked, InstanceEditRoomService } from './'
 @Injectable()
-export class EditRoomService {
+export class EditRoomService implements OnDestroy {
 
   constructor(
     private bedService: BedService,
@@ -30,15 +30,11 @@ export class EditRoomService {
     this.instanceEditRoomService.setOrRemoveInstance(this);
   }
 
-  setMode(mode: string): void {
-    this.modeWardSvgService.setMode(mode);
-  }
-
   restoreBeds(beds: Bed[] | undefined): void {
     if (!beds || !this.roomEntry.roomNotModify) return;
     beds.length = 0;
     beds.push(...this.roomEntry.roomNotModify.beds);
-    this.wardService.refreshSvg('currentState');
+    this.wardService.refreshSvg();
   }
 
   addBed(markedRoom: Room): void {
@@ -53,9 +49,10 @@ export class EditRoomService {
     )
   }
 
-  rotateBed(bed: any, id: number): void {
-    const b: Bed = this.getOutputBed(id);
-    const polygon: string = b && 'polygon' in b ? b.polygon : bed?.polygon;
+  rotateBed(bed: any): void {
+    const id: number = bed.id
+    const bedInOutput: Bed = this.getOutputBed(id);
+    const polygon: string = bedInOutput && 'polygon' in bedInOutput ? bedInOutput.polygon : bed?.polygon;
     this.bedRotate.rotate({ id, polygon });
     if (this.polygonInRoom(this.bedRotate.points)) {
       const polygon = this.bedRotate.points
@@ -71,6 +68,7 @@ export class EditRoomService {
       logError('bed has patient cannot delete');
       return;
     }
+
     this.bedService.deleteBed(id).subscribe(
       isDeleted => {
         if (!isDeleted) {
@@ -89,9 +87,6 @@ export class EditRoomService {
     this.bedService.updateBed(this.outputBed.getOutputBeds).subscribe(
       bedsSaved => {
         callsIfInContext('saved', this.services, bedsSaved);
-        this.bedMarkedService.mark(null);
-        this.setMode('currentState');
-        this.instanceEditRoomService.setOrRemoveInstance(this);
       },
       e => logError(e)
     )
@@ -115,5 +110,11 @@ export class EditRoomService {
 
   polygonInRoom(bedPolygon: string): boolean {
     return this.bedInRoom.check(bedPolygon);
+  }
+
+  ngOnDestroy(): void {
+    this.bedMarkedService.mark(null);
+    this.modeWardSvgService.setMode('currentState');
+    this.instanceEditRoomService.setOrRemoveInstance(this);
   }
 }

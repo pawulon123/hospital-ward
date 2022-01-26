@@ -31,15 +31,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   rotateBed(): void {
     if (!this.idBedMarked || !this.editRoomService.markedBedExist(this.idBedMarked)) return;
-      this.editRoomService.rotateBed(this.markedBed, this.idBedMarked);
+      this.editRoomService.rotateBed(this.markedBed);
   }
 
   cancel(): void {
-    if (!this.editRoomService.outputIsEmpty()) {
-      this.editRoomService.restoreBeds(this.markedRoom?.beds);
-    }
-    this.bedMarkedService.mark(null);
-    this.editRoomService.setMode('currentState');
+    if (!this.editRoomService.outputIsEmpty()) this.editRoomService.restoreBeds(this.markedRoom?.beds);
     this.endEditingRoom();
   }
 
