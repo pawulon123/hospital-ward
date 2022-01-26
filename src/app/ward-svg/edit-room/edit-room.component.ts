@@ -3,11 +3,12 @@ import { Bed } from '../../shared/models/bed';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { findById, logError } from '../../shared/useful/useful';
 import { RoomEntry, BedMarkedService, BedRotate, PosibleBed, OutputBed, BedInRoom, RoomMarked, EditRoomService } from '../../core/services/edit-room'
+import { OutsideEditRoomService } from '../../core/services/edit-room/outside-services';
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
-  providers: [EditRoomService, RoomEntry, BedInRoom, PosibleBed, OutputBed, BedRotate, RoomMarked]
+  providers: [EditRoomService, RoomEntry, BedInRoom, PosibleBed, OutputBed, BedRotate, RoomMarked, OutsideEditRoomService]
 })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
