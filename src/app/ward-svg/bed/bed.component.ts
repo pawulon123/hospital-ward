@@ -3,7 +3,6 @@ import { EditRoomService } from '../../core/services/edit-room/edit-room.service
 import { Component, OnInit } from '@angular/core';
 import { Bed } from 'src/app/shared/models/bed';
 import { BedService } from '../../core/services/bed.service';
-import { EditRoom } from 'src/app/shared/models/edit-room';
 import { BedMarkedService } from 'src/app/core/services/edit-room/bed-marked';
 @Component({
   selector: 'app-bed',
@@ -35,7 +34,7 @@ export class BedComponent implements OnInit {
   }
   mark(idBedMarked: number): void {
     if(!this.editRoomService) return;
-    if (!this.editRoomService.posibleBed.exist(idBedMarked)) return;
+    if (!this.editRoomService.markedBedExist(idBedMarked)) return;
     this.idBedMarked = idBedMarked;
     this.bedMarkedService.mark(idBedMarked);
   }

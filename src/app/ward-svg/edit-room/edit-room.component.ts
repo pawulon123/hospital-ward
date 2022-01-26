@@ -30,7 +30,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   }
 
   rotateBed(): void {
-    if (!this.idBedMarked || !this.editRoomService.posibleBed.exist(this.idBedMarked)) return;
+    if (!this.idBedMarked || !this.editRoomService.markedBedExist(this.idBedMarked)) return;
       this.editRoomService.rotateBed(this.markedBed, this.idBedMarked);
   }
 
@@ -49,7 +49,7 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   }
 
   deleteBed(): void {
-    if (!this.idBedMarked || !this.editRoomService.posibleBed.exist(this.idBedMarked)) return;
+    if (!this.idBedMarked || !this.editRoomService.markedBedExist(this.idBedMarked)) return;
     this.editRoomService.deleteBed(this.idBedMarked);
   }
 

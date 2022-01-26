@@ -16,11 +16,11 @@ export class EditRoomService {
     private wardService: WardService,
     private modeWardSvgService: ModeWardSvgService,
     private bedRotate: BedRotate,
-    public posibleBed: PosibleBed,
-    public outputBed: OutputBed,
-    public roomEntry: RoomEntry,
-    public bedInRoom: BedInRoom,
-    public roomMarked: RoomMarked,
+    private posibleBed: PosibleBed,
+    private outputBed: OutputBed,
+    private roomEntry: RoomEntry,
+    private bedInRoom: BedInRoom,
+    private roomMarked: RoomMarked,
     private instanceEditRoomService: InstanceEditRoomService,
   ) { }
   services: any[] = [this.posibleBed, this.outputBed, this.roomEntry, this.bedInRoom, this.roomMarked];
@@ -42,7 +42,7 @@ export class EditRoomService {
   }
 
   addBed(markedRoom: Room): void {
-    const polygon = newPolygonInRoom(markedRoom?.polygon, this.bedInRoom.check.bind(this.bedInRoom));
+    const polygon = newPolygonInRoom(markedRoom?.polygon, this.polygonInRoom.bind(this));
     const bed = { room: markedRoom.id, polygon };
     this.bedService.createBed(bed).subscribe(
       (bed: Bed) => {
@@ -54,12 +54,12 @@ export class EditRoomService {
   }
 
   rotateBed(bed: any, id: number): void {
-    const b: Bed = this.outputBed.getOutputBed(id);
+    const b: Bed = this.getOutputBed(id);
     const polygon: string = b && 'polygon' in b ? b.polygon : bed?.polygon;
     this.bedRotate.rotate({ id, polygon });
-    if (this.bedInRoom.check(this.bedRotate.points)) {
+    if (this.polygonInRoom(this.bedRotate.points)) {
       const polygon = this.bedRotate.points
-      this.outputBed.addOrUpdate({ id, polygon });
+      this.addOrUpdateToOutput({ id, polygon });
       bed.polygon = polygon;
       this.bedMarkedService.mark(id);
     }
@@ -80,7 +80,6 @@ export class EditRoomService {
         callsIfInContext('deletedBed', this.services, id);
         this.bedMarkedService.mark(null);
         this.wardService.refreshSvg();
-        this.instanceEditRoomService.setOrRemoveInstance(this);
       },
       e => logError(e)
     );
@@ -100,5 +99,21 @@ export class EditRoomService {
 
   outputIsEmpty(): boolean {
     return !(this.outputBed.getOutputBeds.length > 0);
+  }
+
+  markedBedExist(id: number | null): boolean {
+    return this.posibleBed.exist(id);
+  }
+
+  getOutputBed(id: number): Bed {
+    return this.outputBed.getOutputBed(id);
+  }
+
+  addOrUpdateToOutput(bed: { id: number, polygon: string }): void {
+    return this.outputBed.addOrUpdate(bed);
+  }
+
+  polygonInRoom(bedPolygon: string): boolean {
+    return this.bedInRoom.check(bedPolygon);
   }
 }

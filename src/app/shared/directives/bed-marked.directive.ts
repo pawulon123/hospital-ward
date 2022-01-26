@@ -6,7 +6,7 @@ import { EditRoomService } from '../../core/services/edit-room/edit-room.service
   selector: '[appBedMarked]'
 })
 export class BedMarkedDirective implements OnInit {
-  @Input("appBedMarked") id: number | undefined | string = '';
+  @Input("appBedMarked") id: number | undefined;
   private styleDefault: string = "fill:white; opacity:0.3";
   @HostBinding('attr.style') style: string = this.styleDefault;
 
@@ -21,9 +21,9 @@ export class BedMarkedDirective implements OnInit {
   }
   setStyleByBedId(idBedMarked: number | null): void {
     if (!this.editRoomService) return;
-    this.style = this.id && idBedMarked === this.id && this.editRoomService.posibleBed.exist(idBedMarked) ? this.marked : this.styleDefault;
+    this.style = this.id && idBedMarked === this.id && this.editRoomService.markedBedExist(idBedMarked) ? this.styleMarked : this.styleDefault;
   }
-  get marked(): string {
+  get styleMarked(): string {
     return "fill:rgb(154, 194, 45); opacity:0.3"
   }
   private setEditRoomService(): void {

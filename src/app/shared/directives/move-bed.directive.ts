@@ -40,7 +40,7 @@ export class MoveBedDirective implements OnInit {
   private initialStateBasedOnBedId(idBedMarked: number | null): void {
 
     if (!this.editRoomService) return;
-    if (idBedMarked === this.bed.id && this.editRoomService.posibleBed.exist(idBedMarked)) {
+    if (idBedMarked === this.bed.id && this.editRoomService.markedBedExist(idBedMarked)) {
       this.activation();
     } else if (idBedMarked === null) {
       this.restore();
@@ -60,13 +60,13 @@ export class MoveBedDirective implements OnInit {
   }
   private started(): void {
     if (!this.editRoomService) return;
-    const bedInOutput: Bed = this.editRoomService.outputBed.getOutputBed(this.bed.id);
+    const bedInOutput: Bed = this.editRoomService.getOutputBed(this.bed.id);
     this.bedPolygon = bedInOutput && 'polygon' in bedInOutput ? coordinateOfPolygon(bedInOutput.polygon) : coordinateOfPolygon(this.points);
   }
   private moved(e: CdkDragMove): void {
     if (!this.editRoomService) return;
     const movedBed: string = polygonOfcoordinates(move(this.bedPolygon, e.distance))
-    if (this.editRoomService.bedInRoom.check(movedBed)) {
+    if (this.editRoomService.polygonInRoom(movedBed)) {
       this.points = movedBed;
       this.bedMarkedService.mark(this.bed.id);
     }
@@ -75,7 +75,7 @@ export class MoveBedDirective implements OnInit {
   private ended(): void {
     if (!this.editRoomService) return;
     this.bedPolygon = coordinateOfPolygon(this.points);
-    this.editRoomService.outputBed.addOrUpdate({ id: this.bed.id, polygon: this.points });
+    this.editRoomService. addOrUpdateToOutput({ id: this.bed.id, polygon: this.points });
   }
   private setEditRoomService(): void {
     this.editRoomService = this.instanceEditRoomService.getInstance();
