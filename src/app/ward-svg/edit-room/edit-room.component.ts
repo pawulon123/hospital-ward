@@ -37,10 +37,6 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   cancel(): void {
     if (!this.editRoomService.outputIsEmpty())  this.editRoomService.restoreBeds(this.markedRoom?.beds);
-    // console.log('non');
-    // console.log(!this.editRoomService.outputIsEmpty());
-
-
     this.endEditingRoom();
   }
 

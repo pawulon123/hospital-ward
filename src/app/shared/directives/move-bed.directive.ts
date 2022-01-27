@@ -1,7 +1,7 @@
 import { InstanceEditRoomService } from '../../core/services/edit-room/instance-edit-room-service';
 import { Coordinates } from './../models/coordinate';
 import { CdkDrag, CdkDragMove } from '@angular/cdk/drag-drop';
-import { Directive, Input, OnInit } from '@angular/core';
+import { Directive, Input, OnInit, Optional } from '@angular/core';
 import { coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Bed } from '../models/bed';
@@ -20,8 +20,9 @@ export class MoveBedDirective implements OnInit {
   }
   private bedPolygon: Coordinates[] = [];
   private startPolygon: string = '';
-  private editRoomService: EditRoomService | null = null
+
   constructor(
+    @Optional() private editRoomService: EditRoomService | null,
     private instanceEditRoomService: InstanceEditRoomService,
     private cdkDrag: CdkDrag,
     private bedMarkedService: BedMarkedService,
@@ -38,8 +39,6 @@ export class MoveBedDirective implements OnInit {
     this.cdkDrag.ended.subscribe(this.ended.bind(this));
   }
   private initialStateBasedOnBedId(idBedMarked: number | null): void {
-
-    // if (!this.editRoomService) return;
     if (idBedMarked === this.bed.id && this.editRoomService &&this.editRoomService.markedBedExist(idBedMarked)) {
       this.activation();
     } else if (idBedMarked === null) {

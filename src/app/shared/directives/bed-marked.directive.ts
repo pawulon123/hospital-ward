@@ -1,6 +1,6 @@
 import { InstanceEditRoomService } from '../../core/services/edit-room/instance-edit-room-service';
 import { BedMarkedService } from './../../core/services/edit-room/bed-marked';
-import { Directive, HostBinding, Input, OnInit } from '@angular/core';
+import { Directive, HostBinding, Input, OnInit, Optional } from '@angular/core';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 @Directive({
   selector: '[appBedMarked]'
@@ -10,8 +10,8 @@ export class BedMarkedDirective implements OnInit {
   private styleDefault: string = "fill:white; opacity:0.3";
   @HostBinding('attr.style') style: string = this.styleDefault;
 
-  private editRoomService: EditRoomService | null = null;
   constructor(
+    @Optional() private editRoomService: EditRoomService | null,
     private instanceEditRoomService: InstanceEditRoomService,
     private bedMarkedService: BedMarkedService,
   ) { }
@@ -20,10 +20,7 @@ export class BedMarkedDirective implements OnInit {
     this.setEditRoomService();
   }
   setStyleByBedId(idBedMarked: number | null): void {
-    // if (!this.editRoomService) return;
-
-    // console.log(idBedMarked);
-    this.style = this.id && idBedMarked === this.id && this.editRoomService && this.editRoomService.markedBedExist(idBedMarked) ? this.styleMarked : this.styleDefault;
+     this.style = this.id && idBedMarked === this.id && this.editRoomService && this.editRoomService.markedBedExist(idBedMarked) ? this.styleMarked : this.styleDefault;
   }
   get styleMarked(): string {
     return "fill:rgb(154, 194, 45); opacity:0.3"

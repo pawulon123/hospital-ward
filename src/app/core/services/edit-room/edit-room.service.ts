@@ -68,8 +68,7 @@ export class EditRoomService implements OnDestroy {
     );
   }
 
-  outputIsEmpty(): boolean {console.log(!(this.outputBed.getOutputBeds.length > 0));
-
+  outputIsEmpty(): boolean {
     return !(this.outputBed.getOutputBeds.length > 0);
   }
 
