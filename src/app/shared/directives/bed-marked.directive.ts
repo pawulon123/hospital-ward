@@ -20,8 +20,10 @@ export class BedMarkedDirective implements OnInit {
     this.setEditRoomService();
   }
   setStyleByBedId(idBedMarked: number | null): void {
-    if (!this.editRoomService) return;
-    this.style = this.id && idBedMarked === this.id && this.editRoomService.markedBedExist(idBedMarked) ? this.styleMarked : this.styleDefault;
+    // if (!this.editRoomService) return;
+
+    // console.log(idBedMarked);
+    this.style = this.id && idBedMarked === this.id && this.editRoomService && this.editRoomService.markedBedExist(idBedMarked) ? this.styleMarked : this.styleDefault;
   }
   get styleMarked(): string {
     return "fill:rgb(154, 194, 45); opacity:0.3"

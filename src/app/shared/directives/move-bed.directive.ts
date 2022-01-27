@@ -39,8 +39,8 @@ export class MoveBedDirective implements OnInit {
   }
   private initialStateBasedOnBedId(idBedMarked: number | null): void {
 
-    if (!this.editRoomService) return;
-    if (idBedMarked === this.bed.id && this.editRoomService.markedBedExist(idBedMarked)) {
+    // if (!this.editRoomService) return;
+    if (idBedMarked === this.bed.id && this.editRoomService &&this.editRoomService.markedBedExist(idBedMarked)) {
       this.activation();
     } else if (idBedMarked === null) {
       this.restore();
