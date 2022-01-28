@@ -32,11 +32,11 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   rotateBed(): void {
     if (!this.idBedMarked || !this.editRoomService.markedBedExist(this.idBedMarked)) return;
-      this.editRoomService.rotateBed(this.markedBed);
+    this.editRoomService.rotateBed(this.markedBed);
   }
 
   cancel(): void {
-    if (!this.editRoomService.outputIsEmpty())  this.editRoomService.restoreBeds(this.markedRoom?.beds);
+    if (this.outputIsNotEmpty()) this.editRoomService.restoreBeds(this.markedRoom?.beds);
     this.endEditingRoom();
   }
 
@@ -47,17 +47,21 @@ export class EditRoomComponent implements OnInit, OnDestroy {
 
   deleteBed(): void {
     if (!this.idBedMarked || !this.editRoomService.markedBedExist(this.idBedMarked)) return;
-    if(this.editRoomService.bedHasPatient(this.idBedMarked)) {
+    if (this.editRoomService.bedHasPatient(this.idBedMarked)) {
       logError('the bed has patient cannot be removed');
       return;
-    }else{
+    } else {
       this.editRoomService.deleteBed(this.idBedMarked);
     }
   }
 
   confirm(): void {
-    if (!this.editRoomService.outputIsEmpty()) this.editRoomService.confirm();
+    if (this.outputIsNotEmpty()) this.editRoomService.confirm();
     this.endEditingRoom();
+  }
+
+  outputIsNotEmpty(): boolean{
+    return this.editRoomService.outputIsNotEmpty();
   }
 
   ngOnDestroy(): void {

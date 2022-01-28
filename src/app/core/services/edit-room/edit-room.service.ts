@@ -1,5 +1,5 @@
 import { Bed } from '../../../shared/models/bed';
-import { callOnObj, callsIfInContext, logError, partial } from '../../../shared/useful/useful';
+import { callOnObj, logError, partial } from '../../../shared/useful/useful';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Room } from '../../../shared/models/room';
 import { newPolygonInRoom } from '../../../ward-svg/bed/bed-new-polygon';
@@ -23,10 +23,8 @@ export class EditRoomService implements OnDestroy {
     }, {})
     this.callServices = partial(callOnObj, servicesAsObject);
   }
-
   private callServices: Function = () => { }
   private services: string[] = ['posibleBed', 'outputBed', 'roomEntry', 'bedInRoom', 'roomMarked', 'outsideEditRoomService'];
-
 
   init(markedRoom: any): void {
     this.callServices('start', ['posibleBed', 'roomEntry', 'bedInRoom', 'roomMarked'], markedRoom);
@@ -78,8 +76,8 @@ export class EditRoomService implements OnDestroy {
     );
   }
 
-  outputIsEmpty(): boolean {
-    return !(this.outputBed.getOutputBeds.length > 0);
+  outputIsNotEmpty(): boolean {
+    return this.outputBed.getOutputBeds.length > 0;
   }
 
   markedBedExist(id: number | null): boolean {

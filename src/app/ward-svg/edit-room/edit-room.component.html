@@ -1,10 +1,13 @@
 <div>
 
   <button (click) = "addBed()">dodaj łóżko</button>
-  <button (click) = "deleteBed()">usuń łóżko</button>
-  <button (click) = "rotateBed()" >obróć</button>
+  <button (click) = "deleteBed()" [disabled] = "!markedBed">usuń łóżko</button>
+  <button (click) = "rotateBed()" [disabled] = "!markedBed">obróć</button>
   <div>
-    <button (click) = "confirm()">zatwierdź</button>
+    <div *ngIf = "!markedBed"> Zaznacz łózko aby je edytować</div>
+  </div>
+  <div>
+    <button (click) = "confirm()" [disabled] = "!outputIsNotEmpty()">zatwierdź</button>
     <button (click) = "cancel()">anuluj</button>
   </div>
 </div>
