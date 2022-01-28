@@ -34,5 +34,8 @@ export function fnIsInContext(context:any, fnName: string ){
 export function callsIfInContext(fnName: string, objects: any[], arg: any){
   objects.forEach(object => { if(fnIsInContext(object, fnName)) object[fnName](arg)});
 }
+export function callOnObj(method: string, objectNames: string[], arg:any, object: any){
+  objectNames.forEach(objectName => { if(fnIsInContext(object[objectName], method)) object[objectName][method](arg) });
+}
 
 

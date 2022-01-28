@@ -1,5 +1,5 @@
 import { Bed } from '../../../shared/models/bed';
-import { callsIfInContext, logError } from '../../../shared/useful/useful';
+import { callOnObj, callsIfInContext, logError, partial } from '../../../shared/useful/useful';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Room } from '../../../shared/models/room';
 import { newPolygonInRoom } from '../../../ward-svg/bed/bed-new-polygon';
@@ -16,11 +16,20 @@ export class EditRoomService implements OnDestroy {
     private bedInRoom: BedInRoom,
     private roomMarked: RoomMarked,
     private outsideEditRoomService: OutsideEditRoomService,
-  ) { }
-  private services: any[] = [this.posibleBed, this.outputBed, this.roomEntry, this.bedInRoom, this.roomMarked, this.outsideEditRoomService];
+  ) {
+    const servicesAsObject = this.services.reduce((obj: any, serviceName: any) => {
+      obj[serviceName] = (this as Record<string, any>)[serviceName];
+      return obj;
+    }, {})
+    this.callServices = partial(callOnObj, servicesAsObject);
+  }
+
+  private callServices: Function = () => { }
+  private services: string[] = ['posibleBed', 'outputBed', 'roomEntry', 'bedInRoom', 'roomMarked', 'outsideEditRoomService'];
+
 
   init(markedRoom: any): void {
-    callsIfInContext('start', this.services, markedRoom);
+    this.callServices('start', ['posibleBed', 'roomEntry', 'bedInRoom', 'roomMarked'], markedRoom);
     this.outsideEditRoomService.instanceEditRoom.setOrRemoveInstance(this);
   }
 
@@ -49,21 +58,22 @@ export class EditRoomService implements OnDestroy {
     const polygon = newPolygonInRoom(markedRoom?.polygon, this.polygonInRoom.bind(this));
     const bed = { room: markedRoom.id, polygon };
     this.outsideEditRoomService.bed.createBed(bed).subscribe(
-      (bed: Bed) => callsIfInContext('addedBed', this.services, bed),
+      (bed: Bed) => this.callServices('addedBed', ['posibleBed', 'roomEntry', 'outputBed', 'roomMarked', 'outsideEditRoomService'], bed),
       e => logError(e)
     );
   }
 
-  deleteBed(id: number ): void {
+  deleteBed(id: number): void {
     this.outsideEditRoomService.bed.deleteBed(id).subscribe(
-      (isDeleted: boolean) =>  isDeleted ?  callsIfInContext('deletedBed', this.services, id) : logError('the bed cannot be removed') ,
+      (isDeleted: boolean) => isDeleted ? this.callServices('deletedBed', ['posibleBed', 'roomEntry', 'outputBed', 'roomMarked', 'outsideEditRoomService'], id)
+        : logError('the bed cannot be removed'),
       e => logError(e)
     );
   }
 
   confirm(): void {
     this.outsideEditRoomService.bed.updateBed(this.outputBed.getOutputBeds).subscribe(
-      (bedsSaved: Bed[]) => callsIfInContext('saved', this.services, bedsSaved),
+      (bedsSaved: Bed[]) => this.callServices('saved', ['roomMarked'], bedsSaved),
       e => logError(e)
     );
   }
@@ -88,7 +98,7 @@ export class EditRoomService implements OnDestroy {
     return this.bedInRoom.check(bedPolygon);
   }
 
-  bedHasPatient(id: any){
+  bedHasPatient(id: any) {
     const bed: Bed = this.roomMarked.gedBed(id);
     return (bed && 'patient' in bed && bed.patient);
   }

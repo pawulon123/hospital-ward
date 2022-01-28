@@ -20,7 +20,7 @@ export class OutsideEditRoomService implements OnDestroy {
     this.ward.refreshSvg();
   }
 
-   deletedBed(): void {
+  deletedBed(): void {
     this.bedMarked.mark(null);
     this.ward.refreshSvg();
   }

@@ -13,10 +13,4 @@ export class BedInRoom {
   start(markedRoom:any){
     this.roomPolygon = markedRoom?.polygon;
   }
-  addedBed(bed:any){
-
-  }
-  deletedBed(id: number){
-
-  }
 }

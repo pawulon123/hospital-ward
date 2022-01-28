@@ -7,7 +7,6 @@ export class RoomMarked {
   markedRoom:any
   start(markedRoom: any): void {
     this.markedRoom = markedRoom;
-
   }
   addedBed(bed: any): void {
     bed.isNew = true;

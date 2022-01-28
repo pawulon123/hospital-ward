@@ -22,9 +22,6 @@ export class OutputBed implements OnDestroy{
   delete(id: number): void {
     this.beds = this.beds.filter(bed => bed.id != id);
   }
-  start(markedRoom:any){
-
-  }
   addedBed(bed:any){
     this.addOrUpdate({ id: bed.id, polygon: bed.polygon });
   }
