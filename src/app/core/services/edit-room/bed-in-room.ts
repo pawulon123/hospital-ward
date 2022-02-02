@@ -10,7 +10,7 @@ export class BedInRoom {
     const bedArrays = arraysOfPolygon(bedPolygon)
   return polygonInPolygon(bedArrays, this.roomArrays);
   }
-  start(markedRoom:any){
+  start(markedRoom:any){console.log('start bedinroom');
     this.roomPolygon = markedRoom?.polygon;
   }
 }

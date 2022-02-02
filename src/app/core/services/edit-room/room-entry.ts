@@ -27,7 +27,8 @@ export class RoomEntry implements OnDestroy {
     room.beds = room.beds.filter((bed: any) => bed.id != id);
     this.roomNotModify = room;
   }
-  start(markedRoom:any){
+  start(markedRoom:any){console.log('entry start', markedRoom);
+
     this.roomNotModify = markedRoom;
   }
   addedBed(bed:any){

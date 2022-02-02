@@ -31,11 +31,13 @@ return keysValues.reduce((arrIds: number[] , keyValue: { key: string, value: str
 export function fnIsInContext(context:any, fnName: string ){
   return  (fnName in context && (context as Record<string, any>)[fnName].constructor instanceof Function)
 }
-export function callsIfInContext(fnName: string, objects: any[], arg: any){
+export function callsIfInContext(fnName: string, arg: any, objects: any[]): void{
   objects.forEach(object => { if(fnIsInContext(object, fnName)) object[fnName](arg)});
 }
-export function callOnObj(method: string, objectNames: string[], arg:any, object: any){
-  objectNames.forEach(objectName => { if(fnIsInContext(object[objectName], method)) object[objectName][method](arg) });
+export function callOnObj(method: string, objectNames: string[], arg:any, object: any): void{
+  objectNames.forEach(objectName => {console.log(object[objectName]);
+   if(fnIsInContext(object[objectName], method)) object[objectName][method](arg) });
 }
+
 
 

@@ -1,7 +1,7 @@
 import { InstanceEditRoomService } from '../../core/services/edit-room/instance-edit-room-service';
 import { Coordinates } from './../models/coordinate';
 import { CdkDrag, CdkDragMove } from '@angular/cdk/drag-drop';
-import { Directive, Input, OnInit, Optional } from '@angular/core';
+import { Directive, Input, OnInit, Optional, Self } from '@angular/core';
 import { coordinateOfPolygon, move, polygonOfcoordinates } from '../useful/useful';
 import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
 import { Bed } from '../models/bed';

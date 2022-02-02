@@ -1,40 +1,28 @@
 import { Bed } from '../../../shared/models/bed';
-import { callOnObj, logError, partial } from '../../../shared/useful/useful';
-import { Injectable, OnDestroy } from '@angular/core';
+import { callOnObj as callServices,  logError, partial as setServices } from '../../../shared/useful/useful';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Room } from '../../../shared/models/room';
 import { newPolygonInRoom } from '../../../ward-svg/bed/bed-new-polygon';
-import { RoomEntry, BedRotate, PosibleBed, OutputBed, BedInRoom, RoomMarked } from './'
 import { OutsideEditRoomService } from './outside-services';
 @Injectable()
 export class EditRoomService implements OnDestroy {
 
-  constructor(
-    private bedRotate: BedRotate,
-    private posibleBed: PosibleBed,
-    private outputBed: OutputBed,
-    private roomEntry: RoomEntry,
-    private bedInRoom: BedInRoom,
-    private roomMarked: RoomMarked,
-    private outsideEditRoomService: OutsideEditRoomService,
-  ) {
-    const servicesAsObject = this.services.reduce((obj: any, serviceName: any) => {
-      obj[serviceName] = (this as Record<string, any>)[serviceName];
-      return obj;
-    }, {})
-    this.callServices = partial(callOnObj, servicesAsObject);
-  }
   private callServices: Function = () => { }
-  private services: string[] = ['posibleBed', 'outputBed', 'roomEntry', 'bedInRoom', 'roomMarked', 'outsideEditRoomService'];
-
-  init(markedRoom: any): void {
+  constructor(
+    @Inject('Services') private services: any,
+    @Inject(OutsideEditRoomService) private outsideEditRoomService: any,
+  ) {
+    this.callServices = setServices(callServices, this.services);
+  }
+    init(markedRoom: any): void {
     this.callServices('start', ['posibleBed', 'roomEntry', 'bedInRoom', 'roomMarked'], markedRoom);
     this.outsideEditRoomService.instanceEditRoom.setOrRemoveInstance(this);
   }
 
   restoreBeds(beds: Bed[] | undefined): void {
-    if (!beds || !this.roomEntry.roomNotModify) return;
+    if (!beds || !this.services.roomEntry.roomNotModify) return;
     beds.length = 0;
-    beds.push(...this.roomEntry.roomNotModify.beds);
+    beds.push(...this.services.roomEntry.roomNotModify.beds);
     this.outsideEditRoomService.ward.refreshSvg();
   }
 
@@ -43,9 +31,9 @@ export class EditRoomService implements OnDestroy {
     const id = bed.id;
     const bedInOutput: Bed = this.getOutputBed(id);
     const polygon: string = bedInOutput && 'polygon' in bedInOutput ? bedInOutput.polygon : bed?.polygon;
-    this.bedRotate.rotate({ id, polygon });
-    if (this.polygonInRoom(this.bedRotate.points)) {
-      const polygon = this.bedRotate.points
+    this.services.bedRotate.rotate({ id, polygon });
+    if (this.polygonInRoom(this.services.bedRotate.points)) {
+      const polygon = this.services.bedRotate.points
       this.addOrUpdateToOutput({ id, polygon });
       bed.polygon = polygon;
       this.outsideEditRoomService.bedMarked.mark(id);
@@ -56,48 +44,48 @@ export class EditRoomService implements OnDestroy {
     const polygon = newPolygonInRoom(markedRoom?.polygon, this.polygonInRoom.bind(this));
     const bed = { room: markedRoom.id, polygon };
     this.outsideEditRoomService.bed.createBed(bed).subscribe(
-      (bed: Bed) => this.callServices('addedBed', ['posibleBed', 'roomEntry', 'outputBed', 'roomMarked', 'outsideEditRoomService'], bed),
-      e => logError(e)
+      (bed: Bed) => this.callServices('addedBed', ['posibleBed', 'roomEntry', 'outputBed', 'roomMarked'], bed),
+      (e:any) => logError(e)
     );
   }
 
   deleteBed(id: number): void {
     this.outsideEditRoomService.bed.deleteBed(id).subscribe(
-      (isDeleted: boolean) => isDeleted ? this.callServices('deletedBed', ['posibleBed', 'roomEntry', 'outputBed', 'roomMarked', 'outsideEditRoomService'], id)
+      (isDeleted: boolean) => isDeleted ? this.callServices('deletedBed', ['posibleBed', 'roomEntry', 'outputBed', 'roomMarked'], id)
         : logError('the bed cannot be removed'),
-      e => logError(e)
+        (e:any) => logError(e)
     );
   }
 
   confirm(): void {
-    this.outsideEditRoomService.bed.updateBed(this.outputBed.getOutputBeds).subscribe(
+    this.outsideEditRoomService.bed.updateBed(this.services.outputBed.getOutputBeds).subscribe(
       (bedsSaved: Bed[]) => this.callServices('saved', ['roomMarked'], bedsSaved),
-      e => logError(e)
+      (e:any) => logError(e)
     );
   }
 
   outputIsNotEmpty(): boolean {
-    return this.outputBed.getOutputBeds.length > 0;
+    return this.services.outputBed.getOutputBeds.length > 0;
   }
 
   markedBedExist(id: number | null): boolean {
-    return this.posibleBed.exist(id);
+    return this.services.posibleBed.exist(id);
   }
 
   getOutputBed(id: number): Bed {
-    return this.outputBed.getOutputBed(id);
+    return this.services.outputBed.getOutputBed(id);
   }
 
   addOrUpdateToOutput(bed: { id: number, polygon: string }): void {
-    return this.outputBed.addOrUpdate(bed);
+    return this.services.outputBed.addOrUpdate(bed);
   }
 
-  polygonInRoom(bedPolygon: string): boolean {
-    return this.bedInRoom.check(bedPolygon);
+  polygonInRoom(bedPolygon: string) {
+    return this.services.bedInRoom.check(bedPolygon);
   }
 
   bedHasPatient(id: any) {
-    const bed: Bed = this.roomMarked.gedBed(id);
+    const bed: Bed = this.services.roomMarked.gedBed(id);
     return (bed && 'patient' in bed && bed.patient);
   }
 
