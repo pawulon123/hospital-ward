@@ -1,9 +1,9 @@
-import { InstanceEditRoomService } from '../../core/services/edit-room/instance-edit-room-service';
-import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
+import { InstanceEditRoomService } from '../../core/services/edit-room/services/instance-edit-room-service';
+import { EditRoomService } from '../../core/services/edit-room/services/edit-room.service';
 import { Component, OnInit } from '@angular/core';
 import { Bed } from 'src/app/shared/models/bed';
 import { BedService } from '../../core/services/bed.service';
-import { BedMarkedService } from 'src/app/core/services/edit-room/bed-marked';
+import { BedMarkedService } from 'src/app/core/services/edit-room/services/bed-marked';
 @Component({
   selector: 'app-bed',
   templateUrl: './bed.component.html',
@@ -20,11 +20,8 @@ export class BedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.bedMarkedService.markingRoom$.subscribe(this.setMarkedBedId.bind(this));
+    this.bedMarkedService.markingRoom$.subscribe(idBedMarked => idBedMarked = this.idBedMarked );
     this.instanceEditRoomService.instance$.subscribe( editRoomService => this.editRoomService = editRoomService);
-  }
-  private setMarkedBedId(idBedMarked: number | null): void {
-    this.idBedMarked = idBedMarked;
   }
   setBeds(ward: any) {
     this.beds = this.bedService.extractOfWard(ward);
@@ -33,8 +30,8 @@ export class BedComponent implements OnInit {
     return this.beds;
   }
   mark(idBedMarked: number): void {
-    if(!this.editRoomService) return;
-    if (!this.editRoomService.markedBedExist(idBedMarked)) return;
+
+    if(!this.editRoomService || !this.editRoomService.markedBedExist(idBedMarked)) return;
     this.idBedMarked = idBedMarked;
     this.bedMarkedService.mark(idBedMarked);
   }

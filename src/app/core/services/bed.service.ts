@@ -6,19 +6,18 @@ import { Room } from 'src/app/shared/models/room';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
-// import { arraysOfPolygon, logError, rect } from '../../shared/useful/useful';
-// const center = require('svg-polygon-center');
 
-@Injectable({
-  providedIn: 'root'
-})
+
+@Injectable({ providedIn: 'root'})
 export class BedService {
-   httpOptions = {
+   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   };
+
   url: string = 'http://localhost:3000/bed/';
+
   constructor(private http: HttpClient) { }
 
   extractOfWard(ward: Ward): Bed[] {

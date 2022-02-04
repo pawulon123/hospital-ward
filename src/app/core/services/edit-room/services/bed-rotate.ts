@@ -1,6 +1,6 @@
 
-import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../../shared/useful/useful';
-import { Coordinates } from '../../../shared/models/coordinate';
+import { coordinateOfPolygon, polygonOfcoordinates, logError, shapeProperties, cos, sin } from '../../../../shared/useful/useful';
+import { Coordinates } from '../../../../shared/models/coordinate';
 import { Injectable } from '@angular/core';
 @Injectable()
 export class BedRotate {
@@ -8,11 +8,12 @@ export class BedRotate {
   bed: any;
   centerBed: any = null;
   step: number = 15;
-  rotationAngle: number = 15
+  rotationAngle: number = 15;
   height: number = 0;
   width: number = 0;
   polygon: string = '';
   coor:Coordinates[] =[];
+
   rotate(bed: any): void {
     this.bed = bed;
     this.coor = coordinateOfPolygon(this.bed.polygon);
@@ -51,14 +52,10 @@ export class BedRotate {
     // console.log('3x', coordinates[3].x);
     // console.log('3y', coordinates[3].y);
   }
-  get points() {
+  get points(): string {
     return this.polygon;
   }
-  get coordinates() {
+  get coordinates(): Coordinates[] {
     return this.coor;
-  }
-  start(markedRoom:any){
-    console.log("editRoomService");
-
   }
 }

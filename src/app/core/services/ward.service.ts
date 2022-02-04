@@ -7,17 +7,30 @@ import { Ward } from '../../shared/models/ward';
   providedIn: 'root'
 })
 export class WardService {
+
   id: number = 1;
-  refreshSvg: Function = ()=>{};
+  refreshSvg: Function = () => { };
 
   constructor(
     private http: HttpClient,
   ) { }
+
   url: string = 'http://localhost:3000/ward/';
+
   getWard(): Observable<Ward> {
     return this.http.get<Ward>(this.url + this.id);
   }
-  refresh(refresh:Function): void{
+
+  refresh(refresh: Function): void {
     this.refreshSvg = refresh;
   }
+
+  addedBed(): void {
+    this.refreshSvg();
+  }
+
+  deletedBed(): void {
+    this.refreshSvg();
+  }
+
 }

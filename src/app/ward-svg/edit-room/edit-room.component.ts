@@ -2,14 +2,13 @@ import { Room } from '../../shared/models/room';
 import { Bed } from '../../shared/models/bed';
 import { Component, Inject, OnDestroy, OnInit, Self } from '@angular/core';
 import { findById, logError } from '../../shared/useful/useful';
-import { EditRoomService } from '../../core/services/edit-room'
-import { OutsideEditRoomService } from '../../core/services/edit-room/outside-services';
-import { Services } from '../../core/services/edit-room/manage-services';
+import { BedMarkedService, EditRoomService } from '../../core/services/edit-room'
+import { ConfigDIEditRoom } from '../../core/services/edit-room/dependency-injection-config';
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
   styleUrls: ['./edit-room.component.css'],
-  providers: Services.forProviders
+  providers: ConfigDIEditRoom.forProviders
   })
 export class EditRoomComponent implements OnInit, OnDestroy {
 
@@ -18,13 +17,13 @@ export class EditRoomComponent implements OnInit, OnDestroy {
   private endEditingRoom: Function = () => { };
   private subscribeEditRoomService: any;
   constructor(
-    @Self() @Inject(EditRoomService) private editRoomService: EditRoomService,
-    @Inject(OutsideEditRoomService) private outsideEditRoomService: OutsideEditRoomService,
+    @Self() private editRoomService: EditRoomService,
+     private bedMarked: BedMarkedService,
   ) { }
 
   ngOnInit() {
     this.editRoomService.init(this.markedRoom);
-    this.subscribeEditRoomService = this.outsideEditRoomService.bedMarked.markingRoom$.subscribe(idBedMarked => this.idBedMarked = idBedMarked);
+    this.subscribeEditRoomService = this.bedMarked.markingRoom$.subscribe((idBedMarked: any) => this.idBedMarked = idBedMarked);
   }
 
   get markedBed(): Bed {

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root'})
 export class ModeWardSvgService {
-  mode$ = new Subject<string>()
+
+  mode$ = new Subject<string>();
 
   setMode(mode: string ): void {
     this.mode$.next(mode);
   }
+
 }

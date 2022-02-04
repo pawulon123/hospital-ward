@@ -1,35 +1,33 @@
-import { Bed } from './../../../shared/models/bed';
+import { Bed } from '../../../../shared/models/bed';
 import { Injectable } from "@angular/core";
-import { findById, withoutId } from "../../../shared/useful/useful";
+import { findById, withoutId } from "../../../../shared/useful/useful";
+import { Room } from 'src/app/shared/models/room';
 @Injectable()
 export class RoomMarked {
 
-  markedRoom:any
-  start(markedRoom: any): void {
+  markedRoom:any;
+
+  start(markedRoom: Room): void {
     this.markedRoom = markedRoom;
   }
-  addedBed(bed: any): void {
+
+  addedBed(bed: Bed): void {
     bed.isNew = true;
     this.markedRoom.beds.push(bed);
   }
+
   deletedBed(id: number): void {
     const newBeds = withoutId(this.markedRoom.beds, id);
     this.markedRoom.beds.length = 0;
     this.markedRoom.beds.push(...newBeds);
   }
-  saved(bedsSaved :any[]): void{
-    bedsSaved.forEach((bedSaved: any) => {
-      let bed = findById(this.markedRoom?.beds, bedSaved.id);
-      if (bed) {
-        delete bed.isNew
-        Object.assign(bed, bedSaved)
-      }
-    });
-  }
+
   gedBed(id: number): Bed {
     return findById(this.markedRoom.beds, id);
   }
-  get beds (): Bed[]{
+
+  get beds (): Bed[] {
     return this.markedRoom.beds;
   }
+
 }

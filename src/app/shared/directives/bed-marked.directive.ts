@@ -1,7 +1,7 @@
-import { InstanceEditRoomService } from '../../core/services/edit-room/instance-edit-room-service';
-import { BedMarkedService } from './../../core/services/edit-room/bed-marked';
+import { InstanceEditRoomService } from '../../core/services/edit-room/services/instance-edit-room-service';
+import { BedMarkedService } from '../../core/services/edit-room/services/bed-marked';
 import { Directive, HostBinding, Input, OnInit, Optional } from '@angular/core';
-import { EditRoomService } from '../../core/services/edit-room/edit-room.service';
+import { EditRoomService } from '../../core/services/edit-room/services/edit-room.service';
 @Directive({
   selector: '[appBedMarked]'
 })

@@ -1,43 +1,47 @@
 import { Room } from 'src/app/shared/models/room';
 import { Bed } from 'src/app/shared/models/bed';
-import { Injectable, OnDestroy } from "@angular/core";
-import { EditRoomService } from './edit-room.service';
+import { Injectable } from "@angular/core";
 @Injectable()
-export class RoomEntry implements OnDestroy {
-  ngOnDestroy(): void {
-    this.room = '';
-  }
+export class RoomEntry {
 
-  room: string = '';
-  get roomNotModify(): any {
+  private room: string = '';
+
+  get roomNotModify(): Room {
     return this.room ? JSON.parse(this.room) : null;
   }
+
   set roomNotModify(room: Room | string | undefined) {
     this.room = JSON.stringify(room);
   }
+
   addBed(bed: Bed): void {
     if (!this.roomNotModify) return;
-    const room = this.copiedRoom();
+    const room: Room = this.copiedRoom();
     room.beds = [...this.roomNotModify.beds, bed];
     this.roomNotModify = room;
   }
+
   removeBed(id: number): void {
     if (!this.roomNotModify) return;
     const room = this.copiedRoom();
-    room.beds = room.beds.filter((bed: any) => bed.id != id);
+    room.beds = room.beds.filter((bed: Bed) => bed.id != id);
     this.roomNotModify = room;
   }
-  start(markedRoom:any){console.log('entry start', markedRoom);
 
+  start(markedRoom: Room): void {
     this.roomNotModify = markedRoom;
   }
-  addedBed(bed:any){
+
+  addedBed(bed: Bed): void {
     this.addBed(bed);
   }
-  deletedBed(id: number){
+
+  deletedBed(id: number): void {
     this.removeBed(id);
   }
-  private copiedRoom () {
+
+  private copiedRoom(): Room {
     return Object.assign({}, this.roomNotModify);
   }
+
 }

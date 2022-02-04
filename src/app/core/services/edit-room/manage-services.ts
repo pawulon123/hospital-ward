@@ -1,42 +1,48 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
+import { BedService } from "../bed.service";
+import { ModeWardSvgService } from "../mode-ward-svg.service";
+import { WardService } from "../ward.service";
+import { BedInRoom } from "./services/bed-in-room";
+import { BedMarkedService } from "./services/bed-marked";
+import { BedRotate } from "./services/bed-rotate";
+import { InstanceEditRoomService } from "./services/instance-edit-room-service";
+import { OutputBed } from "./services/output-bed";
+import { PosibleBed } from "./services/posible-bed";
+import { RoomEntry } from "./services/room-entry";
+import { RoomMarked } from "./services/room-marked";
+import { fnIsInContext } from '../../../shared/useful/useful';
 
-import { RoomEntry, BedRotate, PosibleBed, OutputBed, BedInRoom, RoomMarked, EditRoomService } from '.'
-import { OutsideEditRoomService } from "./outside-services";
 @Injectable()
-export abstract class Services {
-  private static get bedInRoom(): BedInRoom{
-    return new BedInRoom();
-  };
-  private static get posibleBed(): PosibleBed {
-    return new PosibleBed();
-  };
-  private static get bedRotate(): BedRotate {
-    return new BedRotate();
-  };
-  private static get outputBed(): OutputBed {
-    return new OutputBed();
-  };
-  private static get roomMarked(): RoomMarked {
-    return new RoomMarked();
-  };
-  private static get roomEntry(): RoomEntry {
-    return new RoomEntry();
+export class ManageServices {
+
+ private events: any;
+  constructor(
+    private bed: BedService,
+    private bedMarked: BedMarkedService,
+    private modeWardSvg: ModeWardSvgService,
+    private instanceEditRoom: InstanceEditRoomService,
+    private bedInRoom: BedInRoom,
+    private posibleBed: PosibleBed,
+    private bedRotate: BedRotate,
+    private outputBed: OutputBed,
+    private roomMarked: RoomMarked,
+    private roomEntry: RoomEntry,
+    private ward: WardService,
+  ) {
+    this.createEv();
   }
-  private static services() {
-    return {
-      roomEntry: Services.roomEntry,
-      bedInRoom: Services.bedInRoom,
-      posibleBed: Services.posibleBed,
-      bedRotate: Services.bedRotate,
-      outputBed: Services.outputBed,
-      roomMarked: Services.roomMarked,
-    }
+  private posibleEv(): string[] {
+    return ['start', 'addedBed', 'deletedBed', 'confirm'];
   }
-  public static get forProviders() {
-    return [
-      { provide: 'Services', useValue: Services.services() },
-      { provide: OutsideEditRoomService, useClass: OutsideEditRoomService },
-      { provide: EditRoomService, useClass: EditRoomService },
-    ]
+  private createEv(): void {
+    this.events = this.posibleEv().reduce((obj: any, keyEvent) => {
+      obj[keyEvent] = Object.values(this).filter(s => fnIsInContext(s, keyEvent));
+     this.propertyOnThis(keyEvent)
+      return obj;
+    }, {})
   }
+  private propertyOnThis(keyEvent: string): void{
+    (this as Record<string, any>)[keyEvent] = (arg: any) => this.events[keyEvent].forEach((s: any) => s[keyEvent](arg))
+  }
+
 }
