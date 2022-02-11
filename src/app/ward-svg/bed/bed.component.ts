@@ -30,7 +30,6 @@ export class BedComponent implements OnInit {
     return this.beds;
   }
   mark(idBedMarked: number): void {
-
     if(!this.editRoomService || !this.editRoomService.markedBedExist(idBedMarked)) return;
     this.idBedMarked = idBedMarked;
     this.bedMarkedService.mark(idBedMarked);

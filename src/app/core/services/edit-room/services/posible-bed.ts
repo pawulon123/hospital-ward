@@ -1,9 +1,11 @@
 import { Room } from '../../../../shared/models/room';
 import { Bed } from '../../../../shared/models/bed';
 import { Injectable } from "@angular/core";
+import { EditRoomAddedBed, EditRoomDeletedBed, EditRoomStart } from '../../../../shared/models/edit-room-events';
 
 @Injectable()
-export class PosibleBed {
+export class PosibleBed implements EditRoomStart, EditRoomAddedBed, EditRoomDeletedBed {
+
 
   private ids: any[] = [];
 

@@ -1,8 +1,9 @@
 import { Room } from 'src/app/shared/models/room';
 import { Bed } from 'src/app/shared/models/bed';
 import { Injectable } from "@angular/core";
+import { EditRoomAddedBed, EditRoomDeletedBed, EditRoomStart } from '../../../../shared/models/edit-room-events';
 @Injectable()
-export class RoomEntry {
+export class RoomEntry implements EditRoomDeletedBed, EditRoomStart, EditRoomAddedBed {
 
   private room: string = '';
 

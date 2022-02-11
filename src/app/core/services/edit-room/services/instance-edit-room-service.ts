@@ -7,8 +7,7 @@ export class InstanceEditRoomService {
   instance$ = new Subject<EditRoomService>();
   private instance: EditRoomService | null = null;
 
-  setOrRemoveInstance(instance: EditRoomService
-    ): void {
+  setOrRemoveInstance(instance: EditRoomService): void {
     this.instance = instance;
     this.instance$.next(this.instance);
   }

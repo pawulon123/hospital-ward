@@ -2,8 +2,9 @@ import { Bed } from '../../../../shared/models/bed';
 import { Injectable } from "@angular/core";
 import { findById, withoutId } from "../../../../shared/useful/useful";
 import { Room } from 'src/app/shared/models/room';
+import { EditRoomAddedBed, EditRoomDeletedBed, EditRoomStart } from '../../../../shared/models/edit-room-events';
 @Injectable()
-export class RoomMarked {
+export class RoomMarked implements EditRoomStart, EditRoomAddedBed, EditRoomDeletedBed {
 
   markedRoom:any;
 

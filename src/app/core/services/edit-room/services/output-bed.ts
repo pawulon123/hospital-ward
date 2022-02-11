@@ -1,9 +1,9 @@
 import { Bed } from 'src/app/shared/models/bed';
 import { Injectable, OnDestroy } from "@angular/core";
 import { findById } from '../../../../shared/useful/useful';
-
+import { EditRoomAddedBed, EditRoomDeletedBed } from '../../../../shared/models/edit-room-events';
 @Injectable()
-export class OutputBed {
+export class OutputBed implements EditRoomAddedBed, EditRoomDeletedBed {
 
   beds: { id: number, polygon: string }[] = [];
 
