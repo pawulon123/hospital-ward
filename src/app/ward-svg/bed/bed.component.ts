@@ -11,7 +11,6 @@ import { BedMarkedService } from 'src/app/core/services/edit-room/services/bed-m
 })
 export class BedComponent implements OnInit {
   private idBedMarked: number | null = null;
-  private beds?: any;
   private editRoomService: EditRoomService | null = null;
   constructor(
     private bedService: BedService,
@@ -23,12 +22,7 @@ export class BedComponent implements OnInit {
     this.bedMarkedService.markingRoom$.subscribe(idBedMarked => idBedMarked = this.idBedMarked );
     this.instanceEditRoomService.instance$.subscribe( editRoomService => this.editRoomService = editRoomService);
   }
-  setBeds(ward: any) {
-    this.beds = this.bedService.extractOfWard(ward);
-  }
-  getBeds(): Bed[] {
-    return this.beds;
-  }
+  
   mark(idBedMarked: number): void {
     if(!this.editRoomService || !this.editRoomService.markedBedExist(idBedMarked)) return;
     this.idBedMarked = idBedMarked;

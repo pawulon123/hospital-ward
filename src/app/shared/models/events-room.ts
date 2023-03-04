@@ -1,6 +1,6 @@
 export interface EventsRoom {
 
-  manageBeds:(element:any)=>any;
+  startEditRoom:(element:any)=>any;
   hideRoomInfo:(element:any)=>any;
   roomInfo:(element:any)=>any;
 

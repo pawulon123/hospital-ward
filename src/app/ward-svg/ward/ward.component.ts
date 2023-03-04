@@ -5,6 +5,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { Room } from '../../shared/models/room';
 import { Ward } from '../../shared/models/ward';
 import { logError } from '../../shared/useful/useful';
+import { BedService } from 'src/app/core/services/bed.service';
 
 @Component({
   selector: 'app-ward',
@@ -18,11 +19,11 @@ export class WardComponent implements OnInit {
 
   ) { }
 
-  @ViewChild('bedInstance') bedInstance: any;
+  // @ViewChild('bedInstance') bedInstance: any;
   @ViewChild('roomInstance') roomInstance: any;
 
   viewBox: string = '0 0 1440 360';
-  ward?: Ward;
+  ward!: Ward;
   beds?: Bed[] = [];
   rooms?: Room[] = [];
   private defaultMode: string = 'currentState';
@@ -54,9 +55,9 @@ export class WardComponent implements OnInit {
     this.forRooms();
   }
   forBeds(): void {
-    this.bedInstance.setBeds(this.ward);
-    this.beds = this.bedInstance.getBeds();
+    this.beds = BedService.extractOfWard(this.ward)
   }
+
   forRooms(): void {
     this.rooms = this.ward?.rooms;
     this.roomInstance.setRooms(this.rooms);

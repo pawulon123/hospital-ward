@@ -16,7 +16,8 @@ export class RoomComponent implements EventsRoom {
   ) { }
   editRoom: any;
   rooms: Room[] = [];
-  manageBeds(element: any): void {
+
+  startEditRoom(element: any): void {
     const room = this.getById(element.id);
     if (!room) return;
     this.resolveEditRoom(room);
@@ -46,6 +47,5 @@ export class RoomComponent implements EventsRoom {
   endEditingRoom(): void {
 
     if (this.editRoomContainer?.length) this.editRoomContainer.clear();
-    // if (this.editRoom) this.editRoom.destroy();
   }
 }

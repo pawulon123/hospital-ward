@@ -2,7 +2,7 @@ export function events() {
   return {
     room: {
       click: {
-        editRoom: 'manageBeds',
+        editRoom: 'startEditRoom',
         currentState: null,
         movePatient: null,
         plan: null
